@@ -121,6 +121,26 @@ describe("RegularsManager", function () {
         
         expect(text).toEqual('test# #retest');
     });
+
+    it('wrapInclude method should work with replaceWrapped methods', function() {
+        var _situationalSepSetGlob = RegularsManager.situationalSeparators
+            .set().g();
+
+        var text = "test1...data1 test2---data2 test3''data3";
+        text = _situationalSepSetGlob
+            .composition(RegularsManager.twoAndMore)
+            .init(text)
+            .wrapInclude("#")
+            .getString();
+        
+        text = _situationalSepSetGlob
+            .init(text)
+            .replaceLeftWrapped('#', ' ')
+            .replaceRightWrapped('#', ' ')
+            .getString();
+        
+        expect(text).toEqual('test1 . data1 test2 - data2 test3  data3');
+    });
     
     it('composition method should return combain RegObj from original and received', function() {
          var spaceAndDots = RegularsManager.space

@@ -20,12 +20,23 @@
     }
 
     var WEBSPELLCHECKER = glob.WEBSPELLCHECKER || function(clientOptions) {
-        //var validator = WEBSPELLCHECKER.Validator;
-        // validator.addRules({
-        //     customerId: 'isString'
-        // });
-        // validator.validate(clientOptions);
-
+        
+        var _dependencies = {
+            'TextProcessor': WEBSPELLCHECKER.TextProcessor
+        };
+        var _services = {};
+        for (var k in _dependencies) {
+            _services[k] = new _dependencies[k](k, this);
+        }
+        /**
+         * Private
+         */
+        this._getService = function(name) {
+            return _services[name] || null;
+        };
+        /**
+         * Public
+         */
         this.addWordToTheUserDictionary = function(parametrs) {
             setTimeout(()=>{ parametrs.success();}, 100);
         };

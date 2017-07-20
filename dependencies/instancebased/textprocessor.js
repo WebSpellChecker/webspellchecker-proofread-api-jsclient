@@ -19,64 +19,77 @@
             
             // text = text.replace( /*REG_REPLACE*/new RegExp( String.fromCharCode(160), 'g' ), ' ' );
         //wordBoundary
-        var RegularTypes = Namespace.RegularTypes;
+        var RegularsManager = Namespace.RegularsManager;
         function TextProcessor(moduleId, appInstance) {
             this.moduleId = moduleId;
             this.appInstance = appInstance;
         }
+
         TextProcessor.prototype = {
             replaceSpaces: function() {},
             removeSepatators(text) {
-                var permanentMinWordLength = this.sandbox.getOption('permanentMinWordLength'),
-                    _situationalSepSetGlob = RegularTypes.situationalSeparators.set().g(),
-                    twoAndMoreSeparators;
+                var _situationalSepSetGlob;
+                text = RegularsManager.HtmlSpaceSymbol.compositionGraph([
+                    RegularsManager.textPunctuation,
+                    RegularsManager.EOL
+                ]).g().set()
+                .init(text)
+                .replace(' ')
+                .getString();
 
-                text = RegularType.prototype.compositionGraph([
-                        RegularTypes.textPunctuation,
-                        RegularTypes.HtmlSpaceSymbol,
-                        RegularTypes.EOL
-                    ]).set().g()
-                    .setText(text)
-                    .replace(' ')
-                    .getText();
-
-                text = _situationalSepSetGlob(text)
-                    .composition(RegularTypes.twoAndMore)
-                    .setText(text)
-                    .wrapInclude("#")
-                    .replaceRightWrapped('#', ' ')
-                    .replaceLeftWrapped('#', ' ')
-                    .getText();
+                _situationalSepSetGlob = RegularsManager.situationalSeparators
+                    .set().g();
                 
-                text = _situationalSepSetGlob(text)
+                text = _situationalSepSetGlob
+                    .composition(RegularsManager.twoAndMore)
+                    .init(text)
+                    .wrapInclude("#")
+                    .getString();
+                
+                text = _situationalSepSetGlob
+                    .init(text)
+                    .replaceLeftWrapped('#', ' ')
+                    .replaceRightWrapped('#', ' ')
+                    .getString();
+                debugger;
+                text = _situationalSepSetGlob
+                    .init(text)
                     .replaceRightWrapped(' ', '  ')
                     .replaceLeftWrapped(' ', '  ')
                     .start().or( _situationalSepSetGlob.end() )
                     .replace(' ')
-                    .getText();
+                    .getString();
                 
-                text = RegularTypes.EOL(text).set().g()
+                text = RegularsManager.EOL.set().g()
+                    .init(text)
                     .replace(' ')
-                    .getText();
+                    .getString();
 
                 return text;
             },
             removeSpecialCharacters(text) {
-                return RegularTypes.specialCharacters(text).g().replace('');
+                return RegularsManager.specialCharacters.
+                    init(text).g().replace('').getString();
             },
             getWordsFromText: function(text) {
-                var minWordLength = this.appInstance.getOption('minWordLength'),
+                var minWordLength = 4,//this.appInstance.getOption('minWordLength'),
                     words, wordsCollection;
                 // get correct minWordLength option (for some languages we need to apply restriction that does not allow user to configure minWordLength option. E.g.: th_TH, ko_KR)
                 text = this.removeSepatators(text);
                 text = this.removeSpecialCharacters(text);
 
                 // for Thai we need to keep word with length > 1
-                wordsCollection = RegularTypes.space.split(text).filter(function(word) {
-                    return (word !== '' && word.length >= minWordLength ) ? true : false;
-                });
+                wordsCollection = RegularsManager.space
+                    .init(text)    
+                    .split()
+                    .filter(function(word) {
+                        return (word !== '' && word.length >= minWordLength ) ? true : false;
+                    });
 
                 return wordsCollection;
+            },
+            getSentencesFromString: function() {
+
             }
             
         };

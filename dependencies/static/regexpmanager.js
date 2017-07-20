@@ -15,21 +15,6 @@
             return string;
         }
 
-        var Regularssources = {
-            space: "[\\s\\xA0]",
-            dot: '\\.',
-            digits : '[0-9]',
-            //Punctuations
-            HtmlSpaceSymbol:  String.fromCharCode(160),
-            // \u061F - Arabic question mark, \u060C - Arabic comma, \u061B - Arabic semicolon
-            textPunctuation: ",\"\^\$\*\+\?\=\!\:\|\\\/\(\)\[\]\{\}\>\<\@\%\&\#\;\_\~\u061F\u060C\u061B\u0001-\u001F\u0080-\u00B6\u00B8-\u00BF\u2000-\u200A\u200C-\u266F\u2E00-\u2E7F",
-            situationalSeparators: "\\.\\-\\'",
-            EOL: '[\r\n(\r\n)]',
-            specialCharacters: String.fromCharCode(8203) + String.fromCharCode(65279),            
-            ip: '/^((?:(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.){3}(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?))*$/',
-            twoAndMore: '{2,}'
-        };
-
         function RegularType(name, source, flags) {
             this.name = name;
             this.flags = flags || '';
@@ -52,8 +37,10 @@
                 combainRegType = combainRegType.addFlags(regExpObject.flags + this.flags);
                 return combainRegType;
             },
-            _replaceSource: function(subStr, source) {
-                return this._updateSource(source).replace(subStr);
+            _replaceWithAnotherSource: function(subStr, source) {
+                var clone = this._updateSource(source).replace(subStr);
+                clone.source = this.source;
+                return clone;
             },
             _updateSource: function(source) {
                 var clone = this.clone();
@@ -104,7 +91,7 @@
             end: function() {
                 return this._updateSource(this.source + '$');
             },
-            split: function() {
+            split: function(string) {
                 return this.string.split( this._getRegExp() );
             },
             replace: function(subStr) {
@@ -114,11 +101,11 @@
             },
             replaceLeftWrapped: function(wrapSymbol, subStr) {
                 wrapSymbol = wrapSymbol || this._wrapSymbol;
-                return this._replaceSource(subStr, wrapSymbol + this.source);
+                return this._replaceWithAnotherSource(subStr, wrapSymbol + this.source);
             },
             replaceRightWrapped: function(wrapSymbol, subStr) {
                 wrapSymbol = wrapSymbol || this._wrapSymbol;
-                return this._replaceSource(subStr, this.source + wrapSymbol);
+                return this._replaceWithAnotherSource(subStr, this.source + wrapSymbol);
             },
             wrapInclude: function(wrapSymbol) {
                 wrapSymbol = wrapSymbol || this._wrapSymbol;
@@ -150,12 +137,11 @@
             }
         };
 
-     
+        var RegularsManager = {},
+            RegularsSources = Namespace.RegularsSources;
 
-        var RegularsManager = {};
-        
-        for(var k in Regularssources){
-            RegularsManager[k] = new RegularType(k, Regularssources[k]);
+        for(var k in RegularsSources){
+            RegularsManager[k] = new RegularType(k, RegularsSources[k]);
         }
         
         Namespace.RegularsManager = RegularsManager;

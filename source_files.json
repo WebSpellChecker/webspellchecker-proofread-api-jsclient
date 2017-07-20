@@ -5,6 +5,7 @@
         "<%= webapi_root %>/dependencies/static/utils/browser.js",
         "<%= webapi_root %>/dependencies/static/utils/polyfills.js",
         "<%= webapi_root %>/dependencies/static/utils/typechecker.js",
+        "<%= webapi_root %>/dependencies/static/utils/regularssources.js",
         "<%= webapi_root %>/dependencies/static/logger.js",
         "<%= webapi_root %>/dependencies/static/io.js",
         "<%= webapi_root %>/dependencies/static/regexpmanager.js",
