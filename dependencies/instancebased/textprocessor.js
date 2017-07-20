@@ -51,7 +51,7 @@
                     .replaceLeftWrapped('#', ' ')
                     .replaceRightWrapped('#', ' ')
                     .getString();
-                debugger;
+
                 text = _situationalSepSetGlob
                     .init(text)
                     .replaceRightWrapped(' ', '  ')
