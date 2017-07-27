@@ -80,7 +80,15 @@
                     }
                     result[paramName] = parameters[k];
                 }
-                return Object.assign({}, this.defaultParameters, result);
+                result = Object.assign({}, this.defaultParameters, result);
+                
+                // Now we have the bag with get_lang_list command.
+                // It's doesn't work for some reasons with "format=json" parameter.
+                if(result[_parametersMap.command] === _commandsMap.getLangList) {
+                    delete result[_parametersMap.communicationFormat];
+                }
+
+                return result;
             },
             request: function(parameters, onSuccess, onError) {
                 IO.get( 

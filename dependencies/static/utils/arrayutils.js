@@ -6,28 +6,6 @@
     function init( Namespace ) {
         'use strict';
         var ArrayUtils = {
-            // @TODO: look for another realization
-            arrayFilter: function( fun ) {
-                var _len = this.length;
-
-                if (typeof fun !== "function") {
-                    throw new TypeError();
-                }
-
-                var _res = [];
-                var thisp = arguments[1];
-
-                for (var i = 0; i < _len; i++) {
-                    if (i in this) {
-                        var val = this[i]; // in case fun mutates this
-                        if (fun.call(thisp, val, i, this)) {
-                            _res.push(val);
-                        }
-                    }
-                }
-
-                return _res;
-            },
 
             arrayUnique: function( array, comparisonFunc ) {
                 var a = array.concat();

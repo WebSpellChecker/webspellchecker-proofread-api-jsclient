@@ -4,8 +4,13 @@ var WebApi = require("../"), api, bool,
     WORD = 'exampl',
     WORD2 = 'mispelled',
     TEXT = 'This is an exampl of a sentence with two mispelled words. Just type text with misspelling to see how it works.',
-    TEXTGRAMMAR = 'These are an examples of a sentences with two misspelled words and gramar problems. Just type text with mispelling to see how it works.';
+    TEXTGRAMMAR = 'These are an examples of a sentences with two misspelled words and gramar problems. Just type text with mispelling to see how it works.',
+    StringUtils;
 var WebApi = require("../"), api, bool, TextProcessor, optionTypes;
+
+StringUtils = WebApi.Utils.StringUtils;
+//api = new WebApi();
+
 
 describe("WebApi", function () {
 
@@ -77,6 +82,29 @@ describe("WebApi", function () {
                 text: TEXT,
                 success: function(res) {
                     if(res && !res.error) {
+                        bool = true;
+                    }
+                }
+            });
+        
+        waitsFor(function() {
+            return bool;
+        });
+    });
+
+    it("spellCheck method should return correct position for misspelled words", function() {
+        var bool = false;
+             api.spellCheck({
+                text: TEXT,
+                success: function(res) {
+                    var text = TEXT,
+                        missp;
+                    res.reverse()
+                    for(var i = 0; i < res.length; i += 1 ) {
+                        missp = res[i];
+                        text = StringUtils.replaceFromTo(text, missp.startOffset, missp.endOffset, missp.suggestions[0]);
+                    }
+                    if(text === 'This is an example of a sentence with two misspelled words. Just type text with misspelling to see how it works.') {
                         bool = true;
                     }
                 }

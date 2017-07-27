@@ -94,7 +94,7 @@
                 success,
                 error
             );
-        }
+        };
         /**
          * Accessors
          */
@@ -218,15 +218,38 @@
         };
 
         this.spellCheck = function(parametrs) {
+            var words = textProcessor.getWordsFromString( parametrs.text ),
+                text = words.wordsCollection.join(',');
+            
+            function addOffsetsToMisspelled(data, offsets) {
+                var misspelled;
+                return offsets.reduce(function(prev, offsetsObj) {
+                    for(var i = 0; i < data.length; i += 1) {
+                        misspelled = data[i];
+                        if(misspelled.word === offsetsObj.word) {
+                            prev.push( Object.assign(
+                                {},
+                                misspelled,
+                                offsetsObj
+                            ) );
+                            return prev;
+                        }
+                    }
+                    return prev;
+                }, []);
+            }
             return this._request(
                 {
                     command: commands.spellCheck,
                     language:  this.getOption('lang'),
                     customDictionary: this.getOption('customDictionary'),
                     userDictionary: this.getOption('userDictionaryName'),
-                    text: textProcessor.getWordsFromString( parametrs.text )
+                    text: text
                 },
-                parametrs.success,
+                function onSuccess(data) {
+                    var misspelledsWithOffsets = addOffsetsToMisspelled(data, words.wordsOffsets);
+                    parametrs.success(misspelledsWithOffsets);
+                },
                 parametrs.error
             );
         };
@@ -271,6 +294,7 @@
             setTimeout(()=>{ parametrs.success();}, 100);
         };
     };
+
     WEBSPELLCHECKER.env = env;
     WEBSPELLCHECKER.envTypes = envTypes;
     WEBSPELLCHECKER.isNamespace = true;

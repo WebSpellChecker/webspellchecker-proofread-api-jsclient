@@ -6,7 +6,8 @@
     'use strict';
 	function init( Namespace ) {
 
-        var RegularsManager = Namespace.RegularsManager;
+        var RegularsManager = Namespace.RegularsManager,
+            StringUtils = Namespace.Utils.StringUtils;
         function TextProcessor(moduleId, appInstance) {
             this.moduleId = moduleId;
             this.appInstance = appInstance;
@@ -14,7 +15,7 @@
 
         TextProcessor.prototype = {
             replaceSpaces: function() {},
-            removeSepatators(text) {
+            replaceSepatators: function(text) {
                 var _situationalSepSetGlob;
                 text = RegularsManager.HtmlSpaceSymbol.compositionGraph([
                     RegularsManager.textPunctuation,
@@ -54,29 +55,54 @@
 
                 return text;
             },
-            removeSpecialCharacters(text) {
+            removeSpecialCharacters: function(text) {
                 return RegularsManager.specialCharacters.
                     init(text).g().replace('').getString();
+            },
+            getWordOffsets: function(word, text) {
+                var startOffset = text.indexOf(word),
+                    endOffset = startOffset + word.length;
+                
+                return {
+                    startOffset: startOffset,
+                    endOffset: endOffset
+                };
             },
             /**
              * API
              */
             getWordsFromString: function(text) {
                 var minWordLength = this.appInstance.getOption('minWordLength'),
-                    words, wordsCollection;
+                    wordsCollection = [],
+                    wordsOffsets,
+                    result,
+                    self = this;
                 // get correct minWordLength option (for some languages we need to apply restriction that does not allow user to configure minWordLength option. E.g.: th_TH, ko_KR)
-                text = this.removeSepatators(text);
+                text = this.replaceSepatators(text);
                 text = this.removeSpecialCharacters(text);
 
                 // for Thai we need to keep word with length > 1
-                wordsCollection = RegularsManager.space
+                wordsOffsets = RegularsManager.space
                     .init(text)    
                     .split()
-                    .filter(function(word) {
-                        return (word !== '' && word.length >= minWordLength ) ? true : false;
-                    });
+                    .reduce(function(prev, word) {
+                        var wordObject;
+                        if (word !== '' && word.length >= minWordLength ) {
+                            if( !wordsCollection.includes(word) ) {
+                                wordsCollection.push(word);
+                            }
+                            wordObject = self.getWordOffsets(word, text);
+                            wordObject.word = word;
+                            prev.push(wordObject);
+                            text = StringUtils.replaceFromTo(text, wordObject.startOffset, wordObject.endOffset, new Array(word.length + 1).join(' ') );
+                        }
+                        return prev;
+                    }, []);
 
-                return wordsCollection;
+                return {
+                    wordsOffsets: wordsOffsets,
+                    wordsCollection: wordsCollection
+                };
             }
             
         };

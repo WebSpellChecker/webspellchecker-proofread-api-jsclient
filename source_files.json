@@ -2,6 +2,7 @@
     "webapi": [
         "<%= webapi_root %>/webapi.js",
         "<%= webapi_root %>/dependencies/static/utils/arrayutils.js",
+        "<%= webapi_root %>/dependencies/static/utils/stringutils.js",
         "<%= webapi_root %>/dependencies/static/utils/browser.js",
         "<%= webapi_root %>/dependencies/static/utils/polyfills.js",
         "<%= webapi_root %>/dependencies/static/utils/typechecker.js",

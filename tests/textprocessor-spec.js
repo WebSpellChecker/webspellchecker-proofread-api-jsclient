@@ -20,7 +20,6 @@ describe("TextProcessor", function () {
     });
 
     it("loaded", function() {
-        debugger;
         expect(TextProcessor).toBeDefined();
     });
 
@@ -29,7 +28,7 @@ describe("TextProcessor", function () {
     });
 
 	it("should collect words in string that contains names of Object methods ['constructor __defineGetter__  __defineSetter__ __lookupSetter__ hasOwnProperty isPrototypeOf  propertyIsEnumerable toSource toLocaleString toString unwatch valueOf watch eval']", function() {
-        var words = TextProcessor.getWordsFromString("constructor __defineGetter__  __defineSetter__ __lookupSetter__ hasOwnProperty isPrototypeOf  propertyIsEnumerable toSource toLocaleString toString unwatch valueOf watch eval");
+        var words = TextProcessor.getWordsFromString("constructor __defineGetter__  __defineSetter__ __lookupSetter__ hasOwnProperty isPrototypeOf  propertyIsEnumerable toSource toLocaleString toString unwatch valueOf watch eval").wordsCollection;
 
 		expect(words).toEqual([
             'constructor',
@@ -47,10 +46,40 @@ describe("TextProcessor", function () {
             'watch',
             'eval'
         ]);
+    });
+    
+    it("words offsets should define correctly", function() {
+        var words = TextProcessor.getWordsFromString("constructor __defineGetter__  __defineSetter__");
+        var offsets = words.wordsOffsets;
+
+        var rightOffsets = [
+            {
+                startOffset: 0,
+                endOffset: 11
+            },
+            {
+                startOffset: 14,
+                endOffset: 26
+            },
+            {
+                startOffset: 32,
+                endOffset: 44
+            }
+        ];
+        for(var i = 0; i < offsets.length; i+= 1) {
+            expect(
+                offsets[i].startOffset,
+                offsets[i].endOffset
+            ).toEqual(
+                rightOffsets[i].startOffset,
+                rightOffsets[i].endOffset
+            );
+        }
 	});
 
 	it("should collect words in string with characters: [\.\-\']", function() {
-		var words = TextProcessor.getWordsFromString("test1.data1 test2-data2 test3'data3");
+
+		var words = TextProcessor.getWordsFromString("test1.data1 test2-data2 test3'data3").wordsCollection;
 
         expect(words).toEqual([
             'test1.data1',
@@ -60,7 +89,7 @@ describe("TextProcessor", function () {
 	});
 
 	it("should collect words in string with repeated characters: [\.\-\']", function() {
-		var words = TextProcessor.getWordsFromString("test1...data1 test2---data2 test3''data3");
+		var words = TextProcessor.getWordsFromString("test1...data1 test2---data2 test3''data3").wordsCollection;
 
         expect(words).toEqual([
             'test1',
@@ -73,21 +102,21 @@ describe("TextProcessor", function () {
 	});
 
 	it("should collect words in string which starts or ends with characters: [\.\-\']", function() {
-		var words = TextProcessor.getWordsFromString(".test1 test2.");
+		var words = TextProcessor.getWordsFromString(".test1 test2.").wordsCollection;
 
 		expect(words).toEqual([
             'test1',
             'test2'
         ]);
 
-		words = TextProcessor.getWordsFromString("-test1 test2-");
+		words = TextProcessor.getWordsFromString("-test1 test2-").wordsCollection;
 
 		expect(words).toEqual([
             'test1',
             'test2'
         ]);
 
-		words = TextProcessor.getWordsFromString("'test1 test2'");
+		words = TextProcessor.getWordsFromString("'test1 test2'").wordsCollection;
 
 		expect(words).toEqual([
             'test1',
@@ -96,7 +125,7 @@ describe("TextProcessor", function () {
     });
 
 	it("should collect words with length more or equal to 4 by default", function() {
-		var words = TextProcessor.getWordsFromString("soo this is a test");
+		var words = TextProcessor.getWordsFromString("soo this is a test").wordsCollection;
 
         expect(words).toEqual([
             'this',
@@ -111,7 +140,7 @@ describe("TextProcessor", function () {
 		storedMinWordLengthValue = api.getOption('minWordLength');
 		api.setOption('minWordLength', 1);
 
-		words = TextProcessor.getWordsFromString("soo this is a test");
+		words = TextProcessor.getWordsFromString("soo this is a test").wordsCollection;
         expect(words).toEqual([
             'soo',
             'this',
@@ -121,7 +150,7 @@ describe("TextProcessor", function () {
         ]);
         // restore it to previous value to prevent influence to other tests
         api.setOption('minWordLength', storedMinWordLengthValue);
-        words = TextProcessor.getWordsFromString("soo this is a test");
+        words = TextProcessor.getWordsFromString("soo this is a test").wordsCollection;
         expect(words).toEqual([
             'this',
             'test'
