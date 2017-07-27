@@ -91,6 +91,13 @@
             end: function() {
                 return this._updateSource(this.source + '$');
             },
+            onePlus: function() {
+                return this._updateSource(this.source + '+');
+            },
+            lookahead: function() {
+                return this.group( this._updateSource('?=' + this.source) );
+            },
+
             split: function(string) {
                 return this.string.split( this._getRegExp() );
             },
@@ -111,20 +118,20 @@
                 wrapSymbol = wrapSymbol || this._wrapSymbol;
                 return this.group().replace(wrapSymbol+"$1"+wrapSymbol);
             },
-            or: function(regExpObject, compositionName) {
-                return this._combain({
-                    compositionName: compositionName,
-                    regExpObject: regExpObject,
-                    separator: '|',
-                    nameConcatinator: '|'
-                });
-            },
             composition: function(regExpObject, compositionName) {
                 return this._combain({
                     regExpObject: regExpObject,
                     separator: '',
                     nameConcatinator: '&',
                     compositionName: compositionName
+                });
+            },
+            or: function(regExpObject, compositionName) {
+                return this._combain({
+                    compositionName: compositionName,
+                    regExpObject: regExpObject,
+                    separator: '|',
+                    nameConcatinator: '|'
                 });
             },
             compositionGraph: function(listOfRegExpObjects, compositionName) {

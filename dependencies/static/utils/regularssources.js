@@ -11,6 +11,7 @@
             dot: '\\.',
             EOL: '[\r\n(\r\n)]',
             digits : '[0-9]',
+
             //Punctuations
             HtmlSpaceSymbol:  String.fromCharCode(160),
             // \u061F - Arabic question mark, \u060C - Arabic comma, \u061B - Arabic semicolon
@@ -18,7 +19,7 @@
             situationalSeparators: "\\.\\-\\'",
             specialCharacters: String.fromCharCode(8203) + String.fromCharCode(65279),            
             ip: '/^((?:(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.){3}(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?))*$/',
-            twoAndMore: '{2,}'
+            twoAndMore: '{2,}',            
         };
         
         Namespace.RegularsSources = RegularsSources;

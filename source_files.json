@@ -11,6 +11,7 @@
         "<%= webapi_root %>/dependencies/static/regexpmanager.js",
         "<%= webapi_root %>/dependencies/static/optionsprocessor.js",
 
-        "<%= webapi_root %>/dependencies/instancebased/textprocessor.js"
+        "<%= webapi_root %>/dependencies/instancebased/textprocessor.js",
+        "<%= webapi_root %>/dependencies/instancebased/connection.js"
     ]
 }

@@ -4,7 +4,8 @@
  */
 (function(){
 	function init( Namespace ) {
-        var TypeChecker = Namespace.Utils.TypeChecker, validators;
+        var TypeChecker = Namespace.Utils.TypeChecker, validators,
+            RegularsManager = Namespace.RegularsManager;
 
         function OptionType(name, validate) {
             this.name = name;
@@ -61,11 +62,24 @@
 
                 return res;
             },
-            createOption: function ( params ) {
-                var optionValue = params.optionValue,
-                    optionTemplate = params.optionTemplate,
+            ErrorsObject: function() {
+                this.critical = false;
+                this.count = 0;
+                this.reports = [];
+                this.addError = function(error) {
+                    if(error.critical && this.critical === false) {
+                        this.critical = true;
+                    }
+                    this.reports.push(error);
+                    this.count += 1;
+                };
+            },
+            createOption: function ( option ) {
+                var optionValue = option.value,
+                    optionTemplate = option.template,
                     errorReport = {},
-                    optionName = params.optionName,
+                    optionName = option.name,
+                    optionErrorHandler = option.errorHandler,
                     validationInfo,
                     validationCheckList = {
                         type: optionTemplate.type.validate,
@@ -83,25 +97,13 @@
 
                 if(validationInfo.pass) return optionValue;
 
-                errorReport.critical = optionTemplate.required;
-                errorReport.optionName = params.optionName;
+                errorReport.critical = optionTemplate.required || false;
+                errorReport.optionName = optionName;
                 errorReport.message = validationInfo.errorMessages;
                 
-                params.optionErrorHandler(errorReport);
+                optionErrorHandler(errorReport);
 
                 return defaultValue;
-            },
-            ErrorsObject: function() {
-                this.critical = false;
-                this.count = 0;
-                this.reports = [];
-                this.addError = function(error) {
-                    if(error.critical && this.critical === false) {
-                        this.critical = true;
-                    }
-                    this.reports.push(error);
-                    this.count += 1;
-                };
             },
             createOptions: function(_options, _optionsTemplates, _errorHandler) {
                 var option, valid,
@@ -115,10 +117,10 @@
                         throw new Error(k + ' template "type" parameter should be instance of OptionsProcessor -> OptionType constructor.');
                     }
                     options[k] = this.createOption({
-                        optionName: k,
-                        optionValue: options[k],
-                        optionTemplate: optionsTemplates[k],
-                        optionErrorHandler: function(error) {
+                        name: k,
+                        value: options[k],
+                        template: optionsTemplates[k],
+                        errorHandler: function(error) {
                             errorsObject.addError(error);
                         }
                     });

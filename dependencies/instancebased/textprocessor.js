@@ -6,19 +6,6 @@
     'use strict';
 	function init( Namespace ) {
 
-
-            // text = text.replace( new RegExp( String.fromCharCode(160), 'g' ), ' ' );
-
-			// text = text.replace( new RegExp( '['+punctuation.source+']', 'g' ), ' ' );
-
-			// text = text.replace(/([\.\-\']{2,})/g, '#$1#').replace(/#[\.\-\']|[\.\-\']#/g, ' '); // 
-			// text = text.replace( new RegExp( ' [\-\'\.]|[\-\'\.] ', 'g' ), '  ' ); // except cases
-			// text = text.replace( new RegExp( '^[\-\'\.]|[\-\'\.]$', 'g' ), ' ' ); // except cases
-
-            // text = text.replace( /[\r\n(\r\n)\<\>\\\/\=\"]/g, ' ' );
-            
-            // text = text.replace( /*REG_REPLACE*/new RegExp( String.fromCharCode(160), 'g' ), ' ' );
-        //wordBoundary
         var RegularsManager = Namespace.RegularsManager;
         function TextProcessor(moduleId, appInstance) {
             this.moduleId = moduleId;
@@ -71,8 +58,11 @@
                 return RegularsManager.specialCharacters.
                     init(text).g().replace('').getString();
             },
-            getWordsFromText: function(text) {
-                var minWordLength = 4,//this.appInstance.getOption('minWordLength'),
+            /**
+             * API
+             */
+            getWordsFromString: function(text) {
+                var minWordLength = this.appInstance.getOption('minWordLength'),
                     words, wordsCollection;
                 // get correct minWordLength option (for some languages we need to apply restriction that does not allow user to configure minWordLength option. E.g.: th_TH, ko_KR)
                 text = this.removeSepatators(text);
@@ -87,9 +77,6 @@
                     });
 
                 return wordsCollection;
-            },
-            getSentencesFromString: function() {
-
             }
             
         };

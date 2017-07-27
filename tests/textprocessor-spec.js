@@ -20,15 +20,16 @@ describe("TextProcessor", function () {
     });
 
     it("loaded", function() {
+        debugger;
         expect(TextProcessor).toBeDefined();
     });
 
-    it('should have main inteface methods: getWordsFromText', function() {
-        expect(TextProcessor.getWordsFromText).toBeDefined();
+    it('should have main inteface methods: getWordsFromString', function() {
+        expect(TextProcessor.getWordsFromString).toBeDefined();
     });
 
 	it("should collect words in string that contains names of Object methods ['constructor __defineGetter__  __defineSetter__ __lookupSetter__ hasOwnProperty isPrototypeOf  propertyIsEnumerable toSource toLocaleString toString unwatch valueOf watch eval']", function() {
-        var words = TextProcessor.getWordsFromText("constructor __defineGetter__  __defineSetter__ __lookupSetter__ hasOwnProperty isPrototypeOf  propertyIsEnumerable toSource toLocaleString toString unwatch valueOf watch eval");
+        var words = TextProcessor.getWordsFromString("constructor __defineGetter__  __defineSetter__ __lookupSetter__ hasOwnProperty isPrototypeOf  propertyIsEnumerable toSource toLocaleString toString unwatch valueOf watch eval");
 
 		expect(words).toEqual([
             'constructor',
@@ -49,7 +50,7 @@ describe("TextProcessor", function () {
 	});
 
 	it("should collect words in string with characters: [\.\-\']", function() {
-		var words = TextProcessor.getWordsFromText("test1.data1 test2-data2 test3'data3");
+		var words = TextProcessor.getWordsFromString("test1.data1 test2-data2 test3'data3");
 
         expect(words).toEqual([
             'test1.data1',
@@ -59,7 +60,7 @@ describe("TextProcessor", function () {
 	});
 
 	it("should collect words in string with repeated characters: [\.\-\']", function() {
-		var words = TextProcessor.getWordsFromText("test1...data1 test2---data2 test3''data3");
+		var words = TextProcessor.getWordsFromString("test1...data1 test2---data2 test3''data3");
 
         expect(words).toEqual([
             'test1',
@@ -72,21 +73,21 @@ describe("TextProcessor", function () {
 	});
 
 	it("should collect words in string which starts or ends with characters: [\.\-\']", function() {
-		var words = TextProcessor.getWordsFromText(".test1 test2.");
+		var words = TextProcessor.getWordsFromString(".test1 test2.");
 
 		expect(words).toEqual([
             'test1',
             'test2'
         ]);
 
-		words = TextProcessor.getWordsFromText("-test1 test2-");
+		words = TextProcessor.getWordsFromString("-test1 test2-");
 
 		expect(words).toEqual([
             'test1',
             'test2'
         ]);
 
-		words = TextProcessor.getWordsFromText("'test1 test2'");
+		words = TextProcessor.getWordsFromString("'test1 test2'");
 
 		expect(words).toEqual([
             'test1',
@@ -95,7 +96,7 @@ describe("TextProcessor", function () {
     });
 
 	it("should collect words with length more or equal to 4 by default", function() {
-		var words = TextProcessor.getWordsFromText("soo this is a test");
+		var words = TextProcessor.getWordsFromString("soo this is a test");
 
         expect(words).toEqual([
             'this',
@@ -104,17 +105,26 @@ describe("TextProcessor", function () {
     });
     
     it("should be possible to change minimum words length that will be collected", function() {
-		// var words, storedMinWordLengthValue;
+		var words, storedMinWordLengthValue;
 
-		// // Change core setting
-		// storedMinWordLengthValue = Core.options.minWordLength.value;
-		// Core.options.minWordLength.value = 1;
+		// Change core setting
+		storedMinWordLengthValue = api.getOption('minWordLength');
+		api.setOption('minWordLength', 1);
 
-		// words = TextProcessor.getWordsFromText("soo this is a test").words;
-
-		// // restore it to previous value to prevent influence to other tests
-		// Core.options.minWordLength.value = storedMinWordLengthValue;
-
-		// expect(words).toEqual({ "word_soo": { word: "soo" }, "word_this" : { word : 'this' }, "word_is": { word: "is" }, "word_a": { word: "a" }, "word_test" : { word : 'test' } });
-	});
+		words = TextProcessor.getWordsFromString("soo this is a test");
+        expect(words).toEqual([
+            'soo',
+            'this',
+            'is',
+            'a',
+            'test'
+        ]);
+        // restore it to previous value to prevent influence to other tests
+        api.setOption('minWordLength', storedMinWordLengthValue);
+        words = TextProcessor.getWordsFromString("soo this is a test");
+        expect(words).toEqual([
+            'this',
+            'test'
+        ]);
+    });
 });

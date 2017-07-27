@@ -47,7 +47,7 @@ describe("OptionsProcessor", function () {
         expect(options.lang).toEqual(optionsTemplate.lang.defaultValue);
     });
 
-     it('should throw error if use wrong parameter type.', function() {
+    it('should throw error if use wrong parameter type.', function() {
         var clientOptions = {
             customerId: '1:ABC'
         },

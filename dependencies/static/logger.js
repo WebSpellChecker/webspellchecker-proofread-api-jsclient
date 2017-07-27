@@ -66,7 +66,7 @@
 					message = message.join(' ');
 					console.log(message);
 				} else {
-					console.log.apply(console, message)
+					console.log.apply(console, message);
 				}
 			},
 

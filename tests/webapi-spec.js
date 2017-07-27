@@ -1,7 +1,11 @@
 var WebApi = require("../"), api, bool,
-    UD_NAME = 'ud1',
-    WORD = 'tita',
-    TEXT = 'Hella! I am a doctor Watson';
+    UD_NAME = 'test_js_webapi_ud',
+    NEW_UD_NAME = 'new_test_js_webapi_ud',
+    WORD = 'exampl',
+    WORD2 = 'mispelled',
+    TEXT = 'This is an exampl of a sentence with two mispelled words. Just type text with misspelling to see how it works.',
+    TEXTGRAMMAR = 'These are an examples of a sentences with two misspelled words and gramar problems. Just type text with mispelling to see how it works.';
+var WebApi = require("../"), api, bool, TextProcessor, optionTypes;
 
 describe("WebApi", function () {
 
@@ -27,7 +31,7 @@ describe("WebApi", function () {
             'getUserDictionary',
             'renameUserDictionary',
             'deleteUserDictionary',
-            'addWordToTheUserDictionary',
+            'addWordToUserDictionary',
             'deleteWordFromUserDictionary',
             'spellCheck',
             'grammarCheck',
@@ -38,237 +42,291 @@ describe("WebApi", function () {
         for (var i = 0; i < methodsList.length; i +=1) {
             expect( api[methodsList[i]] ).toBeDefined();
         }
+        
+    });
+    
+    it("getOption and setOptions should work", function() {
+        var boolRes, value;
+        boolRes = api.setOption('test', true);
+        value = api.getOption('test');
+        expect(boolRes).toEqual(false);
+        expect(value).not.toBeDefined();
+        boolRes = api.setOption('lang', 'en_US');
+        expect(boolRes).toEqual(true);
+        value = api.getOption('lang');
+        expect(value).toEqual('en_US');
 	});
 
-    it("spellCheck method should check misspells in text", function() {
+    it("getLangList method should return list with available languages", function() {
         bool = false;
+        
+        api.getLangList({
+            success: function(res) {
+                bool = true;
+            }
+        });
+          
         waitsFor(function() {
+              return bool;
+        });
+    });
+
+    it("spellCheck method should check misspells in text", function() {
+        var bool = false;
             api.spellCheck({
                 text: TEXT,
                 success: function(res) {
-                    bool = true;
+                    if(res && !res.error) {
+                        bool = true;
+                    }
                 }
             });
+        
+        waitsFor(function() {
             return bool;
         });
     });
 
     it("grammarCheck method should check grammar misspells in text", function() {
-        bool = false;
-        waitsFor(function() {
+        var bool = false;
             api.grammarCheck({
-                text: TEXT,
+                text: TEXTGRAMMAR,
                 success: function(res) {
-                    bool = true;
+                   if(res && !res.error) {
+                        bool = true;
+                    }
                 }
             });
+        
+        waitsFor(function() {
             return bool;
         });
     });
 
-    it("getLangList method should return list with available languages", function() {
-        bool = false;
-        waitsFor(function() {
-            api.getLangList({
-                text: TEXT,
-                success: function(res) {
-                    bool = true;
-                }
-            });
-            return bool;
-        });
-    });
-
-    it("getBanner method should return bool - banner true | false", function() {
-        bool = false;
-        waitsFor(function() {
-            api.getBanner({
-                text: TEXT,
-                success: function(res) {
-                    bool = true;
-                }
-            });
-            return bool;
-        });
-    });
-
-    it("createUserDictionary method should create UD", function() {
-        bool = false;
-        waitsFor(function() {
-            api.getUserDictionary({
+    it("getUserDictionary, createUserDictionary deleteUserDictionary methods flow should work correctly", function() {
+        var bool = false;
+        
+        function createUD() {
+            api.createUserDictionary({
                 name: UD_NAME,
+                wordList: WORD + ',' + WORD2, 
                 success: function(res) {
-                    bool = true;
+                    if(res && !res.error) {
+                        bool = true;
+                    }
                 }
             });
-            return bool;
-        });
+        }
 
         runs(function() {
-            bool = false;
-            waitsFor(function() {
-                api.createUserDictionary({
-                    name: UD_NAME,
-                    success: function(res) {
-                        bool = true;
-                    }
-                });
-                return bool;
-            });
-        });
-
-         runs(function() {
-            bool = false;
-            waitsFor(function() {
-                api.getUserDictionary({
-                    name: UD_NAME,
-                    success: function(res) {
-                        bool = true;
-                    }
-                });
-                return bool;
-            });
-        });
-    });
-
-    it("getUserDictionary method should return UD name and words", function() {
-        bool = false;
-        waitsFor(function() {
             api.getUserDictionary({
                 name: UD_NAME,
                 success: function(res) {
-                    bool = true;
+                    api.deleteUserDictionary({
+                        name: UD_NAME,
+                        success: function(res) {
+                            createUD();
+                        }
+                    });
+                },
+                error: function(res) {
+                    createUD();
                 }
+            });        
+
+            waitsFor(function() {
+                return bool;
             });
-            return bool;
         });
     });
 
     it("renameUserDictionary method should change UD name", function() {
-        bool = false;
-        waitsFor(function() {
-            api.renameUserDictionary({
-                name: UD_NAME,
-                success: function(res) {
-                    bool = true;
-                }
-            });
-            return bool;
-        });
-    });
-
-
-    it("addWordToTheUserDictionary method should add words to current UD", function() {
-        bool = false;
-        waitsFor(function() {
-            api.getUserDictionary({
-                name: UD_NAME,
-                success: function(res) {
-                    bool = true;
-                }
-            });
-            return bool;
-        });
-
-        runs(function() {
-            bool = false;
-            waitsFor(function() {
-                api.addWordToTheUserDictionary({
-                    name: UD_NAME,
-                    word: WORD,
+        var bool = false;
+        api.renameUserDictionary({
+            name: UD_NAME,
+            newName: NEW_UD_NAME,
+            success: function(res) {
+                bool = true;
+                api.renameUserDictionary({
+                    name: NEW_UD_NAME,
+                    newName: UD_NAME,
                     success: function(res) {
                         bool = true;
                     }
                 });
-                return bool;
-            });
+            }
         });
-
         waitsFor(function() {
-            api.getUserDictionary({
-                name: UD_NAME,
-                success: function(res) {
-                    bool = true;
-                }
-            });
             return bool;
         });
     });
 
-    it("deleteWordFromUserDictionary method should delete words to current UD", function() {
-        bool = false;
-        waitsFor(function() {
-            api.getUserDictionary({
-                name: UD_NAME,
-                success: function(res) {
-                    bool = true;
-                }
-            });
-            return bool;
-        });
-
-        runs(function() {
-            bool = false;
-            waitsFor(function() {
-                api.deleteWordFromUserDictionary({
-                    name: UD_NAME,
-                    word: WORD,
-                    success: function(res) {
-                        bool = true;
-                    }
-                });
-                return bool;
-            });
-        });
-
-        waitsFor(function() {
-            api.getUserDictionary({
-                name: UD_NAME,
-                success: function(res) {
-                    bool = true;
-                }
-            });
-            return bool;
-        });
-    });
-
+    
     it("deleteUserDictionary method should delete UD", function() {
-        bool = false;
+        var bool = false;
+        api.deleteUserDictionary({
+            newName: UD_NAME,
+            success: function(res) {
+                bool = true;
+            }
+        });
         waitsFor(function() {
-            api.getUserDictionary({
-                name: UD_NAME,
-                success: function(res) {
-                    bool = true;
-                }
-            });
             return bool;
         });
+    });
 
-        runs(function() {
-            bool = false;
-            waitsFor(function() {
-                api.deleteUserDictionary({
-                    name: UD_NAME,
-                    success: function(res) {
-                        bool = true;
-                    }
-                });
-                return bool;
+
+    it("addWordToUserDictionary method should add words to current UD", function() {
+        var bool = false,
+            wordList,
+            wordListLengthBefore,
+            wordListLengthAfter;
+
+        function addWord() {
+            api.addWordToUserDictionary({
+                name: UD_NAME,
+                word: WORD,
+                success: function(res) {
+
+                    api.getUserDictionary({
+                        name: UD_NAME,
+                        success: function(res) {
+                            wordListLengthAfter = res.wordlist.length;
+                            wordList = res.wordlist;
+                        }
+                    });
+                }
             });
+        }
+
+        api.getUserDictionary({
+            name: UD_NAME,
+            success: function(res) {
+                wordListLengthBefore = res.wordlist.length;
+                addWord();
+            },
+            error: function() {
+                api.createUserDictionary({
+                    name: UD_NAME,
+                     success: function(res) {
+                        addWord();
+                    },
+                });
+            }
         });
 
-         runs(function() {
-            bool = false;
-            waitsFor(function() {
-                api.getUserDictionary({
-                    name: UD_NAME,
-                    success: function(res) {
-                        bool = true;
-                    }
-                });
-                return bool;
-            });
+        waitsFor(function() {
+            if(wordListLengthAfter === ( wordListLengthBefore + 1) &&
+                wordList[wordList.length - 1] === WORD) {
+                return true;
+            }
         });
     });
+
+    it("deleteWordFromUserDictionary method should delete words from current UD", function() {
+        var bool = false,
+            wordList,
+            wordListLengthBefore,
+            wordListLengthAfter;
+
+        function deleteWord() {
+            api.deleteWordFromUserDictionary({
+                name: UD_NAME,
+                word: WORD,
+                success: function(res) {
+
+                    api.getUserDictionary({
+                        name: UD_NAME,
+                        success: function(res) {
+                            wordListLengthAfter = res.wordlist.length;
+                            wordList = res.wordlist;
+                            bool = true;
+                            api.deleteUserDictionary({
+                                newName: UD_NAME,
+                                success: function(res) {
+                                    bool = true;
+                                }
+                            });
+                        }
+                    });
+                }
+            });
+        }
+
+        api.getUserDictionary({
+            name: UD_NAME,
+            success: function(res) {
+                wordListLengthBefore = res.wordlist.length;
+                deleteWord();
+            },
+            error: function(error) {
+                api.createUserDictionary({
+                    name: UD_NAME,
+                     success: function(res) {
+                        deleteWord();
+                    },
+                });
+            }
+        });
+
+        waitsFor(function() {
+            if( wordListLengthAfter < wordListLengthBefore  ) {
+                return true;
+            }
+        });
+        
+    });
+
+    // it("deleteWordFromUserDictionary method should delete words to current UD", function() {
+    //     bool = false;
+    //     waitsFor(function() {
+    //         api.getUserDictionary({
+    //             name: UD_NAME,
+    //             success: function(res) {
+    //                 bool = true;
+    //             }
+    //         });
+    //         return bool;
+    //     });
+
+    //     runs(function() {
+    //         bool = false;
+    //         waitsFor(function() {
+    //             api.deleteWordFromUserDictionary({
+    //                 name: UD_NAME,
+    //                 word: WORD,
+    //                 success: function(res) {
+    //                     bool = true;
+    //                 }
+    //             });
+    //             return bool;
+    //         });
+    //     });
+
+    //     waitsFor(function() {
+    //         api.getUserDictionary({
+    //             name: UD_NAME,
+    //             success: function(res) {
+    //                 bool = true;
+    //             }
+    //         });
+    //         return bool;
+    //     });
+    // });
+
+
+    
+    // it("getBanner method should return bool - banner true | false", function() {
+    //     bool = false;
+    //     waitsFor(function() {
+    //         api.getBanner({
+    //             text: TEXT,
+    //             success: function(res) {
+    //                 bool = true;
+    //             }
+    //         });
+    //         return bool;
+    //     });
+    // });
 
 });
