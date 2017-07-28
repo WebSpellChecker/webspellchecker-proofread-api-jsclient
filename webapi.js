@@ -291,7 +291,7 @@
         };
 
         this.getBanner = function(parametrs) {
-            setTimeout(()=>{ parametrs.success();}, 100);
+          //  setTimeout(()=>{ parametrs.success();}, 100);
         };
     };
 

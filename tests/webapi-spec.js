@@ -305,45 +305,6 @@ describe("WebApi", function () {
         
     });
 
-    // it("deleteWordFromUserDictionary method should delete words to current UD", function() {
-    //     bool = false;
-    //     waitsFor(function() {
-    //         api.getUserDictionary({
-    //             name: UD_NAME,
-    //             success: function(res) {
-    //                 bool = true;
-    //             }
-    //         });
-    //         return bool;
-    //     });
-
-    //     runs(function() {
-    //         bool = false;
-    //         waitsFor(function() {
-    //             api.deleteWordFromUserDictionary({
-    //                 name: UD_NAME,
-    //                 word: WORD,
-    //                 success: function(res) {
-    //                     bool = true;
-    //                 }
-    //             });
-    //             return bool;
-    //         });
-    //     });
-
-    //     waitsFor(function() {
-    //         api.getUserDictionary({
-    //             name: UD_NAME,
-    //             success: function(res) {
-    //                 bool = true;
-    //             }
-    //         });
-    //         return bool;
-    //     });
-    // });
-
-
-    
     // it("getBanner method should return bool - banner true | false", function() {
     //     bool = false;
     //     waitsFor(function() {

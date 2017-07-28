@@ -1,5 +1,5 @@
 {
-  "name": "wsc-webapi",
+  "name": "webspellchecker-api",
   "version": "1.0.0",
   "description": "",
   "webapi_root": "./",
@@ -10,6 +10,9 @@
   "author": "Webspellchecker.net",
   "license": "ISC",
   "dependencies": {
+    "grunt": "^1.0.1",
+    "grunt-contrib-concat": "^1.0.1",
+    "grunt-contrib-uglify": "^3.0.1",
     "jasmine-node": "^1.14.5",
     "simple-replace-template": "^1.0.0"
   }
