@@ -27,13 +27,13 @@
 
                 _situationalSepSetGlob = RegularsManager.situationalSeparators
                     .set().g();
-                
+
                 text = _situationalSepSetGlob
                     .composition(RegularsManager.twoAndMore)
                     .init(text)
                     .wrapInclude("#")
                     .getString();
-                
+
                 text = _situationalSepSetGlob
                     .init(text)
                     .replaceLeftWrapped('#', ' ')
@@ -47,7 +47,7 @@
                     .start().or( _situationalSepSetGlob.end() )
                     .replace(' ')
                     .getString();
-                
+
                 text = RegularsManager.EOL.set().g()
                     .init(text)
                     .replace(' ')
@@ -62,7 +62,7 @@
             getWordOffsets: function(word, text) {
                 var startOffset = text.indexOf(word),
                     endOffset = startOffset + word.length;
-                
+
                 return {
                     startOffset: startOffset,
                     endOffset: endOffset
@@ -83,7 +83,7 @@
 
                 // for Thai we need to keep word with length > 1
                 wordsOffsets = RegularsManager.space
-                    .init(text)    
+                    .init(text)
                     .split()
                     .reduce(function(prev, word) {
                         var wordObject;
@@ -104,21 +104,22 @@
                     wordsCollection: wordsCollection
                 };
             }
-            
+
         };
 
         Namespace.TextProcessor = TextProcessor;
     }
-    (typeof WEBSPELLCHECKER !== 'undefined') ? init(WEBSPELLCHECKER) : module.exports = init;
+    if(typeof window === 'undefined') {module.exports = init;}
+	if(typeof WEBSPELLCHECKER !== 'undefined') {init(WEBSPELLCHECKER);}
 
 })();
     /*
 numbers
-/[0-9]/g 
+/[0-9]/g
 /\d/g
 
 dots
-/\./g 
+/\./g
 
 spaces
 /[\t|\v|\f|\r]+/g;
@@ -145,7 +146,7 @@ all
 
 html
 /<meta.*?>/i mta tags
-/style="[^\"]*"/gi style attr 
+/style="[^\"]*"/gi style attr
 /<br>/gi
 /style="[^\"]*"/gi
  new RegExp('<(' + blockElements + ')(>|.*?[^?]>)', 'gi'), '<br class="scayt-marker">$&' ) // add <br> before block tags
@@ -167,7 +168,7 @@ new RegExp(
 					'<[\s]*[a-z0-9]+[\s]*\/[\s]*>'		 	// single self-closing tag
 					, 'gi'									// global and not register sensitive
                 );
-                
+
 /<\/?[A-Z]+>/g
 
 
@@ -235,7 +236,7 @@ Cookie new RegExp("(?:^|; )" + name.replace(/([\.$?*|{}\(\)\[\]\\\/\+^])/g, '\\$
 /((^|%>)[^\t]*)'/g
 /\t=(.*?)%>/g
 
-UTILS 
+UTILS
 new RegExp( String.fromCharCode(160), 'g' )
 new RegExp( '['+punctuation.source+']', 'g' )
 (/([\.\-\']{2,})/g, '#$1#').replace(/#[\.\-\']|[\.\-\']#/g
@@ -250,7 +251,7 @@ new RegExp( String.fromCharCode(160), 'g' )
 new RegExp( String.fromCharCode(65279), 'g' )
 new RegExp( String.fromCharCode(8203), 'g' )
 new RegExp( String.fromCharCode(8204), 'g' )
-/UTILS 
+/UTILS
 
 /(^|.*[\\\/])ckscayt.js(?:\?.*)?$/i
 */

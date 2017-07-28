@@ -1,26 +1,27 @@
-var WebApi = require("../"), api, bool, RegularsManager, optionTypes,
+var WebApi,
+ api, bool, RegularsManager, optionTypes,
     regSpace;
-RegularsManager = WebApi.RegularsManager;
-    regSpace = RegularsManager.space.init('text');
 
-   
+
 describe("RegularsManager", function () {
-    
+
     beforeEach(function() {
+        WebApi = (typeof window === 'undefined') ? require("../") : WEBSPELLCHECKER;
+        
+        RegularsManager = WebApi.RegularsManager;
         regSpace = RegularsManager.space.init('text');
-        //RegularsManager = WebApi.RegularsManager;
     });
 
     it("loaded", function() {
         expect(RegularsManager).toBeDefined();
     });
-    
+
     it('common expressions should be defined', function() {
         expect(RegularsManager.space).toBeDefined();
         expect(RegularsManager.dot).toBeDefined();
         expect(RegularsManager.digits).toBeDefined();
     });
-    
+
     it('regular type should be a object init should return clone RegObj with current text', function() {
         expect(typeof RegularsManager.space).toEqual('object');
         regSpace = RegularsManager.space.init('list');
@@ -38,9 +39,9 @@ describe("RegularsManager", function () {
     it('getString method should return preassigned text ', function() {
         var text = "standard text";
         expect( RegularsManager.space.init(text).getString() )
-            .toEqual( text );         
+            .toEqual( text );
     });
-    
+
     it('addFlags method should add flags to clone of RegObj', function() {
         expect(regSpace.flags).toEqual('');
         regSpace = regSpace.addFlags('gi');
@@ -48,7 +49,7 @@ describe("RegularsManager", function () {
         regSpace = regSpace.addFlags('ig');
         expect(regSpace.flags).toEqual('gi');
     });
-    
+
     it('g and i methods should add flags', function() {
         expect(regSpace.flags).toEqual('');
         var _regSpace = regSpace.g().g();
@@ -57,7 +58,7 @@ describe("RegularsManager", function () {
         expect(_regSpace.flags).toEqual('gi');
         expect(regSpace.i().i().flags).toEqual('i');
     });
-    
+
     it('set method should wrap regular source [ ] square brackets', function() {
         var source = regSpace.source;
         regSpace = regSpace.set().set();
@@ -118,7 +119,7 @@ describe("RegularsManager", function () {
             .init('test retest')
             .wrapInclude('#')
             .getString();
-        
+
         expect(text).toEqual('test# #retest');
     });
 
@@ -132,28 +133,28 @@ describe("RegularsManager", function () {
             .init(text)
             .wrapInclude("#")
             .getString();
-        
+
         text = _situationalSepSetGlob
             .init(text)
             .replaceLeftWrapped('#', ' ')
             .replaceRightWrapped('#', ' ')
             .getString();
-        
+
         expect(text).toEqual('test1 . data1 test2 - data2 test3  data3');
     });
-    
+
     it('composition method should return combain RegObj from original and received', function() {
          var spaceAndDots = RegularsManager.space
                 .init('T .r. r')
                 .composition( RegularsManager.dot )
                 .g(),
             spaceAndDotsSet = spaceAndDots.set();
-        
+
         var text = spaceAndDots.replace('').getString();
         expect(text).toEqual('Tr. r');
         text = spaceAndDotsSet.replace('').getString();
         expect(text).toEqual('Trr');
-        
+
         expect(spaceAndDotsSet.source).toEqual('[\\s\\xA0\\.]');
     });
 

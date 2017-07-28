@@ -17,5 +17,6 @@
         Namespace.Utils.StringUtils = StringUtils;
     }
 
-    (typeof WEBSPELLCHECKER !== 'undefined') ? init(WEBSPELLCHECKER) : module.exports = init;
+    if(typeof window === 'undefined') {module.exports = init;}
+	if(typeof WEBSPELLCHECKER !== 'undefined') {init(WEBSPELLCHECKER);}
 })();

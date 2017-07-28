@@ -1,8 +1,9 @@
-var WebApi = require("../"), api, bool, OptionsProcessor, optionTypes;
+var WebApi, api, bool, OptionsProcessor, optionTypes;
 
 describe("OptionsProcessor", function () {
-    
+
     beforeEach(function() {
+        WebApi = (typeof window === 'undefined') ? require("../") : WEBSPELLCHECKER;
         OptionsProcessor = WebApi.OptionsProcessor;
         optionTypes = OptionsProcessor.optionTypes;
 	});

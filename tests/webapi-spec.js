@@ -1,20 +1,19 @@
-var WebApi = require("../"), api, bool,
+var WebApi,
+ api, bool,
     UD_NAME = 'test_js_webapi_ud',
     NEW_UD_NAME = 'new_test_js_webapi_ud',
     WORD = 'exampl',
     WORD2 = 'mispelled',
     TEXT = 'This is an exampl of a sentence with two mispelled words. Just type text with misspelling to see how it works.',
     TEXTGRAMMAR = 'These are an examples of a sentences with two misspelled words and gramar problems. Just type text with mispelling to see how it works.',
-    StringUtils;
-var WebApi = require("../"), api, bool, TextProcessor, optionTypes;
-
-StringUtils = WebApi.Utils.StringUtils;
-//api = new WebApi();
-
+    StringUtils,
+    api, bool, TextProcessor, optionTypes;
 
 describe("WebApi", function () {
 
     beforeEach(function() {
+        WebApi = (typeof window === 'undefined') ? require("../") : WEBSPELLCHECKER;
+        StringUtils = WebApi.Utils.StringUtils;
 		api = new WebApi();
 	});
 
@@ -47,9 +46,9 @@ describe("WebApi", function () {
         for (var i = 0; i < methodsList.length; i +=1) {
             expect( api[methodsList[i]] ).toBeDefined();
         }
-        
+
     });
-    
+
     it("getOption and setOptions should work", function() {
         var boolRes, value;
         boolRes = api.setOption('test', true);
@@ -64,13 +63,13 @@ describe("WebApi", function () {
 
     it("getLangList method should return list with available languages", function() {
         bool = false;
-        
+
         api.getLangList({
             success: function(res) {
                 bool = true;
             }
         });
-          
+
         waitsFor(function() {
               return bool;
         });
@@ -86,7 +85,7 @@ describe("WebApi", function () {
                     }
                 }
             });
-        
+
         waitsFor(function() {
             return bool;
         });
@@ -109,7 +108,7 @@ describe("WebApi", function () {
                     }
                 }
             });
-        
+
         waitsFor(function() {
             return bool;
         });
@@ -125,7 +124,7 @@ describe("WebApi", function () {
                     }
                 }
             });
-        
+
         waitsFor(function() {
             return bool;
         });
@@ -133,11 +132,11 @@ describe("WebApi", function () {
 
     it("getUserDictionary, createUserDictionary deleteUserDictionary methods flow should work correctly", function() {
         var bool = false;
-        
+
         function createUD() {
             api.createUserDictionary({
                 name: UD_NAME,
-                wordList: WORD + ',' + WORD2, 
+                wordList: WORD + ',' + WORD2,
                 success: function(res) {
                     if(res && !res.error) {
                         bool = true;
@@ -160,7 +159,7 @@ describe("WebApi", function () {
                 error: function(res) {
                     createUD();
                 }
-            });        
+            });
 
             waitsFor(function() {
                 return bool;
@@ -189,7 +188,7 @@ describe("WebApi", function () {
         });
     });
 
-    
+
     it("deleteUserDictionary method should delete UD", function() {
         var bool = false;
         api.deleteUserDictionary({
@@ -302,7 +301,7 @@ describe("WebApi", function () {
                 return true;
             }
         });
-        
+
     });
 
     // it("getBanner method should return bool - banner true | false", function() {

@@ -19,7 +19,7 @@
         env = envTypes.browser;
     }
 
-    var WEBSPELLCHECKER = glob.WEBSPELLCHECKER || function(clientOptions) {
+    var WEBSPELLCHECKER = glob.WEBSPELLCHECKER =  function(clientOptions) {
         /**
          * Static
          */
@@ -174,7 +174,7 @@
                     wordList: parametrs.wordList || ''
                 };
             },
-            delete: function(parametrs) {
+            'delete': function(parametrs) {
                 return {
                     UDAction: this.actions.delete
                 };

@@ -75,5 +75,6 @@
         Namespace.Utils.ArrayUtils = ArrayUtils;
     }
 
-    (typeof WEBSPELLCHECKER !== 'undefined') ? init(WEBSPELLCHECKER) : module.exports = init;
+    if(typeof window === 'undefined') {module.exports = init;}
+	if(typeof WEBSPELLCHECKER !== 'undefined') {init(WEBSPELLCHECKER);}
 })();

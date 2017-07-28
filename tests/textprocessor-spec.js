@@ -1,20 +1,22 @@
-var WebApi = require("../"), api, bool, TextProcessor, optionTypes;
-if(WebApi.env === 'node' && typeof describe === 'undefined') {
-    global.describe = function(t, r) {r()};
-    global.beforeEach = function(r){r()};
-    global.it = function(n, r){r()};
-    global.expect = function(){
-        return {
-            toBeDefined: function(){},
-            toEqual:function(){}
-        }
-    };
-}
+
+ var WebApi, api, bool, TextProcessor, optionTypes;
+// if(WebApi.env === 'node' && typeof describe === 'undefined') {
+//     global.describe = function(t, r) {r()};
+//     global.beforeEach = function(r){r()};
+//     global.it = function(n, r){r()};
+//     global.expect = function(){
+//         return {
+//             toBeDefined: function(){},
+//             toEqual:function(){}
+//         }
+//     };
+// }
 
 
 describe("TextProcessor", function () {
-    
+
     beforeEach(function() {
+        WebApi = (typeof window === 'undefined') ? require("../") : WEBSPELLCHECKER;
         api = new WebApi();
         TextProcessor = api._getService('TextProcessor');
     });
@@ -47,7 +49,7 @@ describe("TextProcessor", function () {
             'eval'
         ]);
     });
-    
+
     it("words offsets should define correctly", function() {
         var words = TextProcessor.getWordsFromString("constructor __defineGetter__  __defineSetter__");
         var offsets = words.wordsOffsets;
@@ -132,7 +134,7 @@ describe("TextProcessor", function () {
             'test'
         ]);
     });
-    
+
     it("should be possible to change minimum words length that will be collected", function() {
 		var words, storedMinWordLengthValue;
 

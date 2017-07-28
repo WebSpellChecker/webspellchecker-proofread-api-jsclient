@@ -7,7 +7,7 @@
 	function init( Namespace ) {
 		var Utils = Namespace.Utils,
 			logger = Namespace.logger.console;
-		
+
 		/**
 		 * Mocked request
 		 * @static
@@ -62,7 +62,7 @@
 
 					return this;
 				};
-				
+
 				this.addParameters = function(parameters) {
 					for(var param in parameters) {
 						this.addParameter(param, parameters[param]);
@@ -74,7 +74,7 @@
 				this.getParameter = function( name ) {
 					return request_params[name];
 				};
-				
+
 				this.joinUrl = function() {
 					var urlString = '';
 
@@ -187,7 +187,7 @@
 
 				ajax.request.open('POST', ajax.params.url, true);
 				// Fixed IE9 bug with ajax requests.
-				if (Utils.browser.ie && Utils.browser.version === 9) {
+				if (Utils.Browser.ie && Utils.Browser.version === 9) {
 					setTimeout(function() {
 						ajax.request.send(ajax.params.data);
 					}, 500);
@@ -272,7 +272,7 @@
 					// we are done, resolve promise with those joined chunks
 					response.on('end', function(){
 						var responseData = body.join('');
-						
+
 						try {
 							responseData = JSON.parse(responseData);
 						} catch (error) {
@@ -463,10 +463,10 @@
 		 *
 		 * @alias SCAYT.prototype.IO
 		 */
-		IO.request = (Namespace.env === Namespace.envTypes.node) ? 
+		IO.request = (Namespace.env === Namespace.envTypes.node) ?
 			IO.requestTypes.NODE :
-			IO.requestTypes.AJAX ; 
-		
+			IO.requestTypes.AJAX ;
+
 
 		/**
 		 * Static Module. Imput&Output (IO) Manager of SCAYT
@@ -476,5 +476,6 @@
 		Namespace.IO = IO;
 	}
 
-    (typeof WEBSPELLCHECKER !== 'undefined') ? init(WEBSPELLCHECKER) : module.exports = init;
+    if(typeof window === 'undefined') {module.exports = init;}
+	if(typeof WEBSPELLCHECKER !== 'undefined') {init(WEBSPELLCHECKER);}
 })();

@@ -39,7 +39,7 @@
                 deleteWord: 'deleteword',
                 getDict: 'getdict'
             };
-        
+
 
         function Connection(moduleId, appInstance) {
             this.moduleId = moduleId;
@@ -81,7 +81,7 @@
                     result[paramName] = parameters[k];
                 }
                 result = Object.assign({}, this.defaultParameters, result);
-                
+
                 // Now we have the bag with get_lang_list command.
                 // It's doesn't work for some reasons with "format=json" parameter.
                 if(result[_parametersMap.command] === _commandsMap.getLangList) {
@@ -91,7 +91,7 @@
                 return result;
             },
             request: function(parameters, onSuccess, onError) {
-                IO.get( 
+                IO.get(
                     this.getURL()
                         .addParameters( this.prepareParameters(parameters) ),
                     onSuccess,
@@ -103,5 +103,6 @@
         Namespace.Connection = Connection;
     }
 
-    (typeof WEBSPELLCHECKER !== 'undefined') ? init(WEBSPELLCHECKER) : module.exports = init;
+    if(typeof window === 'undefined') {module.exports = init;}
+	if(typeof WEBSPELLCHECKER !== 'undefined') {init(WEBSPELLCHECKER);}
 })();

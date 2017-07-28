@@ -100,7 +100,7 @@
                 errorReport.critical = optionTemplate.required || false;
                 errorReport.optionName = optionName;
                 errorReport.message = validationInfo.errorMessages;
-                
+
                 optionErrorHandler(errorReport);
 
                 return defaultValue;
@@ -110,7 +110,7 @@
                     options = Object.assign({}, _options),
                     optionsTemplates = Object.assign({}, _optionsTemplates),
                     errorsObject = new this.ErrorsObject();
-                    
+
                 for(var k in optionsTemplates) {
                     if( optionsTemplates.hasOwnProperty(k) === false ) continue;
                     if(optionsTemplates[k].type instanceof OptionType === false) {
@@ -124,7 +124,7 @@
                             errorsObject.addError(error);
                         }
                     });
-                    
+
                 }
                 if(_errorHandler && errorsObject.count > 0) {
                     _errorHandler(errorsObject);
@@ -139,14 +139,15 @@
                 }
             }
         };
-        
+
         validators = OptionsProcessor.optionsValidators;
         OptionsProcessor.optionTypes = {};
         for(var type in validators) {
             OptionsProcessor.optionTypes[type] = new OptionType(type, validators[type]);
         }
-        
+
         Namespace.OptionsProcessor = OptionsProcessor;
     }
-    (typeof WEBSPELLCHECKER !== 'undefined') ? init(WEBSPELLCHECKER) : module.exports = init;
+    if(typeof window === 'undefined') {module.exports = init;}
+	if(typeof WEBSPELLCHECKER !== 'undefined') {init(WEBSPELLCHECKER);}
 })();
