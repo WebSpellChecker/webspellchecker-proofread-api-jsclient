@@ -20,7 +20,7 @@
                 date: TypeChecker.isDate,
                 defined: TypeChecker.isDefined,
                 empty: TypeChecker.isEmpty,
-                function: TypeChecker.isFunction,
+                'function': TypeChecker.isFunction,
                 hash: TypeChecker.isHash,
                 integer:TypeChecker.isInteger,
                 number: TypeChecker.isNumber,

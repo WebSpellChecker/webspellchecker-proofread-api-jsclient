@@ -32,7 +32,7 @@
             },
             _UDActionsMap = {
                 create: 'create',
-                delete: 'delete',
+                'delete': 'delete',
                 rename: 'rename',
                 check: 'check',
                 addWord: 'addword',

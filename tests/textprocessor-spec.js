@@ -99,7 +99,7 @@ describe("TextProcessor", function () {
             "test2",
             'data2',
             'test3',
-            "data3",
+            "data3"
         ]);
 	});
 

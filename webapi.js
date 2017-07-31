@@ -176,7 +176,7 @@
             },
             'delete': function(parametrs) {
                 return {
-                    UDAction: this.actions.delete
+                    UDAction: this.actions['delete']
                 };
             },
             rename: function(parametrs) {
