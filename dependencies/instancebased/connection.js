@@ -91,7 +91,7 @@
                 return result;
             },
             request: function(parameters, onSuccess, onError) {
-                IO.get(
+                return IO.get(
                     this.getURL()
                         .addParameters( this.prepareParameters(parameters) ),
                     onSuccess,

@@ -39,8 +39,7 @@ describe("WebApi", function () {
             'deleteWordFromUserDictionary',
             'spellCheck',
             'grammarCheck',
-            'getLangList',
-            'getBanner'
+            'getLangList'
         ];
 
         for (var i = 0; i < methodsList.length; i +=1) {
@@ -66,6 +65,7 @@ describe("WebApi", function () {
 
         api.getLangList({
             success: function(res) {
+                console.log(res);
                 bool = true;
             }
         });
@@ -303,18 +303,4 @@ describe("WebApi", function () {
         });
 
     });
-
-    // it("getBanner method should return bool - banner true | false", function() {
-    //     bool = false;
-    //     waitsFor(function() {
-    //         api.getBanner({
-    //             text: TEXT,
-    //             success: function(res) {
-    //                 bool = true;
-    //             }
-    //         });
-    //         return bool;
-    //     });
-    // });
-
 });

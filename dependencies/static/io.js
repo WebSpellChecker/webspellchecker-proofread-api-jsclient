@@ -291,6 +291,8 @@
 				});
 				request.write( params.url.joinRequestParams() );
 				request.end();
+
+				return request;
 			},
 			/**
 			 * Create script tag
