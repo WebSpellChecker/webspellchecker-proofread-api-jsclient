@@ -1,4 +1,4 @@
-
+// webapi.js
 (function(){
     // Define local variables
     var env, glob, envTypes = {
@@ -15,38 +15,38 @@
     }
     /**
      * Represents a Namespace (WEBSPELLCHECKER).
-     * @constructor
-     * @instance
+     * @constructor WEBSPELLCHECKER
      * @public
+     * 
      * @param {Object} clientOptions
      
-    * @param {string} [options.lang='en_US'] - The parameter sets the default spell checking language for SCAYT. Possible values are:
-    * 'en_US', 'en_GB', 'pt_BR', 'da_DK',
-    * 'nl_NL', 'en_CA', 'fi_FI', 'fr_FR',
-    * 'fr_CA', 'de_DE', 'el_GR', 'it_IT',
-    * 'nb_NO', 'pt_PT', 'es_ES', 'sv_SE'.
-    *
-    * @param {string} [options.serviceProtocol='http'] - The parameter allows to specify protocol for WSC service (entry point is ssrv.cgi) full path.
-    *
-    * @param {string} [options.serviceHost='svc.webspellchecker.net'] - The parameter allows to specify host for WSC service (entry point is ssrv.cgi) full path.
-    *
-    * @param {number} [options.servicePort='80'] - The parameter allows to specify default port for WSC service (entry point is ssrv.cgi) full path.
-    *
-    * @param {string} [options.servicePath='spellcheck31/script/ssrv.cgi'] - The parameter allows to specify path for WSC service (entry point is ssrv.cgi) full path.
-    *
-    * @param {number} [options.minWordLength=4] - The parameter defines minimum length of the letters that will be collected from container's text for spell checking.
-    * Possible value is any positive number.
-    *
-    * @param {string} [options.customDictionaryIds=''] - The parameter links SCAYT to custom dictionaries. Here is a string containing dictionary IDs separated by commas (',').
-    * Further details can be found at [http://wiki.webspellchecker.net/doku.php?id=installationandconfiguration:customdictionaries:licensed](http://wiki.webspellchecker.net/doku.php?id=installationandconfiguration:customdictionaries:licensed).
-    *
-    * @param {string} [options.userDictionaryName=''] - The parameter activates a User Dictionary in SCAYT.
-    *
-    * @param {string} [options.customerId='1:j47ai-r4SLN1-dG5xP1-UuonU-WqXUZ3-0bzqZ1-QI8OP1-bQZcb1-KQuPE3-nWbcY3-aA4Zk4-wT9'] - The parameter sets the customer ID for SCAYT. It used for a migration from free,
-    * ad-supported version to paid, ad-free version.
-    *
-    * @param {string} [options.customPunctuation='-'] - The parameter that receives a string with characters that will considered as separators.
-    */
+     * @param {String} [options.lang='en_US'] - The parameter sets the default spell checking language for SCAYT. Possible values are:
+     * 'en_US', 'en_GB', 'pt_BR', 'da_DK',
+     * 'nl_NL', 'en_CA', 'fi_FI', 'fr_FR',
+     * 'fr_CA', 'de_DE', 'el_GR', 'it_IT',
+     * 'nb_NO', 'pt_PT', 'es_ES', 'sv_SE'.
+     *
+     * @param {String} [clientOptions.serviceProtocol='http'] - The parameter allows to specify protocol for WSC service (entry point is ssrv.cgi) full path.
+     *
+     * @param {String} [clientOptions.serviceHost='svc.webspellchecker.net'] - The parameter allows to specify host for WSC service (entry point is ssrv.cgi) full path.
+     *
+     * @param {Number} [clientOptions.servicePort='80'] - The parameter allows to specify default port for WSC service (entry point is ssrv.cgi) full path.
+     *
+     * @param {String} [clientOptions.servicePath='spellcheck31/script/ssrv.cgi'] - The parameter allows to specify path for WSC service (entry point is ssrv.cgi) full path.
+     *
+     * @param {Number} [clientOptions.minWordLength=4] - The parameter defines minimum length of the letters that will be collected from container's text for spell checking.
+     * Possible value is any positive number.
+     *
+     * @param {String} [clientOptions.customDictionaryIds=''] - The parameter links SCAYT to custom dictionaries. Here is a string containing dictionary IDs separated by commas (',').
+     * Further details can be found at [http://wiki.webspellchecker.net/doku.php?id=installationandconfiguration:customdictionaries:licensed](http://wiki.webspellchecker.net/doku.php?id=installationandconfiguration:customdictionaries:licensed).
+     *
+     * @param {String} [clientOptions.userDictionaryName=''] - The parameter activates a User Dictionary in SCAYT.
+     *
+     * @param {String} [clientOptions.customerId='1:KpkvQ2-6KNUj-L1W3u2-C9j0K1-Zv2tY1-CfDOx-WfGRg2-qXtci-YyyE34-j09H42-b0aCt3-d9a'] - The parameter sets the customer ID for SCAYT. It used for a migration from free,
+     * ad-supported version to paid, ad-free version.
+     *
+     * @param {String} [clientOptions.customPunctuation=''] - The parameter that receives a string with characters that will considered as separators.
+     */
     var WEBSPELLCHECKER = glob.WEBSPELLCHECKER =  function(clientOptions) {
 
         // Static dependencies
@@ -119,9 +119,9 @@
         /**
          * Return instance of dependencie.
          *
-         * @param {string} name - Name of instancebased service.
+         * @param {String} name - Name of instancebased service.
          *
-         * @returns {object} - Instance of service.
+         * @returns {Object} - Instance of service.
          */
         this._getService = function(name) {
             return _services[name] || null;
@@ -131,11 +131,11 @@
          * Wrapper of request method.
          * @private
          * 
-         * @param {object} data - Object with request data.
+         * @param {Object} data - Object with request data.
          * @param {function} success - Handler successful response from the server.
 	     * @param {function} error - Handler unsuccessful response from the server.
          *
-         * @returns {object} - Transport object.
+         * @returns {Object} - Transport object.
          */
         this._request = function(data, success, error) {
             return connection.request(
@@ -182,13 +182,13 @@
         commands = connection.getCommands();
 
         /**
+         * @constructor
          * UserDictionary Manager constructor.
          * Encapsulates the construction of a query for UD request.
-         * @private
-         * @constructor
 	     *
-	     * @param {object} parametrs.actions        - List of available UD actions.
+	     * @param {Object} parametrs.actions        - List of available UD actions.
          * @param {function} parametrs.request  	- Request-maker function.
+         * @private
 	     */
         function UserDictionaryManager(parametrs) {
             this.actions = parametrs.actions;
@@ -198,13 +198,13 @@
         UserDictionaryManager.prototype = {
             constructor: UserDictionaryManager,
             /**
-             * @private
              * UserDictionaryManager entrypoint.
              * Controller for UD actions.
-             * @param {string} actionName           - Name of UD action .
+             * @param {String} actionName           - Name of UD action .
              * @param {function} parametrs.request  - Request-maker function.
              *
-             * @returns {object}                    - Transport object.
+             * @returns {Object}                    - Transport object.
+             * @private
              */
             action: function(actionName, parametrs) {
                 var actionMethod = this[actionName],
@@ -223,10 +223,10 @@
                 );
             },
             /**
-             * @private
              * UserDictionaryManager 'get' method.
              *
-             * @returns {object} - Object with UD 'get' action.
+             * @returns {Object} - Object with UD 'get' action.
+             * @private
              */
             get: function() {
                 return {
@@ -234,13 +234,13 @@
                 };
             },
             /**
-             * @private
              * UserDictionaryManager 'create' method.
              * Receive list of words what will be added to the new dicrionary.
              *
-             * @param {string} parametrs.wordList - List of words separated by ','.
+             * @param {String} parametrs.wordList - List of words separated by ','.
              *
-             * @returns {object} - Object with UD 'create' action and wordLists parametr.
+             * @returns {Object} - Object with UD 'create' action and wordLists parametr.
+             * @private
              */
             create: function(parametrs) {
                 return {
@@ -249,10 +249,10 @@
                 };
             },
             /**
-             * @private
              * UserDictionaryManager 'delete' method.
              *
-             * @returns {object} - Object with UD 'delete' action.
+             * @returns {Object} - Object with UD 'delete' action.
+             * @private
              */
             'delete': function() {
                return {
@@ -261,13 +261,13 @@
                 };
             },
             /**
-             * @private
              * UserDictionaryManager 'rename' method.
              * Receive new dictionary name.
              *
-             * @param {string} parametrs.newName - Name of new dictionary.
+             * @param {String} parametrs.newName - Name of new dictionary.
              *
-             * @returns {object} - Object with UD 'rename' action and new UD name.
+             * @returns {Object} - Object with UD 'rename' action and new UD name.
+             * @private
              */
             rename: function(parametrs) {
                 return {
@@ -276,13 +276,13 @@
                 };
             },
             /**
-             * @private
              * UserDictionaryManager 'addWord' method.
              * Receive word what will be added to dictionary.
              *
-             * @param {string} parametrs.word - Word.
+             * @param {String} parametrs.word - Word.
              *
-             * @returns {object} - Object with UD 'addWord' action and word.
+             * @returns {Object} - Object with UD 'addWord' action and word.
+             * @private
              */
             addWord: function(parametrs) {
                 return {
@@ -291,13 +291,13 @@
                 };
             },
             /**
-             * @private 
              * UserDictionaryManager 'deleteWord' method.
              * Receive word what will be deleted from dictionary.
              *
-             * @param {string} parametrs.word - Word.
+             * @param {String} parametrs.word - Word.
              *
-             * @returns {object} - Object with UD 'deleteWord' action and word.
+             * @returns {Object} - Object with UD 'deleteWord' action and word.
+             * @private 
              */
             deleteWord: function(parametrs) {
                 return {
@@ -315,21 +315,28 @@
             }
         });
 
+
+
         // API
         /**
          * getLangList success Callback.
          *
-         * @callback getLangListCallback
-         * @param {object} data.langList - Object with list of available languages. Separeted on ltr(left-to-right) and rtl(right-to-left) directions.
-         * @param {number} data.verLang - Number of available languages.
+         * @callback GetLangListCallback
+         * @param {Object} data
+         * @param {Object} [data.langList={"ltr":{"en_US" : "American English","en_GB" : "British English","fr_FR" : "French","de_DE" : "German","it_IT" : "Italian","es_ES" : "Spanish"},"rtl":{}}]
+         *      Object with list of available languages. Separeted on ltr(left-to-right) and rtl(right-to-left) directions.
+         * @param {Number} [data.verLang=9] Number of available languages.
          */
 
         /**
          * getLangList API method.
-         *
-         * @param {getLangListCallback} parametrs.success - Handler successful response from the server.
-         * @param {requestCallback} parametrs.error - Handler unsuccessful response from the server. 
-         * @returns {object} - Transport object.
+         * @public
+         * @memberof WEBSPELLCHECKER#
+         * 
+         * @param {Object} parametrs
+         * @param {GetLangListCallback} parametrs.success - Handler successful response from the server.
+         * @param {RequestCallback} parametrs.error - Handler unsuccessful response from the server. 
+         * @returns {Object} - Transport object.
          * @example
          * wscWebApiInstance.getLangList({
          *      success: function(data) {
@@ -340,7 +347,7 @@
          *      }
          * })
          */
-        this.getLangList = function(parametrs) {
+        var getLangList = function(parametrs) {
             return this._request(
                 {
                     command: commands.getLangList
@@ -349,22 +356,27 @@
                 parametrs.error
             );
         };
+        this.getLangList = getLangList;
         /**
          * spellCheck success Callback.
          *
-         * @callback spellCheckCallback
-         * @param {Array.<Object>} wordObjects.word - misspelled word.
-         * @param {Array.<Object>} wordObjects.ud - flag. Is this word in the dictionary.
-         * @param {Array.<Object>} wordObjects.suggestions - array with suggestions for current misspelled.
+         * @callback SpellCheckCallback
+         * @param {Object[]} wordObjects
+         * @param {String} wordObjects.word - Misspelled word.
+         * @param {String} wordObjects.ud - Flag. Is this word in the user dictionary.
+         * @param {String[]} wordObjects.suggestions - Array with suggestions for current misspelled.
          */
 
         /**
          * spellCheck API method.
+         * @public
+         * @memberof WEBSPELLCHECKER#
          *
-         * @param {string} parametrs.text - Text to check spelling.
-         * @param {spellCheckCallback} parametrs.success - Handler successful response from the server.
-         * @param {requestCallback} parametrs.error - Handler unsuccessful response from the server.
-         * @returns {object} - Transport object.
+         * @param {Object} parametrs
+         * @param {String} parametrs.text - Text to check spelling.
+         * @param {SpellCheckCallback} parametrs.success - Handler successful response from the server.
+         * @param {RequestCallback} parametrs.error - Handler unsuccessful response from the server.
+         * @returns {Object} - Transport object.
          * @example
          * wscWebApiInstance.spellCheck({
          *      text: 'This is an exampl of a sentence with two mispelled words. Just type text with misspelling to see how it works',
@@ -376,7 +388,7 @@
          *      }
          * });
          */
-        this.spellCheck = function(parametrs) {
+        var spellCheck = function(parametrs) {
             var words = textProcessor.getWordsFromString( parametrs.text ),
                 text = words.wordsCollection.join(',');
 
@@ -412,23 +424,28 @@
                 parametrs.error
             );
         };
+        this.spellCheck = spellCheck;
         /**
          * grammarCheck success Callback.
          *
-         * @callback grammarCheckCallback
-         * @param {Array.<Object>} phraseObjects.description - description of grammar problem.
-         * @param {Array.<Object>} phraseObjects.phrase - phrase with problem.
-         * @param {Array.<Object>} phraseObjects.problem_id - id of current problem.
-         * @param {Array.<Object>} phraseObjects.suggestions - array with suggestions.
+         * @callback GrammarCheckCallback
+         * @param {Object[]} phraseObjects
+         * @param {String} phraseObjects.description - Description of grammar problem.
+         * @param {String} phraseObjects.phrase - Phrase with problem.
+         * @param {Number} phraseObjects.problem_id - Id of current problem.
+         * @param {String[]} phraseObjects.suggestions - Array with suggestions.
          */
 
         /**
          * grammarCheck API method.
-         *
-         * @param {string} parametrs.text - Text to grammar checking.
-         * @param {grammarCheckCallback} parametrs.success - Handler successful response from the server.
-         * @param {requestCallback} parametrs.error - Handler unsuccessful response from the server.
-         * @returns {object} - Transport object.
+         * @public
+         * @memberof WEBSPELLCHECKER#
+         * 
+         * @param {Object} parametrs
+         * @param {String} parametrs.text - Text to grammar checking.
+         * @param {GrammarCheckCallback} parametrs.success - Handler successful response from the server.
+         * @param {RequestCallback} parametrs.error - Handler unsuccessful response from the server.
+         * @returns {Object} - Transport object.
          * @example
          * wscWebApiInstance.grammarCheck({
          *      text: 'These are an examples of a sentences with two misspelled words and gramar problems. Just type text with mispelling to see how it works.',
@@ -440,7 +457,7 @@
          *      }
          * });
          */
-        this.grammarCheck = function(parametrs) {
+        var grammarCheck = function(parametrs) {
             return this._request(
                 {
                     command: commands.grammarCheck,
@@ -451,22 +468,27 @@
                 parametrs.error
             );
         };
+        this.grammarCheck = grammarCheck;
         /** 
          * userDictionary success Callback.
          *
-         * @callback userDictionaryCallback
-         * @param {string} UDResponse.name - Dictionary name.
-         * @param {string} UDResponse.action - User Dictionary action.
-         * @param {Object} wordObjects.wordlist - lsit of words stored in this dictionary.
+         * @callback UserDictionaryCallback
+         * @param {Object} UDResponse
+         * @param {String} UDResponse.name - Dictionary name.
+         * @param {String} UDResponse.action - User Dictionary action.
+         * @param {Object} UDResponse.wordlist - List of words stored in this dictionary.
          */
 
         /**
          * getUserDictionary API method.
-         *
-         * @param {string} parametrs.name - User dictionary name.
-         * @param {userDictionaryCallback} parametrs.success - Handler successful response from the server.
-         * @param {requestCallback} parametrs.error - Handler unsuccessful response from the server.
-         * @returns {object} - Transport object.
+         * @public
+         * @memberof WEBSPELLCHECKER#
+         * 
+         * @param {Object} parametrs
+         * @param {String} parametrs.name - User dictionary name.
+         * @param {UserDictionaryCallback} parametrs.success - Handler successful response from the server.
+         * @param {RequestCallback} parametrs.error - Handler unsuccessful response from the server.
+         * @returns {Object} - Transport object.
          * @example
          * wscWebApiInstance.getUserDictionary({
          *      name: 'test',
@@ -478,18 +500,21 @@
          *      }
          * });
          */
-        this.getUserDictionary = function(parametrs) {
+        var getUserDictionary = function(parametrs) {
             return userDictionaryManager.action('get', parametrs);
         };
-        
+        this.getUserDictionary = getUserDictionary;
 
         /**
          * createUserDictionary API method.
-         *
-         * @param {string} parametrs.name - User dictionary name.
-         * @param {userDictionaryCallback} parametrs.success - Handler successful response from the server.
-         * @param {requestCallback} parametrs.error - Handler unsuccessful response from the server.
-         * @returns {object} - Transport object.
+         * @public
+         * @memberof WEBSPELLCHECKER#
+         * 
+         * @param {Object} parametrs
+         * @param {String} parametrs.name - User dictionary name.
+         * @param {UserDictionaryCallback} parametrs.success - Handler successful response from the server.
+         * @param {RequestCallback} parametrs.error - Handler unsuccessful response from the server.
+         * @returns {Object} - Transport object.
          * @example
          * wscWebApiInstance.createUserDictionary({
          *      name: 'test',
@@ -501,17 +526,21 @@
          *      }
          * });
          */
-        this.createUserDictionary = function(parametrs) {
+        var createUserDictionary = function(parametrs) {
             return userDictionaryManager.action('create', parametrs);
         };
+        this.createUserDictionary = createUserDictionary;
         
         /**
          * deleteUserDictionary API method.
-         *
-         * @param {string} parametrs.name - User dictionary name.
-         * @param {userDictionaryCallback} parametrs.success - Handler successful response from the server.
-         * @param {requestCallback} parametrs.error - Handler unsuccessful response from the server.
-         * @returns {object} - Transport object.
+         * @public 
+         * @memberof WEBSPELLCHECKER#
+         * 
+         * @param {Object} parametrs
+         * @param {String} parametrs.name - User dictionary name.
+         * @param {UserDictionaryCallback} parametrs.success - Handler successful response from the server.
+         * @param {RequestCallback} parametrs.error - Handler unsuccessful response from the server.
+         * @returns {Object} - Transport object.
          * @example
          * wscWebApiInstance.deleteUserDictionary({
          *      name: 'test',
@@ -523,18 +552,22 @@
          *      }
          * });
          */
-        this.deleteUserDictionary = function(parametrs) {
+        var deleteUserDictionary = function(parametrs) {
             return userDictionaryManager.action('delete', parametrs);
         };
+        this.deleteUserDictionary = deleteUserDictionary;
 
         /**
          * renameUserDictionary API method.
-         *
-         * @param {string} parametrs.name - User dictionary name.
-         * @param {string} parametrs.newName - new User dictionary name.
-         * @param {userDictionaryCallback} parametrs.success - Handler successful response from the server.
-         * @param {requestCallback} parametrs.error - Handler unsuccessful response from the server.
-         * @returns {object} - Transport object.
+         * @public
+         * @memberof WEBSPELLCHECKER#
+         * 
+         * @param {Object} parametrs
+         * @param {String} parametrs.name - User dictionary name.
+         * @param {String} parametrs.newName - New user dictionary name.
+         * @param {UserDictionaryCallback} parametrs.success - Handler successful response from the server.
+         * @param {RequestCallback} parametrs.error - Handler unsuccessful response from the server.
+         * @returns {Object} - Transport object.
          * @example
          * wscWebApiInstance.renameUserDictionary({
          *      name: 'test',
@@ -546,18 +579,22 @@
          *      }
          * });
          */
-        this.renameUserDictionary = function(parametrs) {
+        var renameUserDictionary = function(parametrs) {
             return userDictionaryManager.action('rename' , parametrs);
         };
+        this.renameUserDictionary = renameUserDictionary;
 
         /**
          * addWordToUserDictionary API method.
-         *
-         * @param {string} parametrs.name - User dictionary name.
-         * @param {string} parametrs.word - Word what will be added to UD.
-         * @param {userDictionaryCallback} parametrs.success - Handler successful response from the server.
-         * @param {requestCallback} parametrs.error - Handler unsuccessful response from the server.
-         * @returns {object} - Transport object.
+         * @public
+         * @memberof WEBSPELLCHECKER#
+         * 
+         * @param {Object} parametrs
+         * @param {String} parametrs.name - User dictionary name.
+         * @param {String} parametrs.word - Word what will be added to UD.
+         * @param {UserDictionaryCallback} parametrs.success - Handler successful response from the server.
+         * @param {RequestCallback} parametrs.error - Handler unsuccessful response from the server.
+         * @returns {Object} - Transport object.
          * @example
          * wscWebApiInstance.addWordToUserDictionary({
          *      name: 'test',
@@ -570,18 +607,22 @@
          *      }
          * });
          */
-        this.addWordToUserDictionary = function(parametrs) {
+        var addWordToUserDictionary = function(parametrs) {
             return userDictionaryManager.action('addWord', parametrs);
         };
+        this.addWordToUserDictionary = addWordToUserDictionary;
 
         /**
          * deleteWordFromUserDictionary API method.
-         *
-         * @param {string} parametrs.name - User dictionary name.
-         * @param {string} parametrs.word - Word what will be deleted from UD.
-         * @param {userDictionaryCallback} parametrs.success - Handler successful response from the server.
-         * @param {requestCallback} parametrs.error - Handler unsuccessful response from the server.
-         * @returns {object} - Transport object.
+         * @public
+         * @memberof WEBSPELLCHECKER#
+         * 
+         * @param {Object} parametrs
+         * @param {String} parametrs.name - User dictionary name.
+         * @param {String} parametrs.word - Word what will be deleted from UD.
+         * @param {UserDictionaryCallback} parametrs.success - Handler successful response from the server.
+         * @param {RequestCallback} parametrs.error - Handler unsuccessful response from the server.
+         * @returns {Object} - Transport object.
          * @example
          * wscWebApiInstance.deleteWordFromUserDictionary({
          *      name: 'test',
@@ -594,9 +635,10 @@
          *      }
          * });
          */
-        this.deleteWordFromUserDictionary = function(parametrs) {
+        var deleteWordFromUserDictionary = function(parametrs) {
             return userDictionaryManager.action('deleteWord', parametrs);
         };
+        this.deleteWordFromUserDictionary = deleteWordFromUserDictionary;
     };
 
     WEBSPELLCHECKER.env = env;
