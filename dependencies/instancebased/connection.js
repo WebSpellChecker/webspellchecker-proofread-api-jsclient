@@ -39,11 +39,18 @@
                 deleteWord: 'deleteword',
                 getDict: 'getdict'
             };
-
-
+        /**
+         * Connection constructor.
+         * Module for working with server commands and preparing request info.
+         * @constructor
+         * @param {String} moduleId - Moduloe name;
+         * @param {Object} appInstance - Instance of main app.
+         * @private
+         */ 
         function Connection(moduleId, appInstance) {
             this.moduleId = moduleId;
             this.appInstance = appInstance;
+
             this.url = new IO.URL({
 				protocol 	: appInstance.getOption('serviceProtocol'),
 				host 		: appInstance.getOption('serviceHost'),
@@ -56,19 +63,52 @@
         }
 
         Connection.prototype = {
+            constructor: Connection,
+            /**
+             * Accessor for map of cmd request parameter values.
+             * 
+             * @returns {Object} - List of server commands.
+             * @private
+             */ 
             getCommands: function() {
                 return _commandsMap;
             },
+            /**
+             * Accessor for map of user dictionary actions.
+             * 
+             * @returns {Object} - List of UD actions.
+             * @private
+             */ 
             getUDActions: function() {
                 return _UDActionsMap;
             },
+            /**
+             * Define common parameters for each request.
+             * 
+             * @private
+             */ 
             setDefaultParameters: function() {
                 this.defaultParameters[_parametersMap.customer_id] = this.appInstance.getOption('customerId');
                 this.defaultParameters[_parametersMap.communicationFormat] = this.appInstance.getOption('communicationFormat');
             },
+            /**
+             * Return clone of url object for request.
+             * 
+             * @returns {Object} - Clone of IO url object.
+             * @private
+             */
             getURL: function() {
                 return Object.assign({}, this.url);
             },
+            /**
+             * Prepare client parameters before request.
+             * Collect request parameters from _parametersMap.
+             * 
+             * @param {Object} parameters - Wrapped requst parameters.
+             * 
+             * @returns {Object} - Requst parameters.
+             * @private
+             */
             prepareParameters: function(parameters) {
                 var result = {},
                     paramName;
@@ -90,6 +130,16 @@
 
                 return result;
             },
+            /**
+             * Make requst to the server using IO object.
+             * 
+             * @param {Object} parameters - Wrapped requst parameters.
+             * @param {Object} onSuccess - Handler successful response from the server.
+             * @param {Object} onError - Handler unsuccessful response from the server.
+             * 
+             * @returns {Object} - Transport object.
+             * @private
+             */
             request: function(parameters, onSuccess, onError) {
                 return IO.get(
                     this.getURL()
