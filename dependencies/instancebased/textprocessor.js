@@ -8,13 +8,33 @@
 
         var RegularsManager = Namespace.RegularsManager,
             StringUtils = Namespace.Utils.StringUtils;
+
+        /**
+         * Represents TextProcessor Module.
+         *
+         * @constructor
+         * @alias WEBSPELLCHECKER.TextProcessor
+         * 
+         * @param {String} moduleId - Moduloe name;
+         * @param {Object} appInstance - Instance of main app.
+         * @private
+         */
         function TextProcessor(moduleId, appInstance) {
             this.moduleId = moduleId;
             this.appInstance = appInstance;
         }
 
         TextProcessor.prototype = {
-            replaceSpaces: function() {},
+            constructor: TextProcessor,
+            /**
+             * Method what replacing separators(punctuation, symbols, quots) on spacces* Method for placing separators(punctuation, symbols, quotes) on spaces.
+             * @memberof WEBSPELLCHECKER.TextProcessor#
+             * 
+             * @param {String} text - Text for replacing separators.
+             * 
+             * @returns {String} - text without separators.
+             * @private
+             */ 
             replaceSepatators: function(text) {
                 var _situationalSepSetGlob;
                 text = RegularsManager.HtmlSpaceSymbol.compositionGraph([
@@ -54,10 +74,29 @@
 
                 return text;
             },
+            /**
+             * Method what remove special characters.
+             * @memberof WEBSPELLCHECKER.TextProcessor#
+             * 
+             * @param {String} text - Text for removing special characters.
+             * 
+             * @returns {String} - Text without special characters.
+             * @private
+             */
             removeSpecialCharacters: function(text) {
                 return RegularsManager.specialCharacters.
                     init(text).g().replace('').getString();
             },
+            /**
+             * Method what collect offsets in text for current word.
+             * @memberof WEBSPELLCHECKER.TextProcessor#
+             * 
+             * @param {String} word - Words for which we are looking for offsets.
+             * @param {String} text - Text with words.
+             * 
+             * @returns {Object} - Start and end offsets.
+             * @private
+             */
             getWordOffsets: function(word, text) {
                 var startOffset = text.indexOf(word),
                     endOffset = startOffset + word.length;
@@ -68,7 +107,12 @@
                 };
             },
             /**
-             * API
+             * API method what collect words from original text.
+             * @memberof WEBSPELLCHECKER.TextProcessor#
+             * 
+             * @param {String} text - Original text.
+             * 
+             * @returns {Object} - Object with array of words and collection of words offsets.
              */
             getWordsFromString: function(text) {
                 var minWordLength = this.appInstance.getOption('minWordLength'),
@@ -76,11 +120,11 @@
                     wordsOffsets,
                     result,
                     self = this;
-                // get correct minWordLength option (for some languages we need to apply restriction that does not allow user to configure minWordLength option. E.g.: th_TH, ko_KR)
+
                 text = this.replaceSepatators(text);
                 text = this.removeSpecialCharacters(text);
 
-                // for Thai we need to keep word with length > 1
+
                 wordsOffsets = RegularsManager.space
                     .init(text)
                     .split()

@@ -40,9 +40,11 @@
                 getDict: 'getdict'
             };
         /**
-         * Connection constructor.
+         * Represents Connection Module.
          * Module for working with server commands and preparing request info.
          * @constructor
+         * @alias WEBSPELLCHECKER.Connection
+         * 
          * @param {String} moduleId - Moduloe name;
          * @param {Object} appInstance - Instance of main app.
          * @private
@@ -66,6 +68,7 @@
             constructor: Connection,
             /**
              * Accessor for map of cmd request parameter values.
+             * @memberof WEBSPELLCHECKER.Connection#
              * 
              * @returns {Object} - List of server commands.
              * @private
@@ -75,6 +78,7 @@
             },
             /**
              * Accessor for map of user dictionary actions.
+             * @memberof WEBSPELLCHECKER.Connection#
              * 
              * @returns {Object} - List of UD actions.
              * @private
@@ -84,6 +88,7 @@
             },
             /**
              * Define common parameters for each request.
+             * @memberof WEBSPELLCHECKER.Connection#
              * 
              * @private
              */ 
@@ -93,6 +98,7 @@
             },
             /**
              * Return clone of url object for request.
+             * @memberof WEBSPELLCHECKER.Connection#
              * 
              * @returns {Object} - Clone of IO url object.
              * @private
@@ -103,6 +109,7 @@
             /**
              * Prepare client parameters before request.
              * Collect request parameters from _parametersMap.
+             * @memberof WEBSPELLCHECKER.Connection#
              * 
              * @param {Object} parameters - Wrapped requst parameters.
              * 
@@ -132,10 +139,11 @@
             },
             /**
              * Make requst to the server using IO object.
+             * @memberof WEBSPELLCHECKER.Connection#
              * 
              * @param {Object} parameters - Wrapped requst parameters.
-             * @param {Object} onSuccess - Handler successful response from the server.
-             * @param {Object} onError - Handler unsuccessful response from the server.
+             * @param {Function} onSuccess - Handler successful response from the server.
+             * @param {Function} onError - Handler unsuccessful response from the server.
              * 
              * @returns {Object} - Transport object.
              * @private
