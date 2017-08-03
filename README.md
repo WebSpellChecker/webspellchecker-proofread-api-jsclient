@@ -1,6 +1,6 @@
 # WebSpellChecker JavaScript Api
 
-Browser|Node javascript simple WebApi what provide methods for spell | grammar check and managing user dictionary. Full list of parametrs and methods you can found follow <a terget="_blank" src="https://www.webspellchecker.net/jswebapi/documentation/WEBSPELLCHECKER.html">this link</a>
+Browser and Node javascript api what provide methods for spell and grammar check and methods for managing user dictionary. Full list of parametrs and methods you can found follow <a terget="_blank" src="//www.webspellchecker.net/jswebapi/documentation/WEBSPELLCHECKER.html">this link</a>
 
 ## Getting Started
 
