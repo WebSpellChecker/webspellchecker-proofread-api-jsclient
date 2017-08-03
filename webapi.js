@@ -84,7 +84,7 @@
                 type: _optionTypes.url_path,
                 defaultValue: 'spellcheck31/script/ssrv.cgi'
             },
-            customer_id: {
+            customerId: {
                 type: _optionTypes.string,
                 defaultValue: '1:KpkvQ2-6KNUj-L1W3u2-C9j0K1-Zv2tY1-CfDOx-WfGRg2-qXtci-YyyE34-j09H42-b0aCt3-d9a'
             },
@@ -374,6 +374,7 @@
          *
          * @param {Object} parametrs
          * @param {String} parametrs.text - Text to check spelling.
+         * @param {String} parametrs.lang - Spellcheck language. If not provided then take from constructor.
          * @param {SpellCheckCallback} parametrs.success - Handler successful response from the server.
          * @param {RequestCallback} parametrs.error - Handler unsuccessful response from the server.
          * @returns {Object} - Transport object.
@@ -412,7 +413,7 @@
             return this._request(
                 {
                     command: commands.spellCheck,
-                    language:  this.getOption('lang'),
+                    language:  parametrs.lang || this.getOption('lang'),
                     customDictionary: this.getOption('customDictionary'),
                     userDictionary: this.getOption('userDictionaryName'),
                     text: text
@@ -443,6 +444,7 @@
          * 
          * @param {Object} parametrs
          * @param {String} parametrs.text - Text to grammar checking.
+         * @param {String} parametrs.lang - Grammarcheck language. If not provided then take from constructor.
          * @param {GrammarCheckCallback} parametrs.success - Handler successful response from the server.
          * @param {RequestCallback} parametrs.error - Handler unsuccessful response from the server.
          * @returns {Object} - Transport object.
@@ -461,7 +463,7 @@
             return this._request(
                 {
                     command: commands.grammarCheck,
-                    language:  this.getOption('lang'),
+                    language: parametrs.lang || this.getOption('lang'),
                     text: parametrs.text
                 },
                 parametrs.success,

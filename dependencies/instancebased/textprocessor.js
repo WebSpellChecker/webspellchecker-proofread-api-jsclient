@@ -28,28 +28,27 @@
                 _situationalSepSetGlob = RegularsManager.situationalSeparators
                     .set().g();
 
+                // replace(/([\.\-\']{2,})/g, '#$1#')
                 text = _situationalSepSetGlob
                     .composition(RegularsManager.twoAndMore)
                     .init(text)
                     .wrapInclude("#")
                     .getString();
 
+                // replace(/#[\.\-\']|[\.\-\']#/g, ' ')
                 text = _situationalSepSetGlob
                     .init(text)
                     .replaceLeftWrapped('#', ' ')
                     .replaceRightWrapped('#', ' ')
                     .getString();
 
+                // replace( new RegExp( ' [\-\'\.]|[\-\'\.] ', 'g' ), '  ' )
+                // replace( new RegExp( '^[\-\'\.]|[\-\'\.]$', 'g' ), ' ' )
                 text = _situationalSepSetGlob
                     .init(text)
                     .replaceRightWrapped(' ', '  ')
                     .replaceLeftWrapped(' ', '  ')
                     .start().or( _situationalSepSetGlob.end() )
-                    .replace(' ')
-                    .getString();
-
-                text = RegularsManager.EOL.set().g()
-                    .init(text)
                     .replace(' ')
                     .getString();
 

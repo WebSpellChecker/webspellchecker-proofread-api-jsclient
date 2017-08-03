@@ -65,7 +65,6 @@ describe("WebApi", function () {
 
         api.getLangList({
             success: function(res) {
-                console.log(res);
                 bool = true;
             }
         });

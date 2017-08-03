@@ -45,10 +45,10 @@
             this.moduleId = moduleId;
             this.appInstance = appInstance;
             this.url = new IO.URL({
-				protocol 	: appInstance.getOption('service_protocol'),
-				host 		: appInstance.getOption('service_host'),
-				port 		: appInstance.getOption('service_port'),
-				path 		: appInstance.getOption('service_path')
+				protocol 	: appInstance.getOption('serviceProtocol'),
+				host 		: appInstance.getOption('serviceHost'),
+				port 		: appInstance.getOption('servicePort'),
+				path 		: appInstance.getOption('servicePath')
             });
 
             this.defaultParameters = {};
@@ -63,7 +63,7 @@
                 return _UDActionsMap;
             },
             setDefaultParameters: function() {
-                this.defaultParameters[_parametersMap.customer_id] = this.appInstance.getOption('customer_id');
+                this.defaultParameters[_parametersMap.customer_id] = this.appInstance.getOption('customerId');
                 this.defaultParameters[_parametersMap.communicationFormat] = this.appInstance.getOption('communicationFormat');
             },
             getURL: function() {
