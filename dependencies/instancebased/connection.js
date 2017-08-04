@@ -24,6 +24,9 @@
                 text: 'text',
                 sentences: 'sentences'
             },
+            _metaParametersMap = {
+                appType: 'app_type'
+            },
             _commandsMap = {
                 spellCheck: 'check_spelling',
                 grammarCheck: 'grammar_check',
@@ -112,16 +115,17 @@
              * @memberof WEBSPELLCHECKER.Connection#
              * 
              * @param {Object} parameters - Wrapped requst parameters.
+             * @param {Object} map - map to server parameters names.
              * 
              * @returns {Object} - Requst parameters.
              * @private
              */
-            prepareParameters: function(parameters) {
+            prepareParameters: function(parameters, map) {
                 var result = {},
                     paramName;
 
                 for(var k in parameters) {
-                    paramName = _parametersMap[k];
+                    paramName = map[k];
                     if(!paramName) {
                         throw new Error('parameter ' + k + ' is not specified.');
                     }
@@ -130,9 +134,10 @@
                 result = Object.assign({}, this.defaultParameters, result);
 
                 // Now we have the bag with get_lang_list command.
-                // It's doesn't work for some reasons with "format=json" parameter.
-                if(result[_parametersMap.command] === _commandsMap.getLangList) {
-                    delete result[_parametersMap.communicationFormat];
+                // It's doesn't work for some reasons in server side with "format=json" parameter.
+                // we should remove this parametr for get_lang_list command;
+                if(result[map.command] === _commandsMap.getLangList) {
+                    delete result[map.communicationFormat];
                 }
 
                 return result;
@@ -151,7 +156,7 @@
             request: function(parameters, onSuccess, onError) {
                 return IO.get(
                     this.getURL()
-                        .addParameters( this.prepareParameters(parameters) ),
+                        .addParameters( this.prepareParameters(parameters, _parametersMap) ),
                     onSuccess,
                     onError
                 );

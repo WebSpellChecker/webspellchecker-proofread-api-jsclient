@@ -107,6 +107,12 @@
             customPunctuation: {
                 type: _optionTypes.string,
                 defaultValue: ''
+            },
+            metaParameters: {
+                type: _optionTypes.object,
+                defaultValue: {
+                    appType: 'webapi'
+                }
             }
         };
         _options = OptionsProcessor.createOptions(clientOptions, _optionsTemplate, function errorHandler(errors) {

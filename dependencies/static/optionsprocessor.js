@@ -7,13 +7,46 @@
         var TypeChecker = Namespace.Utils.TypeChecker, validators,
             RegularsManager = Namespace.RegularsManager;
 
+        /**
+         * Constructor for option type.
+         * @constructor
+         * 
+         * @param {String} name - type name.
+         * @param {Function} validate - Parameter validation checker.
+         * @private
+         */
         function OptionType(name, validate) {
             this.name = name;
             this.validate = validate;
         }
-
+        /**
+         * Constructor for errors Object.
+         * This object acomulated errors what occur during validation parameters.
+         * @constructor
+         * 
+         * @private
+         */
+        function ErrorsObject() {
+            this.critical = false;
+            this.count = 0;
+            this.reports = [];
+            this.addError = function(error) {
+                if(error.critical && this.critical === false) {
+                    this.critical = true;
+                }
+                this.reports.push(error);
+                this.count += 1;
+            };
+        }
+        /**
+         * @exports WEBSPELLCHECKER.OptionsProcessor
+         */
         var OptionsProcessor = {
             optionTypes: {},
+            /**
+             * List of Validation rules.
+             * @memberof WEBSPELLCHECKER.OptionsProcessor#
+             */
             optionsValidators: {
                 array: TypeChecker.isArray,
                 boolean: TypeChecker.isBoolean,
@@ -44,77 +77,61 @@
                     return TypeChecker.isString(value);// && Regular test ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789-._~:/?#[]@!$&'()*+,;=
                 }
             },
-            validateOption: function (optionValue, validationCheckList, errorsList) {
-                var res = {
-                    pass: true,
-                    errorMessage: undefined
-                },
-                validationRule;
-
-                for(var k in validationCheckList) {
-                    validationRule = validationCheckList[k];
-                    if(TypeChecker.isFunction(validationRule) && validationRule(optionValue) === false) {
-                        res.pass = false;
-                        res.errorMessages = errorsList[k];
-                        return res;
-                    }
-                }
-
-                return res;
-            },
-            ErrorsObject: function() {
-                this.critical = false;
-                this.count = 0;
-                this.reports = [];
-                this.addError = function(error) {
-                    if(error.critical && this.critical === false) {
-                        this.critical = true;
-                    }
-                    this.reports.push(error);
-                    this.count += 1;
-                };
-            },
-            createOption: function ( option ) {
-                var optionValue = option.value,
-                    optionTemplate = option.template,
+            /**
+             * Method return option value based on option parameters.
+             * @memberof WEBSPELLCHECKER.OptionsProcessor#
+             * 
+             * @param {Object} optionData - Object with option parameters.
+             * @param {String} optionData.name - Option name.
+             * @param {*} optionData.value - Option user value.
+             * @param {Object} optionData.template - Object with object info.
+             * @param {Function} optionData.errorHandler - Problem Handler. Receive object with error info.
+             * 
+             * @returns {*} - Option value.
+             * @private
+             */ 
+            createOption: function ( optionData ) {
+                var optionValue = optionData.value,
+                    optionTemplate = optionData.template,
                     errorReport = {},
-                    optionName = option.name,
-                    optionErrorHandler = option.errorHandler,
-                    validationInfo,
-                    validationCheckList = {
-                        type: optionTemplate.type.validate,
-                        requirements: optionTemplate.validate
-                    },
-                    errorsList = {
-                        type: 'Parameter ' + optionName + ' should be a ' + optionTemplate.type.name + '.',
-                        requirements: optionName + ' Parameter is not valid for internal requirements.'
-                    },
+                    optionName = optionData.name,
+                    optionErrorHandler = optionData.errorHandler,
+                    validated,
                     defaultValue = optionTemplate.defaultValue;
 
-
                 if(optionValue === undefined && optionTemplate.required === false) return defaultValue;
-                validationInfo = this.validateOption(optionValue, validationCheckList, errorsList);
+                validated = optionTemplate.type.validate(optionValue);
 
-                if(validationInfo.pass) return optionValue;
+                if(validated) return optionValue;
 
                 errorReport.critical = optionTemplate.required || false;
                 errorReport.optionName = optionName;
-                errorReport.message = validationInfo.errorMessages;
+                errorReport.message = 'Parameter ' + optionName + ' should have a type - ' + optionTemplate.type.name + '.';
 
                 optionErrorHandler(errorReport);
 
                 return defaultValue;
             },
-            createOptions: function(_options, _optionsTemplates, _errorHandler) {
+            /**
+             * Method what porocces client options. 
+             * @memberof WEBSPELLCHECKER.OptionsProcessor#
+             * 
+             * @param {Object} clientOptions - Options what should be processed.
+             * @param {Object} optionsTemplates - Validation and another information for clientOptions options.
+             * @param {Object} errorHandler - Error callback if we have a problem with options creating.
+             * 
+             * @returns {Object} - processed options.
+             * @private
+             */
+            createOptions: function(clientOptions, optionsTemplates, errorHandler) {
                 var option, valid,
-                    options = Object.assign({}, _options),
-                    optionsTemplates = Object.assign({}, _optionsTemplates),
+                    options = Object.assign({}, clientOptions),
                     errorsObject = new this.ErrorsObject();
 
                 for(var k in optionsTemplates) {
                     if( optionsTemplates.hasOwnProperty(k) === false ) continue;
                     if(optionsTemplates[k].type instanceof OptionType === false) {
-                        throw new Error(k + ' template "type" parameter should be instance of OptionsProcessor -> OptionType constructor.');
+                        throw new Error(k + ' template "type" parameter should be instance of OptionsProcessor.OptionType constructor.');
                     }
                     options[k] = this.createOption({
                         name: k,
@@ -126,12 +143,21 @@
                     });
 
                 }
-                if(_errorHandler && errorsObject.count > 0) {
-                    _errorHandler(errorsObject);
+                if(errorHandler && errorsObject.count > 0) {
+                    errorHandler(errorsObject);
                 }
 
                 return options;
             },
+            /**
+             * Add new option type. 
+             * @memberof WEBSPELLCHECKER.OptionsProcessor#
+             * 
+             * @param {Object} type - New type info.
+             * @param {String} type.name - Type name.
+             * @param {Function} type.validate - Validation rules for current type.
+             * @private
+             */
             extendOptionTypes: function(type) {
                 if( !type.name || !TypeChecker.isFunction(type.validate) ) return false;
                 if(!this.optionTypes[type.name]) {
