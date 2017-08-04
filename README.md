@@ -1,10 +1,10 @@
-# WebSpellChecker JavaScript Api
+# WebSpellChecker JavaScript API
 
-Browser and Node javascript api what provide methods for spell and grammar check and methods for managing user dictionary. Full list of parametrs and methods you can found follow [this link](https://www.webspellchecker.net/jswebapi/documentation/WEBSPELLCHECKER.html)
+Browser and Node Javascript API which provide methods for spell and grammar check and methods for managing user dictionary. Full list of parameters and methods you can find by following [this link](https://www.webspellchecker.net/jswebapi/documentation/WEBSPELLCHECKER.html)
 
 ## Getting Started
 
-For start working with WebSpellChecker api use next instructions:
+To start working with WebSpellChecker API use the following instructions:
 
 ### Installing
 
@@ -35,7 +35,7 @@ proofreadApi.spellCheck({
 });
 ```
 
-### Running the tests
+### Running tests
 
 Just run command:
 ```
@@ -43,12 +43,12 @@ npm test
 ```
 
 ### Building
-For build concat and minified version run command:
+To build and concatenate minified version run command:
 
 ```
 grunt
 ```
-Result will be added to `dest` folder.
+Result will be added to the `dest` folder.
 
 ## License
 
