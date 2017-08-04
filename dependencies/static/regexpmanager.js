@@ -97,7 +97,9 @@
              * @return {Object} new regular with specified string.
              */
             init: function(string) {
-                return this.setString(string);
+                 var clone = this.clone();
+                 clone.string = string;
+                 return clone;
             },
             /**
              * Method what create new regular type based on current.

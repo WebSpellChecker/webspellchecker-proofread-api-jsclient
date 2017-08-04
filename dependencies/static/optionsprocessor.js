@@ -126,7 +126,7 @@
             createOptions: function(clientOptions, optionsTemplates, errorHandler) {
                 var option, valid,
                     options = Object.assign({}, clientOptions),
-                    errorsObject = new this.ErrorsObject();
+                    errorsObject = new ErrorsObject();
 
                 for(var k in optionsTemplates) {
                     if( optionsTemplates.hasOwnProperty(k) === false ) continue;

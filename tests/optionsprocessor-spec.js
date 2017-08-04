@@ -90,33 +90,6 @@ describe("OptionsProcessor", function () {
         expect(options.lang).toEqual(optionsTemplate.lang.defaultValue);
     });
 
-    it('should call validate function in template and send ther error if .', function() {
-        var clientOptions = {
-            customerId: '1:ABC',
-            minWordLength: -1
-        },
-        optionsTemplate = {
-            customerId: {
-                type: optionTypes.string,
-                defaultValue: '1:CBA'
-            },
-            minWordLength: {
-                type: optionTypes.number,
-                defaultValue: 3,
-                validate: function(value) {
-                    return value > 0;
-                }
-            }
-        },
-        options;
-
-        options = OptionsProcessor.createOptions(clientOptions, optionsTemplate, function(errors) {
-             expect(errors.count).toEqual(1);
-        });
-
-        expect(options.minWordLength).toEqual(optionsTemplate.minWordLength.defaultValue);
-    });
-
     it('error handler should recive object with validation errors', function() {
         var clientOptions = {
             customerId: 1442115,
