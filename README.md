@@ -43,7 +43,7 @@ npm test
 ```
 
 ### Building
-For build minified version run command:
+To build and concatenate minified version run command:
 
 ```
 grunt
