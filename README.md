@@ -1,4 +1,4 @@
-# WebSpellChecker JavaScript Api
+# WebSpellChecker JavaScript API
 
 Browser and Node Javascript API which provide methods for spell and grammar check and methods for managing user dictionary. Full list of parameters and methods you can find by following [this link](https://www.webspellchecker.net/jswebapi/documentation/WEBSPELLCHECKER.html)
 
