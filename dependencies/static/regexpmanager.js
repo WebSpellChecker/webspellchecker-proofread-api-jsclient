@@ -55,6 +55,9 @@
              */
             _combine: function(options) {
                 var regExpObject = options.regExpObject;
+                if(regExpObject instanceof RegularType === false) {
+                    throw new Error(regExpObject.name + ' should be instance of RegularType constructor.');
+                }
                 var separator = options.separator || '';
                 var nameSeparator = options.nameSeparator || '&';
                 var source = this.source + separator + regExpObject.source;
@@ -307,11 +310,24 @@
             }
         };
 
-        var RegularsManager = {},
+        /**
+         * @exports WEBSPELLCHECKER.RegularsManager
+         */
+        var RegularsManager = {
+                /**
+                 * Add regular type to RegularsManager.
+                 * 
+                 * @param {String} name - Name of regular type.
+                 * @param {String} source - Regular expression source. 
+                 */
+                addRegularType: function(name, source) {
+                    this[name] = new RegularType(name, source);
+                }
+            },
             RegularsSources = Namespace.RegularsSources;
 
         for(var k in RegularsSources){
-            RegularsManager[k] = new RegularType(k, RegularsSources[k]);
+            RegularsManager.addRegularType(k, RegularsSources[k]);
         }
 
         Namespace.RegularsManager = RegularsManager;

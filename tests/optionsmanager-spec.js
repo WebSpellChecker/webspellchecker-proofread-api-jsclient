@@ -1,25 +1,25 @@
-var WebApi, api, bool, OptionsProcessor, optionTypes;
+var WebApi, api, bool, OptionsManager, optionTypes;
 
-describe("OptionsProcessor", function () {
+describe("OptionsManager", function () {
 
     beforeEach(function() {
         WebApi = (typeof window === 'undefined') ? require("../") : WEBSPELLCHECKER;
-        OptionsProcessor = WebApi.OptionsProcessor;
-        optionTypes = OptionsProcessor.optionTypes;
+        OptionsManager = WebApi.OptionsManager;
+        optionTypes = OptionsManager.optionTypes;
 	});
 
     it("loaded", function() {
-        expect(OptionsProcessor).toBeDefined();
+        expect(OptionsManager).toBeDefined();
     });
 
     it('should have main inteface methods: createOptions, extendOptionTypes', function() {
-        expect(OptionsProcessor.createOptions).toBeDefined();
-        expect(OptionsProcessor.extendOptionTypes).toBeDefined();
+        expect(OptionsManager.createOptions).toBeDefined();
+        expect(OptionsManager.extendOptionTypes).toBeDefined();
     });
 
     it('method "createOptions" should return options object', function() {
         var clientOptions = {test: 'test'},
-            options = OptionsProcessor.createOptions(clientOptions);
+            options = OptionsManager.createOptions(clientOptions);
 
         for(var k in options) {
             expect(options[k]).toBeDefined(clientOptions[k]);
@@ -42,7 +42,7 @@ describe("OptionsProcessor", function () {
         },
         options;
 
-        options = OptionsProcessor.createOptions(clientOptions, optionsTemplate);
+        options = OptionsManager.createOptions(clientOptions, optionsTemplate);
 
         expect(clientOptions.customerId).toEqual(options.customerId);
         expect(options.lang).toEqual(optionsTemplate.lang.defaultValue);
@@ -60,7 +60,7 @@ describe("OptionsProcessor", function () {
         },
         options, error;
         try {
-            options = OptionsProcessor.createOptions(clientOptions, optionsTemplate);
+            options = OptionsManager.createOptions(clientOptions, optionsTemplate);
         } catch(e) {
             error = e;
         }
@@ -84,7 +84,7 @@ describe("OptionsProcessor", function () {
         },
         options;
 
-        options = OptionsProcessor.createOptions(clientOptions, optionsTemplate);
+        options = OptionsManager.createOptions(clientOptions, optionsTemplate);
 
         expect(options.customerId).toEqual(optionsTemplate.customerId.defaultValue);
         expect(options.lang).toEqual(optionsTemplate.lang.defaultValue);
@@ -105,7 +105,7 @@ describe("OptionsProcessor", function () {
                 defaultValue: '1:CBA'
             }
         },
-        options = OptionsProcessor.createOptions(clientOptions, optionsTemplate, function(errors) {
+        options = OptionsManager.createOptions(clientOptions, optionsTemplate, function(errors) {
             expect(errors.count).toEqual(2);
             expect(errors.reports[0].optionName).toEqual('lang');
             expect(errors.reports[1].optionName).toEqual('customerId');
@@ -128,13 +128,13 @@ describe("OptionsProcessor", function () {
                 defaultValue: '1:CBA'
             }
         },
-        options = OptionsProcessor.createOptions(clientOptions, optionsTemplate, function(errors) {
+        options = OptionsManager.createOptions(clientOptions, optionsTemplate, function(errors) {
             expect(errors.count).toEqual(2);
             expect(errors.critical).toEqual(true);
         });
 
         optionsTemplate.lang.required = false;
-        options = OptionsProcessor.createOptions(clientOptions, optionsTemplate, function(errors) {
+        options = OptionsManager.createOptions(clientOptions, optionsTemplate, function(errors) {
             expect(errors.count).toEqual(2);
             expect(errors.critical).toEqual(false);
         });
@@ -142,7 +142,7 @@ describe("OptionsProcessor", function () {
 
     it('method "extendOptionTypes" should work correctly', function() {
         var TypeChecker = WebApi.Utils.TypeChecker;
-        OptionsProcessor.extendOptionTypes({
+        OptionsManager.extendOptionTypes({
             name: 'customerId',
             validate: function(value) {
                 return TypeChecker.isString(value) && value.indexOf("1:") === 0;
@@ -167,25 +167,25 @@ describe("OptionsProcessor", function () {
                 defaultValue: '1:CBA'
             }
         }, options, errors;
-        options = OptionsProcessor.createOptions(clientOptions1, optionsTemplate1, function(e) {
+        options = OptionsManager.createOptions(clientOptions1, optionsTemplate1, function(e) {
             errors = e;
         });
         expect(errors).not.toBeDefined();
         errors = undefined;
 
-        options = OptionsProcessor.createOptions(clientOptions2, optionsTemplate1, function(e) {
+        options = OptionsManager.createOptions(clientOptions2, optionsTemplate1, function(e) {
             errors = e;
         });
         expect(errors).not.toBeDefined();
         errors = undefined;
 
-        options = OptionsProcessor.createOptions(clientOptions1, optionsTemplate2, function(e) {
+        options = OptionsManager.createOptions(clientOptions1, optionsTemplate2, function(e) {
             errors = e;
         });
         expect(errors.count).toEqual(1);
         errors = undefined;
 
-        options = OptionsProcessor.createOptions(clientOptions2, optionsTemplate1, function(e) {
+        options = OptionsManager.createOptions(clientOptions2, optionsTemplate1, function(e) {
             errors = e;
         });
         expect(errors).not.toBeDefined();

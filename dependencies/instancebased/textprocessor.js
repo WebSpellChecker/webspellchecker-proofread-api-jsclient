@@ -36,9 +36,13 @@
              * @private
              */ 
             replaceSepatators: function(text) {
-                var _situationalSepSetGlob;
+                var _situationalSepSetGlob,
+                    customPunctuation = this.appInstance.getOption('customPunctuation');
+
+                    RegularsManager.addRegularType('customPunctuation', customPunctuation);
                 text = RegularsManager.HtmlSpaceSymbol.compositionGraph([
                     RegularsManager.textPunctuation,
+                    RegularsManager.customPunctuation,
                     RegularsManager.EOL
                 ]).g().set()
                 .init(text)

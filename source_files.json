@@ -10,7 +10,7 @@
         "<%= webapi_root %>/dependencies/static/logger.js",
         "<%= webapi_root %>/dependencies/static/io.js",
         "<%= webapi_root %>/dependencies/static/regexpmanager.js",
-        "<%= webapi_root %>/dependencies/static/optionsprocessor.js",
+        "<%= webapi_root %>/dependencies/static/optionsmanager.js",
 
         "<%= webapi_root %>/dependencies/instancebased/textprocessor.js",
         "<%= webapi_root %>/dependencies/instancebased/connection.js"

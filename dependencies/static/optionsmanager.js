@@ -1,6 +1,6 @@
-// OptionsProcessor.js
+// OptionsManager.js
 /**
- * @fileoverview Static Module. OptionsProcessor
+ * @fileoverview Static Module. OptionsManager
  */
 (function(){
 	function init( Namespace ) {
@@ -10,7 +10,7 @@
         /**
          * Constructor for option type.
          * @constructor
-         * 
+         *
          * @param {String} name - type name.
          * @param {Function} validate - Parameter validation checker.
          * @private
@@ -23,7 +23,7 @@
          * Constructor for errors Object.
          * This object acomulated errors what occur during validation parameters.
          * @constructor
-         * 
+         *
          * @private
          */
         function ErrorsObject() {
@@ -39,13 +39,13 @@
             };
         }
         /**
-         * @exports WEBSPELLCHECKER.OptionsProcessor
+         * @exports WEBSPELLCHECKER.OptionsManager
          */
-        var OptionsProcessor = {
+        var OptionsManager = {
             optionTypes: {},
             /**
              * List of Validation rules.
-             * @memberof WEBSPELLCHECKER.OptionsProcessor#
+             * @memberof WEBSPELLCHECKER.OptionsManager#
              */
             optionsValidators: {
                 array: TypeChecker.isArray,
@@ -79,17 +79,17 @@
             },
             /**
              * Method return option value based on option parameters.
-             * @memberof WEBSPELLCHECKER.OptionsProcessor#
-             * 
+             * @memberof WEBSPELLCHECKER.OptionsManager#
+             *
              * @param {Object} optionData - Object with option parameters.
              * @param {String} optionData.name - Option name.
              * @param {*} optionData.value - Option user value.
              * @param {Object} optionData.template - Object with object info.
              * @param {Function} optionData.errorHandler - Problem Handler. Receive object with error info.
-             * 
+             *
              * @returns {*} - Option value.
              * @private
-             */ 
+             */
             createOption: function ( optionData ) {
                 var optionValue = optionData.value,
                     optionTemplate = optionData.template,
@@ -113,13 +113,13 @@
                 return defaultValue;
             },
             /**
-             * Method what porocces client options. 
-             * @memberof WEBSPELLCHECKER.OptionsProcessor#
-             * 
+             * Method what porocces client options.
+             * @memberof WEBSPELLCHECKER.OptionsManager#
+             *
              * @param {Object} clientOptions - Options what should be processed.
              * @param {Object} optionsTemplates - Validation and another information for clientOptions options.
              * @param {Object} errorHandler - Error callback if we have a problem with options creating.
-             * 
+             *
              * @returns {Object} - processed options.
              * @private
              */
@@ -131,7 +131,7 @@
                 for(var k in optionsTemplates) {
                     if( optionsTemplates.hasOwnProperty(k) === false ) continue;
                     if(optionsTemplates[k].type instanceof OptionType === false) {
-                        throw new Error(k + ' template "type" parameter should be instance of OptionsProcessor.OptionType constructor.');
+                        throw new Error(k + ' template "type" parameter should be instance of OptionsManager.OptionType constructor.');
                     }
                     options[k] = this.createOption({
                         name: k,
@@ -150,9 +150,9 @@
                 return options;
             },
             /**
-             * Add new option type. 
-             * @memberof WEBSPELLCHECKER.OptionsProcessor#
-             * 
+             * Add new option type.
+             * @memberof WEBSPELLCHECKER.OptionsManager#
+             *
              * @param {Object} type - New type info.
              * @param {String} type.name - Type name.
              * @param {Function} type.validate - Validation rules for current type.
@@ -166,13 +166,13 @@
             }
         };
 
-        validators = OptionsProcessor.optionsValidators;
-        OptionsProcessor.optionTypes = {};
+        validators = OptionsManager.optionsValidators;
+        OptionsManager.optionTypes = {};
         for(var type in validators) {
-            OptionsProcessor.optionTypes[type] = new OptionType(type, validators[type]);
+            OptionsManager.optionTypes[type] = new OptionType(type, validators[type]);
         }
 
-        Namespace.OptionsProcessor = OptionsProcessor;
+        Namespace.OptionsManager = OptionsManager;
     }
     if(typeof window === 'undefined') {module.exports = init;}
 	if(typeof WEBSPELLCHECKER !== 'undefined') {init(WEBSPELLCHECKER);}

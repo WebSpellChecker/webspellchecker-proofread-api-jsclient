@@ -24,7 +24,7 @@ describe("WebApi", function () {
     it("static dependencies defined", function() {
         expect(WebApi.Utils).toBeDefined();
         expect(WebApi.IO).toBeDefined();
-        expect(WebApi.OptionsProcessor).toBeDefined();
+        expect(WebApi.OptionsManager).toBeDefined();
         expect(WebApi.RegularsManager).toBeDefined();
         expect(WebApi.logger).toBeDefined();
 	});

@@ -17,9 +17,9 @@
      * Represents a Namespace (WEBSPELLCHECKER).
      * @constructor WEBSPELLCHECKER
      * @public
-     * 
+     *
      * @param {Object} clientOptions
-     
+
      * @param {String} [clientOptions.lang='en_US'] - The parameter sets the default spell checking language for SCAYT. Possible values are:
      * 'en_US', 'en_GB', 'pt_BR', 'da_DK',
      * 'nl_NL', 'en_CA', 'fi_FI', 'fr_FR',
@@ -50,7 +50,7 @@
     var WEBSPELLCHECKER = glob.WEBSPELLCHECKER =  function(clientOptions) {
 
         // Static dependencies
-        var OptionsProcessor =  WEBSPELLCHECKER.OptionsProcessor,
+        var OptionsManager =  WEBSPELLCHECKER.OptionsManager,
             logger = WEBSPELLCHECKER.logger;
 
         // Variables
@@ -62,7 +62,7 @@
             self = this;
 
         // options creation
-        _optionTypes = OptionsProcessor.optionTypes;
+        _optionTypes = OptionsManager.optionTypes;
         _optionsTemplate = {
             lang: {
                 type: _optionTypes.string,
@@ -115,7 +115,7 @@
                 }
             }
         };
-        _options = OptionsProcessor.createOptions(clientOptions, _optionsTemplate, function errorHandler(errors) {
+        _options = OptionsManager.createOptions(clientOptions, _optionsTemplate, function errorHandler(errors) {
             errors.reports.forEach(function(report) {
                 logger.log(report.message);
             }, this);
@@ -136,7 +136,7 @@
         /**
          * Wrapper of request method.
          * @private
-         * 
+         *
          * @param {Object} data - Object with request data.
          * @param {function} success - Handler successful response from the server.
 	     * @param {function} error - Handler unsuccessful response from the server.
@@ -160,7 +160,7 @@
                 template = _optionsTemplate[name];
             if(template) {
                 result = true;
-                _options[name] = OptionsProcessor.createOption({
+                _options[name] = OptionsManager.createOption({
                     name: name,
                     value: value,
                     template: template,
@@ -303,7 +303,7 @@
              * @param {String} parametrs.word - Word.
              *
              * @returns {Object} - Object with UD 'deleteWord' action and word.
-             * @private 
+             * @private
              */
             deleteWord: function(parametrs) {
                 return {
@@ -338,10 +338,10 @@
          * getLangList API method.
          * @public
          * @memberof WEBSPELLCHECKER#
-         * 
+         *
          * @param {Object} parametrs
          * @param {GetLangListCallback} parametrs.success - Handler successful response from the server.
-         * @param {RequestCallback} parametrs.error - Handler unsuccessful response from the server. 
+         * @param {RequestCallback} parametrs.error - Handler unsuccessful response from the server.
          * @returns {Object} - Transport object.
          * @example
          * wscWebApiInstance.getLangList({
@@ -447,7 +447,7 @@
          * grammarCheck API method.
          * @public
          * @memberof WEBSPELLCHECKER#
-         * 
+         *
          * @param {Object} parametrs
          * @param {String} parametrs.text - Text to grammar checking.
          * @param {String} parametrs.lang - Grammarcheck language. If not provided then take from constructor.
@@ -477,7 +477,7 @@
             );
         };
         this.grammarCheck = grammarCheck;
-        /** 
+        /**
          * userDictionary success Callback.
          *
          * @callback UserDictionaryCallback
@@ -491,7 +491,7 @@
          * getUserDictionary API method.
          * @public
          * @memberof WEBSPELLCHECKER#
-         * 
+         *
          * @param {Object} parametrs
          * @param {String} parametrs.name - User dictionary name.
          * @param {UserDictionaryCallback} parametrs.success - Handler successful response from the server.
@@ -517,7 +517,7 @@
          * createUserDictionary API method.
          * @public
          * @memberof WEBSPELLCHECKER#
-         * 
+         *
          * @param {Object} parametrs
          * @param {String} parametrs.name - User dictionary name.
          * @param {UserDictionaryCallback} parametrs.success - Handler successful response from the server.
@@ -538,12 +538,12 @@
             return userDictionaryManager.action('create', parametrs);
         };
         this.createUserDictionary = createUserDictionary;
-        
+
         /**
          * deleteUserDictionary API method.
-         * @public 
+         * @public
          * @memberof WEBSPELLCHECKER#
-         * 
+         *
          * @param {Object} parametrs
          * @param {String} parametrs.name - User dictionary name.
          * @param {UserDictionaryCallback} parametrs.success - Handler successful response from the server.
@@ -569,7 +569,7 @@
          * renameUserDictionary API method.
          * @public
          * @memberof WEBSPELLCHECKER#
-         * 
+         *
          * @param {Object} parametrs
          * @param {String} parametrs.name - User dictionary name.
          * @param {String} parametrs.newName - New user dictionary name.
@@ -596,7 +596,7 @@
          * addWordToUserDictionary API method.
          * @public
          * @memberof WEBSPELLCHECKER#
-         * 
+         *
          * @param {Object} parametrs
          * @param {String} parametrs.name - User dictionary name.
          * @param {String} parametrs.word - Word what will be added to UD.
@@ -624,7 +624,7 @@
          * deleteWordFromUserDictionary API method.
          * @public
          * @memberof WEBSPELLCHECKER#
-         * 
+         *
          * @param {Object} parametrs
          * @param {String} parametrs.name - User dictionary name.
          * @param {String} parametrs.word - Word what will be deleted from UD.
