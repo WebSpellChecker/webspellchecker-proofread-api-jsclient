@@ -20,7 +20,7 @@
      * 
      * @param {Object} clientOptions
      
-     * @param {String} [options.lang='en_US'] - The parameter sets the default spell checking language for SCAYT. Possible values are:
+     * @param {String} [clientOptions.lang='en_US'] - The parameter sets the default spell checking language for SCAYT. Possible values are:
      * 'en_US', 'en_GB', 'pt_BR', 'da_DK',
      * 'nl_NL', 'en_CA', 'fi_FI', 'fr_FR',
      * 'fr_CA', 'de_DE', 'el_GR', 'it_IT',
