@@ -3,7 +3,7 @@ module.exports = function(grunt) {
         fs = require('fs'),
         source_files = grunt.file.read('source_files.json').toString();
 
-    source_files = source_files.replace(/<%= webapi_root %>/g, pkg.webapi_root);
+    source_files = source_files.replace(/<%= webapi_path %>/g, pkg.webapi_path);
 	source_files = JSON.parse(source_files);
     grunt.initConfig({
         pkg: pkg,
@@ -11,7 +11,7 @@ module.exports = function(grunt) {
         concat: {
             webApi: {
                 src: '<%= source_files.webapi %>',
-                dest: '<%= pkg.webapi_root %>/dest/uncompressed/webspellchecker-api.js',
+                dest: '<%= pkg.webapi_path %>/dest/uncompressed/webspellchecker-api.js',
                 nonull: true
             }
         },
@@ -21,7 +21,7 @@ module.exports = function(grunt) {
             },
             webApi: {
                 src: '<%= concat.webApi.dest %>',
-                dest: '<%= pkg.webapi_root %>/dest/webspellchecker-api.js',
+                dest: '<%= pkg.webapi_path %>/dest/webspellchecker-api.js',
                 nonull: true
             }
         }

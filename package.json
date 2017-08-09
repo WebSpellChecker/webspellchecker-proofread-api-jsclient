@@ -2,7 +2,7 @@
   "name": "webspellchecker-api",
   "version": "1.0.0",
   "description": "",
-  "webapi_root": "./",
+  "webapi_path": "./",
   "main": "index.js",
   "scripts": {
     "test": "./node_modules/.bin/jasmine-node tests"

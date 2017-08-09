@@ -1,18 +1,18 @@
 {
     "webapi": [
-        "<%= webapi_root %>/webapi.js",
-        "<%= webapi_root %>/dependencies/static/utils/arrayutils.js",
-        "<%= webapi_root %>/dependencies/static/utils/stringutils.js",
-        "<%= webapi_root %>/dependencies/static/utils/browser.js",
-        "<%= webapi_root %>/dependencies/static/utils/polyfills.js",
-        "<%= webapi_root %>/dependencies/static/utils/typechecker.js",
-        "<%= webapi_root %>/dependencies/static/utils/regularssources.js",
-        "<%= webapi_root %>/dependencies/static/logger.js",
-        "<%= webapi_root %>/dependencies/static/io.js",
-        "<%= webapi_root %>/dependencies/static/regexpmanager.js",
-        "<%= webapi_root %>/dependencies/static/optionsmanager.js",
+        "<%= webapi_path %>/webapi.js",
+        "<%= webapi_path %>/dependencies/static/utils/arrayutils.js",
+        "<%= webapi_path %>/dependencies/static/utils/stringutils.js",
+        "<%= webapi_path %>/dependencies/static/utils/browser.js",
+        "<%= webapi_path %>/dependencies/static/utils/polyfills.js",
+        "<%= webapi_path %>/dependencies/static/utils/typechecker.js",
+        "<%= webapi_path %>/dependencies/static/utils/regularssources.js",
+        "<%= webapi_path %>/dependencies/static/logger.js",
+        "<%= webapi_path %>/dependencies/static/io.js",
+        "<%= webapi_path %>/dependencies/static/regexpmanager.js",
+        "<%= webapi_path %>/dependencies/static/optionsmanager.js",
 
-        "<%= webapi_root %>/dependencies/instancebased/textprocessor.js",
-        "<%= webapi_root %>/dependencies/instancebased/connection.js"
+        "<%= webapi_path %>/dependencies/instancebased/textprocessor.js",
+        "<%= webapi_path %>/dependencies/instancebased/connection.js"
     ]
 }
