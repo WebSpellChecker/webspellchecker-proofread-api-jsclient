@@ -16,8 +16,8 @@
 describe("TextProcessor", function () {
 
     beforeEach(function() {
-        WebApi = (typeof window === 'undefined') ? require("../") : WEBSPELLCHECKER;
-        api = new WebApi();
+        WEBSPELLCHECKER = (typeof window === 'undefined') ? require("../") : WEBSPELLCHECKER;
+        api = WEBSPELLCHECKER.initWebApi();
         TextProcessor = api._getService('TextProcessor');
     });
 

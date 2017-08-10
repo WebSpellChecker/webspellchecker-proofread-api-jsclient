@@ -1,4 +1,4 @@
-var WebApi,
+var WebApi, WEBSPELLCHECKER,
  api, bool,
     UD_NAME = 'test_js_webapi_ud',
     NEW_UD_NAME = 'new_test_js_webapi_ud',
@@ -12,21 +12,21 @@ var WebApi,
 describe("WebApi", function () {
 
     beforeEach(function() {
-        WebApi = (typeof window === 'undefined') ? require("../") : WEBSPELLCHECKER;
-        StringUtils = WebApi.Utils.StringUtils;
-		api = new WebApi();
+        WEBSPELLCHECKER = (typeof window === 'undefined') ? require("../") : WEBSPELLCHECKER;
+        StringUtils = WEBSPELLCHECKER.Utils.StringUtils;
+		api = WEBSPELLCHECKER.initWebApi();
 	});
 
     it("loaded", function() {
-        expect(WebApi).toBeDefined();
+        expect(api).toBeDefined();
     });
 
     it("static dependencies defined", function() {
-        expect(WebApi.Utils).toBeDefined();
-        expect(WebApi.IO).toBeDefined();
-        expect(WebApi.OptionsManager).toBeDefined();
-        expect(WebApi.RegularsManager).toBeDefined();
-        expect(WebApi.logger).toBeDefined();
+        expect(WEBSPELLCHECKER.Utils).toBeDefined();
+        expect(WEBSPELLCHECKER.IO).toBeDefined();
+        expect(WEBSPELLCHECKER.OptionsManager).toBeDefined();
+        expect(WEBSPELLCHECKER.RegularsManager).toBeDefined();
+        expect(WEBSPELLCHECKER.logger).toBeDefined();
 	});
 
     it("WebApi should have public api methods", function() {

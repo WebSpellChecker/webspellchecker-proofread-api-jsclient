@@ -1,6 +1,5 @@
 {
     "webapi": [
-        "<%= webapi_path %>/webapi.js",
         "<%= webapi_path %>/dependencies/static/utils/arrayutils.js",
         "<%= webapi_path %>/dependencies/static/utils/stringutils.js",
         "<%= webapi_path %>/dependencies/static/utils/browser.js",
@@ -12,6 +11,7 @@
         "<%= webapi_path %>/dependencies/static/regexpmanager.js",
         "<%= webapi_path %>/dependencies/static/optionsmanager.js",
 
+        "<%= webapi_path %>/webapi.js",
         "<%= webapi_path %>/dependencies/instancebased/textprocessor.js",
         "<%= webapi_path %>/dependencies/instancebased/connection.js"
     ]

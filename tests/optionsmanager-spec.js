@@ -1,5 +1,13 @@
 var WebApi, api, bool, OptionsManager, optionTypes;
-
+// global.describe = function(t, r) {r()};
+//     global.beforeEach = function(r){r()};
+//     global.it = function(n, r){r()};
+//     global.expect = function(){
+//         return {
+//             toBeDefined: function(){},
+//             toEqual:function(){}
+//         }
+//     };
 describe("OptionsManager", function () {
 
     beforeEach(function() {
