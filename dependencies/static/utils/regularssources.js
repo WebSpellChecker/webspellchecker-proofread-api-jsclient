@@ -9,6 +9,8 @@
         var RegularsSources = {
             space: "[\\s\\xA0]",
             dot: '\\.',
+            anyChar: '.',
+            comma: '\\,',
             EOL: '[\r\n(\r\n)]',
             digits : '[0-9]',
 
@@ -20,6 +22,7 @@
             specialCharacters: String.fromCharCode(8203) + String.fromCharCode(65279),
             ip: '/^((?:(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.){3}(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?))*$/',
             twoAndMore: '{2,}',
+            whiteSpace: "\\u00A0\\u1680\\u180E\\u2000-\\u200C\\u2028\\u2029\\u202F\\u205F\\u3000"
         };
 
         Namespace.RegularsSources = RegularsSources;

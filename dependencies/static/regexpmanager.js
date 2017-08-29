@@ -19,7 +19,7 @@
          * Constructor for regExp type.
          * List of regulars sources stored in regularssources.js
          * @constructor
-         * 
+         *
          * @param {String} name - type name.
          * @param {String} source -string source of regular expression.
          * @param {String} flags -regExp flags (g,i etc.).
@@ -29,28 +29,32 @@
             this.flags = flags || '';
             this.source = source;
             this.string = '';
+            this.regExp = null;
         }
 
         RegularType.prototype = {
             _wrapSymbol: '#',
             /**
              * Create RegExp from sources.
-             * 
+             *
              * @return {RegExp} RegExp.
              */
             _getRegExp: function() {
-                 return new RegExp(this.source, this.flags);
+                if(!this.regExp || (this.regExp.source !== this.source)) {
+                    this.regExp = new RegExp(this.source, this.flags);
+                }
+                return this.regExp;
             },
             /**
              * Combine provided regularType with current.
-             * 
+             *
              * @param {Object} options - Combine data Object.
              * @param {Object} options.regExpObject - Instance of RegularType.
              * @param {String} options.separator - string element what separate two regular sources.
              * @param {String} options.nameSeparator - string element what separate two names of regular types.
              * @param {String} options.compositionName - Name of result composition.
              *      If not specified name generate automatically based on Regular Type names and name separator parameter.
-             * 
+             *
              * @return {Object} Combined regular types.
              */
             _combine: function(options) {
@@ -69,10 +73,10 @@
             },
             /**
              * The composition of the _updateSource and replace methods.
-             * 
+             *
              * @param {String} subStr - The string that replaces the substring specified by source parameter.
              * @param {String} source - New source for current regular type.
-             * 
+             *
              * @return {Object} new regular type based on provided source and with changed string.
              */
             _replaceWithAnotherSource: function(subStr, source) {
@@ -82,9 +86,9 @@
             },
             /**
              * Method what reassign source parameter.
-             * 
+             *
              * @param {String} source - Regular type source.
-             * 
+             *
              * @return {Object} new regular type with new source.
              */
             _updateSource: function(source) {
@@ -94,9 +98,9 @@
             },
             /**
              * Method what set string for processing to current regular type.
-             * 
+             *
              * @param {String} string - String what will process in current regular type.
-             * 
+             *
              * @return {Object} new regular with specified string.
              */
             init: function(string) {
@@ -106,7 +110,7 @@
             },
             /**
              * Method what create new regular type based on current.
-             * 
+             *
              * @return {Object} clone of current regular type.
              */
             clone: function() {
@@ -115,16 +119,33 @@
             },
             /**
              * Return the string field of current regular type.
-             * 
+             *
              * @return {String} current string.
              */
             getString: function() {
                 return this.string;
             },
             /**
+             * Return lastIndex field of current regularExp.
+             *
+             * @return {Number} index.
+             */
+            getLastIndex: function() {
+                return this._getRegExp().lastIndex;
+            },
+            /**
+             * Set lastIndex field of current regularExp.
+             *
+             * @return {Number} index.
+             */
+            setLastIndex: function(index) {
+                var regExp = this._getRegExp();
+                regExp.lastIndex = index;
+            },
+            /**
              * Add RegEx flags if it not already setted.
              * @param {String} flags - String with RegExp flags 'gi'| 'g' etc.
-             * 
+             *
              * @return {Object} clone of current regular type.
              */
             addFlags: function(flags) {
@@ -139,7 +160,7 @@
             },
             /**
              * Add 'g' RegEx flag if it not already setted.
-             * 
+             *
              * @return {Object} clone of current regular type.
              */
             g: function() {
@@ -147,7 +168,7 @@
             },
             /**
              * Add 'i' RegEx flag if it not already setted.
-             * 
+             *
              * @return {Object} clone of current regular type.
              */
             i: function() {
@@ -155,7 +176,7 @@
             },
             /**
              * Transformation of regular type source to:
-             * a character set. Matches any one of the enclosed characters. 
+             * a character set. Matches any one of the enclosed characters.
              *
              * @return {Object} clone of current regular type.
              */
@@ -165,7 +186,7 @@
             },
             /**
              * Transformation of regular type source to:
-             * a capturing groups. 
+             * a capturing groups.
              *
              * @return {Object} clone of current regular type.
              */
@@ -200,6 +221,30 @@
                 return this._updateSource(this.source + '+');
             },
             /**
+             * Matches a left word boundary.
+             *
+             * @return {Object} clone of current regular type.
+             */
+            leftWordBoundary: function() {
+                return this._updateSource('\\b' + this.source);
+            },
+            /**
+             * Matches a right word boundary.
+             *
+             * @return {Object} clone of current regular type.
+             */
+            rightWordBoundary: function() {
+                return this._updateSource(this.source + '\\b');
+            },
+            /**
+             * Wrap word boundary.
+             *
+             * @return {Object} clone of current regular type.
+             */
+            wrapWordBoundary: function() {
+                return this.leftWordBoundary().rightWordBoundary();
+            },
+            /**
              * Transformation of regular type source to:
              * a matches x only if x is followed by y.
              *
@@ -215,7 +260,35 @@
              * @return {Array} clone of current regular type.
              */
             split: function(string) {
-                return this.string.split( this._getRegExp() );
+                string = string || this.string;
+                return string.split( this._getRegExp() );
+            },
+            /**
+             * Retrieves the matches when matching a string against a regular expression.
+             *
+             * @return {Array}
+             */
+            match: function(string) {
+                string = string || this.string;
+                return string.match( this._getRegExp() );
+            },
+            /**
+             * Method executes a search for a match between a regular expression and this String object.
+             *
+             * The index of the first match between the regular expression and the given string.
+             * @return {Number}
+             */
+            search: function(string) {
+                string = string || this.string;
+                return string.search( this._getRegExp() );
+            },
+            /**
+             * Method executes a search for a match between a regular expression and a specified string.
+             *
+             * @return {Bool}
+             */
+            test: function(string) {
+                return this._getRegExp().test( string || this.string );
             },
             /**
              * Clone regular type and change string.
@@ -223,16 +296,21 @@
              *
              * @return {Array}
              */
-            replace: function(subStr) {
-                var clone = this.clone();
-                clone.string = clone.string.replace(this._getRegExp(), subStr);
-                return clone;
+            replace: function(string, subStr) {
+                if(subStr !== undefined) {
+                    return string.replace( this._getRegExp(), subStr );
+                } else {
+                    var clone = this.clone();
+                    subStr = string;
+                    clone.string = clone.string.replace( this._getRegExp(), subStr );
+                    return clone;
+                }
             },
             /**
              * Replace regular type with provided left symbol.
              * @param {String} wrapSymbol - String what will added to sources left.
              * @param {String} subStr - The String that replaces the substring specified by regular type.
-             * 
+             *
              * @return {Array} clone of current regular type.
              */
             replaceLeftWrapped: function(wrapSymbol, subStr) {
@@ -243,7 +321,7 @@
              * Replace regular type with provided right symbol.
              * @param {String} wrapSymbol - String what will added to sources right.
              * @param {String} subStr - The String that replaces the substring specified by regular type.
-             * 
+             *
              * @return {Array} clone of current regular type.
              */
             replaceRightWrapped: function(wrapSymbol, subStr) {
@@ -253,7 +331,7 @@
             /**
              * Wrap regular includes in this.string by wrapSymbols.
              * @param {String} wrapSymbol - What wrap include.
-             * 
+             *
              * @return {Array} clone of current regular type.
              */
             wrapInclude: function(wrapSymbol) {
@@ -265,7 +343,7 @@
              * @param {Object} regExpObject - Instance of RegularType.
              * @param {String} compositionName - Name of result composition.
              *      If not specified name generate automatically from regular types combine by &.
-             * 
+             *
              * @return {Object} Combined regular types.
              */
             composition: function(regExpObject, compositionName) {
@@ -281,7 +359,7 @@
              * @param {Object} regExpObject - Instance of RegularType.
              * @param {String} compositionName - Name of result composition.
              *      If not specified name generate automatically from regular types combine by |.
-             * 
+             *
              * @return {Object} Combined regular types.
              */
             or: function(regExpObject, compositionName) {
@@ -297,7 +375,7 @@
              * @param {Array} listOfRegExpObjects - List of regular types instances.
              * @param {String} compositionName - Name of result composition.
              *      If not specified name generate automatically from regular types combine by &.
-             * 
+             *
              * @return {Object} Combined regular types.
              */
             compositionGraph: function(listOfRegExpObjects, compositionName) {
@@ -316,12 +394,17 @@
         var RegularsManager = {
                 /**
                  * Add regular type to RegularsManager.
-                 * 
+                 *
                  * @param {String} name - Name of regular type.
-                 * @param {String} source - Regular expression source. 
+                 * @param {String} source - Regular expression source.
                  */
                 addRegularType: function(name, source) {
-                    this[name] = new RegularType(name, source);
+                    var type = new RegularType(name, source);
+                    this[name] = type;
+                    return type;
+                },
+                wrap: function(source) {
+                    return new RegularType('regular', source);
                 }
             },
             RegularsSources = Namespace.RegularsSources;

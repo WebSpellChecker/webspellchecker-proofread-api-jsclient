@@ -1,7 +1,7 @@
 var WebApi, WEBSPELLCHECKER,
  api, bool,
-    UD_NAME = 'test_js_webapi_ud',
-    NEW_UD_NAME = 'new_test_js_webapi_ud',
+    UD_NAME = 'test1_js_webapi_ud',
+    NEW_UD_NAME = 'new_test1_js_webapi_ud',
     WORD = 'exampl',
     WORD2 = 'mispelled',
     TEXT = 'This is an exampl of a sentence with two mispelled words. Just type text with misspelling to see how it works.',
@@ -71,7 +71,7 @@ describe("WebApi", function () {
 
         waitsFor(function() {
               return bool;
-        });
+        }, 20000);
     });
 
     it("spellCheck method should check misspells in text", function() {
@@ -87,7 +87,7 @@ describe("WebApi", function () {
 
         waitsFor(function() {
             return bool;
-        });
+        }, 20000);
     });
 
     it("spellCheck method should return correct position for misspelled words", function() {
@@ -110,7 +110,7 @@ describe("WebApi", function () {
 
         waitsFor(function() {
             return bool;
-        });
+        }, 20000);
     });
 
     it("grammarCheck method should check grammar misspells in text", function() {
@@ -126,7 +126,7 @@ describe("WebApi", function () {
 
         waitsFor(function() {
             return bool;
-        });
+        }, 20000);
     });
 
     it("getUserDictionary, createUserDictionary deleteUserDictionary methods flow should work correctly", function() {
@@ -162,7 +162,7 @@ describe("WebApi", function () {
 
             waitsFor(function() {
                 return bool;
-            });
+            }, 20000);
         });
     });
 
@@ -184,7 +184,7 @@ describe("WebApi", function () {
         });
         waitsFor(function() {
             return bool;
-        });
+        }, 20000);
     });
 
 
@@ -198,7 +198,7 @@ describe("WebApi", function () {
         });
         waitsFor(function() {
             return bool;
-        });
+        }, 20000);
     });
 
 
@@ -246,7 +246,7 @@ describe("WebApi", function () {
                 wordList[wordList.length - 1] === WORD) {
                 return true;
             }
-        });
+        }, 20000);
     });
 
     it("deleteWordFromUserDictionary method should delete words from current UD", function() {
@@ -299,7 +299,7 @@ describe("WebApi", function () {
             if( wordListLengthAfter < wordListLengthBefore  ) {
                 return true;
             }
-        });
+        }, 20000);
 
     });
 });

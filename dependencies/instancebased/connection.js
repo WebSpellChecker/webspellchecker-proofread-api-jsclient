@@ -47,11 +47,11 @@
          * Module for working with server commands and preparing request info.
          * @constructor
          * @alias WEBSPELLCHECKER.Connection
-         * 
+         *
          * @param {String} moduleId - Moduloe name;
          * @param {Object} appInstance - Instance of main app.
          * @private
-         */ 
+         */
         function Connection(moduleId, appInstance) {
             this.moduleId = moduleId;
             this.appInstance = appInstance;
@@ -72,29 +72,29 @@
             /**
              * Accessor for map of cmd request parameter values.
              * @memberof WEBSPELLCHECKER.Connection#
-             * 
+             *
              * @returns {Object} - List of server commands.
              * @private
-             */ 
+             */
             getCommands: function() {
                 return _commandsMap;
             },
             /**
              * Accessor for map of user dictionary actions.
              * @memberof WEBSPELLCHECKER.Connection#
-             * 
+             *
              * @returns {Object} - List of UD actions.
              * @private
-             */ 
+             */
             getUDActions: function() {
                 return _UDActionsMap;
             },
             /**
              * Define common parameters for each request.
              * @memberof WEBSPELLCHECKER.Connection#
-             * 
+             *
              * @private
-             */ 
+             */
             setDefaultParameters: function() {
                 this.defaultParameters[_parametersMap.customer_id] = this.appInstance.getOption('customerId');
                 this.defaultParameters[_parametersMap.communicationFormat] = this.appInstance.getOption('communicationFormat');
@@ -102,7 +102,7 @@
             /**
              * Return clone of url object for request.
              * @memberof WEBSPELLCHECKER.Connection#
-             * 
+             *
              * @returns {Object} - Clone of IO url object.
              * @private
              */
@@ -113,10 +113,10 @@
              * Prepare client parameters before request.
              * Collect request parameters from _parametersMap.
              * @memberof WEBSPELLCHECKER.Connection#
-             * 
+             *
              * @param {Object} parameters - Wrapped requst parameters.
              * @param {Object} map - map to server parameters names.
-             * 
+             *
              * @returns {Object} - Requst parameters.
              * @private
              */
@@ -145,11 +145,11 @@
             /**
              * Make requst to the server using IO object.
              * @memberof WEBSPELLCHECKER.Connection#
-             * 
+             *
              * @param {Object} parameters - Wrapped requst parameters.
              * @param {Function} onSuccess - Handler successful response from the server.
              * @param {Function} onError - Handler unsuccessful response from the server.
-             * 
+             *
              * @returns {Object} - Transport object.
              * @private
              */

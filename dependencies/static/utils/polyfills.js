@@ -383,7 +383,7 @@
         Object.defineProperty(Array.prototype, 'reduce', {
             value: function(callback /*, initialValue*/) {
             if (this === null) {
-                throw new TypeError( 'Array.prototype.reduce ' + 
+                throw new TypeError( 'Array.prototype.reduce ' +
                 'called on null or undefined' );
             }
             if (typeof callback !== 'function') {
@@ -395,17 +395,17 @@
             var o = Object(this);
 
             // 2. Let len be ? ToLength(? Get(O, "length")).
-            var len = o.length >>> 0; 
+            var len = o.length >>> 0;
 
-            // Steps 3, 4, 5, 6, 7      
-            var k = 0; 
+            // Steps 3, 4, 5, 6, 7
+            var k = 0;
             var value;
 
             if (arguments.length >= 2) {
                 value = arguments[1];
             } else {
                 while (k < len && !(k in o)) {
-                    k++; 
+                    k++;
                 }
 
                 // 3. If len is 0 and initialValue is not present,
@@ -430,7 +430,7 @@
                     value = callback(value, o[k], k, o);
                 }
 
-                // d. Increase k by 1.      
+                // d. Increase k by 1.
                 k++;
             }
 
@@ -461,7 +461,7 @@
             // 3. Let len be toUint32(lenValue).
             var len = O.length >>> 0;
 
-            // 4. If isCallable(callback) is false, throw a TypeError exception. 
+            // 4. If isCallable(callback) is false, throw a TypeError exception.
             // See: http://es5.github.com/#x9.11
             if (typeof callback !== 'function') {
                 throw new TypeError(callback + ' is not a function');
@@ -501,6 +501,36 @@
                 k++;
             }
             // 8. return undefined.
+        };
+    }
+
+    if (![].includes) {
+        Array.prototype.includes = function(searchElement/*, fromIndex*/) {
+            var O = Object(this);
+            var len = parseInt(O.length) || 0;
+            if (len === 0) {
+                return false;
+            }
+            var n = parseInt(arguments[1]) || 0;
+            var k;
+            if (n >= 0) {
+                k = n;
+            } else {
+                k = len + n;
+                if (k < 0) {
+                k = 0;
+                }
+            }
+            while (k < len) {
+                var currentElement = O[k];
+                if (searchElement === currentElement ||
+                (searchElement !== searchElement && currentElement !== currentElement)
+                ) {
+                    return true;
+                }
+                k++;
+            }
+            return false;
         };
     }
 })();

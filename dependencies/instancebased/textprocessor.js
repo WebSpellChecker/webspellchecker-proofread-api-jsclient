@@ -14,7 +14,7 @@
          *
          * @constructor
          * @alias WEBSPELLCHECKER.TextProcessor
-         * 
+         *
          * @param {String} moduleId - Moduloe name;
          * @param {Object} appInstance - Instance of main app.
          * @private
@@ -29,12 +29,12 @@
             /**
              * Method what replacing separators(punctuation, symbols, quots) on spacces* Method for placing separators(punctuation, symbols, quotes) on spaces.
              * @memberof WEBSPELLCHECKER.TextProcessor#
-             * 
+             *
              * @param {String} text - Text for replacing separators.
-             * 
+             *
              * @returns {String} - text without separators.
              * @private
-             */ 
+             */
             replaceSepatators: function(text) {
                 var _situationalSepSetGlob,
                     customPunctuation = this.appInstance.getOption('customPunctuation');
@@ -81,9 +81,9 @@
             /**
              * Method what remove special characters.
              * @memberof WEBSPELLCHECKER.TextProcessor#
-             * 
+             *
              * @param {String} text - Text for removing special characters.
-             * 
+             *
              * @returns {String} - Text without special characters.
              * @private
              */
@@ -94,10 +94,10 @@
             /**
              * Method what collect offsets in text for current word.
              * @memberof WEBSPELLCHECKER.TextProcessor#
-             * 
+             *
              * @param {String} word - Words for which we are looking for offsets.
              * @param {String} text - Text with words.
-             * 
+             *
              * @returns {Object} - Start and end offsets.
              * @private
              */
@@ -113,9 +113,9 @@
             /**
              * API method what collect words from original text.
              * @memberof WEBSPELLCHECKER.TextProcessor#
-             * 
+             *
              * @param {String} text - Original text.
-             * 
+             *
              * @returns {Object} - Object with array of words and collection of words offsets.
              */
             getWordsFromString: function(text) {

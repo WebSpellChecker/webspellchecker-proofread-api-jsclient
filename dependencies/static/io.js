@@ -23,20 +23,20 @@
 			mockParams = [];
 
 		/**
-		 * @exports SCAYT.prototype.IO
+		 * @exports WEBSPELLCHECKER.IO
 		 */
 		var IO = {
 
 			/**
 			 * Link to XMLHttpRequest constructor
 			 *
-			 * @alias SCAYT.prototype.IO
+			 * @alias WEBSPELLCHECKER.IO
 			 */
 			XMLHttpRequest: (typeof XMLHttpRequest !== 'undefined') ? XMLHttpRequest : null,
 			/**
 			 * Link to XDomainRequest constructor
 			 *
-			 * @alias SCAYT.prototype.IO
+			 * @alias WEBSPELLCHECKER.IO
 			 */
 			XDomainRequest: (typeof XDomainRequest !== 'undefined') ? XDomainRequest : null,
 			/**
@@ -207,7 +207,7 @@
 			 */
 			JSONP: function(params) {
 				var callbackName = ( "callback" + Math.random().toString(20).substr(2,9) ),
-					callbackFunctionPath = "SCAYT.prototype.IO.";
+					callbackFunctionPath = "WEBSPELLCHECKER.IO.";
 
 				if( isMocked ) {
 
@@ -308,16 +308,17 @@
 			Script: function( params ) {
 				params = params || {};
 				var self = this,
-					responseData; // Variable for JSONP response data
+					responseData, // Variable for JSONP response data
+					head;
 
 				var registerCallback = function() {
-					SCAYT.prototype.IO[params.callbackName] = function(data) {
+					WEBSPELLCHECKER.IO[params.callbackName] = function(data) {
 						responseData = data;
 					};
 				};
 
 				var removeCallback = function() {
-					delete SCAYT.prototype.IO[params.callbackName];
+					delete WEBSPELLCHECKER.IO[params.callbackName];
 				};
 
 				var removeAll = function() {
@@ -371,15 +372,15 @@
 						}, 0);
 					}
 				};
-
-				UILib.appendTo(script, 'head');
+				head = document.getElementsByTagName('head')[0];
+				head.appendChild(script);
 
 				this.getScript = function() {
 					return script;
 				};
 
 				this.removeScript = function() {
-					UILib.remove(script);
+					head.removeChild(script);
 					script = null;
 				};
 			},
@@ -446,7 +447,7 @@
 		/**
 		 * Define list of request types
 		 *
-		 * @alias SCAYT.prototype.IO
+		 * @alias WEBSPELLCHECKER.IO
 		 */
 		IO.requestTypes = {
 			AJAX: IO.AJAX,
@@ -463,7 +464,7 @@
 		/**
 		 * Define request type for IO Manager
 		 *
-		 * @alias SCAYT.prototype.IO
+		 * @alias WEBSPELLCHECKER.IO
 		 */
 		IO.request = (Namespace.env === Namespace.envTypes.node) ?
 			IO.requestTypes.NODE :
@@ -473,7 +474,7 @@
 		/**
 		 * Static Module. Imput&Output (IO) Manager of SCAYT
 		 *
-		 * @alias SCAYT.prototype.IO
+		 * @alias WEBSPELLCHECKER.IO
 		 */
 		Namespace.IO = IO;
 	}
