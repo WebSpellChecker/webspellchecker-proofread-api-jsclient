@@ -88,17 +88,25 @@
                 this._services[k] = new this._dependencies[k](k, this);
             }
 
-            var connection = this._services['Connection'],
-                commands = connection.getCommands();
-            this._commands = commands;
+            var connection = this._services['Connection'];
+            this._commands = connection.getCommands();
+            this._UDActions = connection.getUDActions();
+        }
 
-            this._userDictionaryManager = new UserDictionaryManager({
-                actions: connection.getUDActions(),
-                request: function(parametrs) {
-                    parametrs.command = commands.userDictionary;
-                    return self._request.apply(self, arguments);
-                }
-            });
+        /**
+         * UserDictionary  constructor.
+         * Encapsulates the construction of a query for UD request.
+         *
+         * @typedef {(Object)} UserDictionary
+         * @namespace UserDictionary
+         * @property {String} parametrs.name - List of available UD actions.
+         * @property {function} parametrs.wordlist - List of words in current dictionary.
+         * @property {function} parametrs.makeUDAction - Request-maker function.
+         */
+        function UserDictionary(parameters) {
+            this.name = parameters.name;
+            this.wordlist = parameters.wordlist;
+            this.makeUDAction = parameters.makeUDAction;
         }
 
         /**
@@ -130,9 +138,39 @@
             _request: function(data, success, error) {
                 return this._getService('Connection').request(
                     data,
-                    success,
-                    error
+                    success || function(){},
+                    error || function(){}
                 );
+            },
+            _makeUDAction: function(actionName, parametrs) {
+                var requestParametrs = {
+                    command: this._commands.userDictionary,
+                    UDAction: this._UDActions[actionName],
+                    UDName: parametrs.name,
+                    newUDName: parametrs.newName,
+                    wordList: parametrs.wordList,
+                    UDWord: parametrs.word
+                };
+
+                return this._request(
+                    requestParametrs,
+                    parametrs.success,
+                    parametrs.error
+                );
+            },
+            _UDMethodWrapper: function(actionName, parameters) {
+                var self = this,
+                    success = parameters.success || function(){};
+
+                parameters.success = function(responseInfo) {
+                    var ud = new UserDictionary({
+                        wordlist: responseInfo.wordlist,
+                        name: responseInfo.name,
+                        makeUDAction: self._makeUDAction.bind(self)
+                    });
+                    success(ud);
+                };
+                return this._makeUDAction(actionName, parameters);
             },
             // Accessors
             getOption: function(name) {
@@ -310,10 +348,7 @@
              * userDictionary success Callback.
              *
              * @callback UserDictionaryCallback
-             * @param {Object} UDResponse
-             * @param {String} UDResponse.name - Dictionary name.
-             * @param {String} UDResponse.action - User Dictionary action.
-             * @param {Object} UDResponse.wordlist - List of words stored in this dictionary.
+             * @param {UserDictionary} UDObject
              */
 
             /**
@@ -338,7 +373,7 @@
              * });
              */
             getUserDictionary: function(parametrs) {
-                return this._userDictionaryManager.action('get', parametrs);
+                return this._UDMethodWrapper('getDict', parametrs);
             },
             /**
              * createUserDictionary API method.
@@ -347,6 +382,8 @@
              *
              * @param {Object} parametrs
              * @param {String} parametrs.name - User dictionary name.
+             * @param {String} parametrs.wordList - Word list.
+             *
              * @param {UserDictionaryCallback} parametrs.success - Handler successful response from the server.
              * @param {RequestCallback} parametrs.error - Handler unsuccessful response from the server.
              * @returns {Object} - Transport object.
@@ -362,7 +399,7 @@
              * });
              */
             createUserDictionary: function(parametrs) {
-                return this._userDictionaryManager.action('create', parametrs);
+                return this._UDMethodWrapper('create', parametrs);
             },
             /**
              * deleteUserDictionary API method.
@@ -386,7 +423,7 @@
              * });
              */
             deleteUserDictionary: function(parametrs) {
-                return this._userDictionaryManager.action('delete', parametrs);
+                return this._UDMethodWrapper('delete', parametrs);
             },
             /**
              * renameUserDictionary API method.
@@ -411,7 +448,7 @@
              * });
              */
             renameUserDictionary: function(parametrs) {
-                return this._userDictionaryManager.action('rename' , parametrs);
+                return this._UDMethodWrapper('rename' , parametrs);
             },
             /**
              * addWordToUserDictionary API method.
@@ -437,7 +474,7 @@
              * });
              */
             addWordToUserDictionary: function(parametrs) {
-                return this._userDictionaryManager.action('addWord', parametrs);
+                return this._UDMethodWrapper('addWord', parametrs);
             },
             /**
              * deleteWordFromUserDictionary API method.
@@ -463,135 +500,115 @@
              * });
              */
             deleteWordFromUserDictionary: function(parametrs) {
-                return this._userDictionaryManager.action('deleteWord', parametrs);
+                return this._UDMethodWrapper('deleteWord', parametrs);
             }
         };
 
-        /**
-         * @constructor
-         * UserDictionary Manager constructor.
-         * Encapsulates the construction of a query for UD request.
-         *
-         * @param {Object} parametrs.actions        - List of available UD actions.
-         * @param {function} parametrs.request  	- Request-maker function.
-         * @private
-         */
-        function UserDictionaryManager(parametrs) {
-            this.actions = parametrs.actions;
-            this.request = parametrs.request;
-        }
+        UserDictionary.prototype = {
+            constructor: UserDictionary,
+            _action: function(actionName, parameters) {
+                this.makeUDAction(actionName, Object.assign({
+                    name: this.name
+                }, parameters) );
+            },
+            /**
+             *  Add word to current user dictionary.
+             *
+             * @property {Object} parametrs
+             * @memberof UserDictionary
+             *
+             * @property {String} parametrs.word - Word what will be added to UD.
+             * @property {UserDictionaryCallback} parametrs.success - Handler successful response from the server.
+             * @property {RequestCallback} parametrs.error - Handler unsuccessful response from the server.
+             */
+            addWord: function(parameters) {
+                var success = parameters.success,
+                    self = this;
 
-        UserDictionaryManager.prototype = {
-            constructor: UserDictionaryManager,
+                parameters.success = function(responseInfo) {
+                    self.wordlist.push(parameters.word);
+                    success(self);
+                };
+                this._action('addWord', parameters);
+            },
             /**
-             * UserDictionaryManager entrypoint.
-             * Controller for UD actions.
-             * @param {String} actionName           - Name of UD action .
-             * @param {function} parametrs.request  - Request-maker function.
+             *  Delete word to current user dictionary.
              *
-             * @returns {Object}                    - Transport object.
-             * @private
+             * @memberof UserDictionary
+             * @param {Object} parametrs
+             *
+             * @param {String} parametrs.word - Word what will be deleted from UD.
+             * @param {UserDictionaryCallback} parametrs.success - Handler successful response from the server.
+             * @param {RequestCallback} parametrs.error - Handler unsuccessful response from the server.
              */
-            action: function(actionName, parametrs) {
-                var actionMethod = this[actionName],
-                    UDName =  parametrs.name,
-                    requestParametrs;
+            deleteWord: function(parameters) {
+                var success = parameters.success,
+                    word = parameters.word,
+                    self = this;
 
-                requestParametrs = Object.assign( {
-                    // UDName common parameter for any request.
-                    UDName: UDName
-                }, actionMethod.call(this, parametrs) );
+                parameters.success = function(responseInfo) {
+                    var wordlist = [];
+                    for(var i = 0; i < self.wordlist.length; i += 1) {
+                        if(self.wordlist[i] !== word) {
+                            wordlist.push(wordlist[i]);
+                        }
+                    }
+                    self.wordlist = wordlist;
+                    success(self);
+                };
+                this._action('deleteWord', parameters);
+            },
+            /**
+             *  Delete current user dictionary.
+             *
+             * @memberof UserDictionary
+             * @param {Object} parametrs
+             *
+             * @param {UserDictionaryCallback} parametrs.success - Handler successful response from the server.
+             * @param {RequestCallback} parametrs.error - Handler unsuccessful response from the server.
+             */
+            delete: function(parameters) {
+                var success = parameters.success,
+                    self = this;
 
-                return this.request(
-                    requestParametrs,
-                    parametrs.success,
-                    parametrs.error
-                );
+                parameters.success = function(responseInfo) {
+                    this.name = undefined;
+                    this.wordlist = undefined;
+                    success(self);
+                };
+                this._action('delete', parameters);
             },
             /**
-             * UserDictionaryManager 'get' method.
+             *  Rename current user dictionary.
              *
-             * @returns {Object} - Object with UD 'get' action.
-             * @private
+             * @memberof UserDictionary
+             * @param {Object} parametrs
+             *
+             * @param {String} parametrs.newName - New Ud name.
+             * @param {UserDictionaryCallback} parametrs.success - Handler successful response from the server.
+             * @param {RequestCallback} parametrs.error - Handler unsuccessful response from the server.
              */
-            get: function() {
-                return {
-                    UDAction: this.actions.getDict
+            rename: function(parameters) {
+                var success = parameters.success,
+                    self = this;
+
+                parameters.success = function(responseInfo) {
+                    self.name = parameters.newName;
+                    success(self);
                 };
+                this._action('rename', parameters);
             },
             /**
-             * UserDictionaryManager 'create' method.
-             * Receive list of words what will be added to the new dicrionary.
+             *  Return UD Word list.
+             * @memberof UserDictionary
              *
-             * @param {String} parametrs.wordList - List of words separated by ','.
-             *
-             * @returns {Object} - Object with UD 'create' action and wordLists parametr.
-             * @private
+             * @returns {Array} UD word list.
              */
-            create: function(parametrs) {
-                return {
-                    UDAction: this.actions.create,
-                    wordList: parametrs.wordList || ''
-                };
-            },
-            /**
-             * UserDictionaryManager 'delete' method.
-             *
-             * @returns {Object} - Object with UD 'delete' action.
-             * @private
-             */
-            'delete': function() {
-                return {
-                    // Used reflection notation because in IE8 we can't create field named 'delete'.
-                    UDAction: this.actions['delete']
-                };
-            },
-            /**
-             * UserDictionaryManager 'rename' method.
-             * Receive new dictionary name.
-             *
-             * @param {String} parametrs.newName - Name of new dictionary.
-             *
-             * @returns {Object} - Object with UD 'rename' action and new UD name.
-             * @private
-             */
-            rename: function(parametrs) {
-                return {
-                    UDAction: this.actions.rename,
-                    newUDName: parametrs.newName
-                };
-            },
-            /**
-             * UserDictionaryManager 'addWord' method.
-             * Receive word what will be added to dictionary.
-             *
-             * @param {String} parametrs.word - Word.
-             *
-             * @returns {Object} - Object with UD 'addWord' action and word.
-             * @private
-             */
-            addWord: function(parametrs) {
-                return {
-                    UDAction: this.actions.addWord,
-                    UDWord: parametrs.word
-                };
-            },
-            /**
-             * UserDictionaryManager 'deleteWord' method.
-             * Receive word what will be deleted from dictionary.
-             *
-             * @param {String} parametrs.word - Word.
-             *
-             * @returns {Object} - Object with UD 'deleteWord' action and word.
-             * @private
-             */
-            deleteWord: function(parametrs) {
-                return {
-                    UDAction: this.actions.deleteWord,
-                    UDWord: parametrs.word
-                };
+            getWordList: function() {
+                return this.wordlist.slice();
             }
         };
+
         /**
          * Method check client options and return WebApi instance.
          * @memberof WEBSPELLCHECKER

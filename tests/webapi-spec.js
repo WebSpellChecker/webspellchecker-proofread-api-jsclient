@@ -302,4 +302,125 @@ describe("WebApi", function () {
         }, 20000);
 
     });
+
+    describe("UserDictionary Object", function() {
+        var ud_res, params = {
+            name: UD_NAME
+        };
+        afterEach(function() {
+            api.deleteUserDictionary({name: UD_NAME});
+        });
+
+        it("'addWord' should add word", function() {
+            var ud_res;
+            params.success = function() {
+                api.getUserDictionary({
+                    name: UD_NAME,
+                    success: function(ud) {
+                        ud.addWord({
+                            word: 'tripa',
+                            success: function() {
+                                ud_res = ud;
+                            }
+                        });
+                    },
+                });
+            };
+
+            api.createUserDictionary(params);
+
+            waitsFor(function() {
+                if(ud_res) {
+                    if(ud_res.wordlist.includes('tripa')) {
+                        return true;
+                    }
+                }
+            }, 20000);
+        });
+
+        it("'deleteWord' should delete word", function() {
+            var ud_res;
+            params.success = function() {
+                api.getUserDictionary({
+                    name: UD_NAME,
+                    success: function(ud) {
+                        ud.addWord({
+                            word: 'tripa',
+                            success: function(ud) {
+                                ud.deleteWord({
+                                    word: 'tripa',
+                                    success: function(data) {
+                                        ud_res = ud;
+                                    }
+                                });
+                            }
+                        });
+                    }
+                });
+            };
+            api.createUserDictionary(params);
+            waitsFor(function() {
+                if(ud_res && !ud_res.wordlist.includes('tripa')) {
+                    return true;
+                }
+            }, 20000);
+        });
+
+        it("'rename' should rename dictionary", function() {
+            var ud_res, newN = 'temt_test_name', bool = false;
+            api.deleteUserDictionary({
+                name: newN
+            });
+            params.success = function() {
+                api.getUserDictionary({
+                    name: UD_NAME,
+                    success: function(ud) {
+                        ud.rename({
+                            newName: newN,
+                            success: function(ud) {
+                                if(ud.name === newN) {
+                                    ud.rename({
+                                        newName: UD_NAME,
+                                        success: function(ud) {
+                                            if(ud.name === UD_NAME) {
+                                                bool = true;
+                                            }
+                                        }
+                                    });
+                                }
+                            }
+                        });
+                    }
+                });
+            };
+            api.createUserDictionary(params);
+            waitsFor(function() {
+                if(bool) {
+                    return true;
+                }
+            }, 20000);
+        });
+
+        it("'delete' should delete dictionary", function() {
+            var ud_res, newN = 'temt_test_name', bool = false;
+            params.success = function() {
+                api.getUserDictionary({
+                    name: UD_NAME,
+                    success: function(ud) {
+                        ud.delete({
+                            success: function() {
+                                bool = true;
+                            }
+                        });
+                    }
+                });
+            };
+            api.createUserDictionary(params);
+            waitsFor(function() {
+                if(bool) {
+                    return true;
+                }
+            }, 20000);
+        });
+    });
 });
