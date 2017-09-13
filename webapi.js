@@ -39,7 +39,7 @@
                 type: optionTypes.string,
                 defaultValue: undefined
             },
-            customDictionary: {
+            customDictionaryIds: {
                 type: optionTypes.string,
                 defaultValue: undefined
             },
@@ -72,7 +72,8 @@
             var self = this;
             this._services = {};
             // options creation
-            this._options = OptionsManager.createOptions(clientOptions, optionsTemplate, function errorHandler(errors) {
+            OptionsManager.addOptionsTemplate('WebApiTemplate', optionsTemplate);
+            this._options = OptionsManager.createOptions(clientOptions, 'WebApiTemplate', function errorHandler(errors) {
                 errors.reports.forEach(function(report) {
                     logger.log(report.message);
                 }, this);
@@ -289,7 +290,7 @@
                     {
                         command: this._commands.spellCheck,
                         language:  parametrs.lang || this.getOption('lang'),
-                        customDictionary: this.getOption('customDictionary'),
+                        customDictionary: this.getOption('customDictionaryIds'),
                         userDictionary: this.getOption('userDictionaryName'),
                         text: text
                     },

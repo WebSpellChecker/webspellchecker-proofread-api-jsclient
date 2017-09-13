@@ -4,6 +4,9 @@
             isString: function(value) {
                 return typeof value === 'string';
             },
+            notEmptyString: function(value) {
+                return value !== '' && TypeChecker.isString(value);
+            },
             isArray: function(value) {
                 return {}.toString.call(value) === '[object Array]';
             },
@@ -77,6 +80,11 @@
             // number like many other `isNumber` functions do.
             isNumber: function(value) {
                 return typeof value === 'number' && !isNaN(value);
+            },
+            // Checks if the value is a number. TypeChecker function does not consider NaN a
+            // number like many other `isNumber` functions do.
+            isPositive: function(value) {
+                return typeof value === 'number' && value >= 0;
             }
         };
 

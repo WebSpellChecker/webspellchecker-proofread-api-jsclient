@@ -4,7 +4,8 @@
  */
 (function(){
 	function init( Namespace ) {
-        var TypeChecker = Namespace.Utils.TypeChecker, validators,
+        var TypeChecker = Namespace.Utils.TypeChecker,
+            ArrayUtils = Namespace.Utils.ArrayUtils, validators,
             RegularsManager = Namespace.RegularsManager;
 
         /**
@@ -38,11 +39,32 @@
                 this.count += 1;
             };
         }
+
+        function OptionsObject(options, createOptionValue) {
+            if(options instanceof this.constructor) {
+                return options;
+            }
+            Object.assign(this, options);
+            this.createOptionValue = createOptionValue;
+            this.validatedFields = [];
+        }
+
+        OptionsObject.protoype = {
+            constructor: OptionsObject,
+            addOption: function(option) {
+                var name = option.name;
+                if( !this.validatedFields.includes(name) ) {
+                    this[name] = this.createOptionValue(option);
+                    this.validatedFields.push(name);
+                }
+            }
+        };
         /**
          * @exports WEBSPELLCHECKER.OptionsManager
          */
         var OptionsManager = {
             optionTypes: {},
+            optionsTemplate: {},
             /**
              * List of Validation rules.
              * @memberof WEBSPELLCHECKER.OptionsManager#
@@ -55,7 +77,8 @@
                 empty: TypeChecker.isEmpty,
                 'function': TypeChecker.isFunction,
                 hash: TypeChecker.isHash,
-                integer:TypeChecker.isInteger,
+                integer: TypeChecker.isInteger,
+                positive: TypeChecker.isPositive,
                 number: TypeChecker.isNumber,
                 object: TypeChecker.isObject,
                 string: TypeChecker.isString,
@@ -63,7 +86,7 @@
                     return value === 'http' || value === 'https';
                 },
                 url_host:function(value) {
-                    return TypeChecker.isString(value);// && Regular test ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789-._~:/?#[]@!$&'()*+,;=
+                    return TypeChecker.notEmptyString(value);// && Regular test ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789-._~:/?#[]@!$&'()*+,;=
                 },
                 url_port: function(value) {
                     if( TypeChecker.isNumber(value) ) {
@@ -74,7 +97,7 @@
                     return false;
                 },
                 url_path: function(value) {
-                    return TypeChecker.isString(value);// && Regular test ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789-._~:/?#[]@!$&'()*+,;=
+                    return TypeChecker.notEmptyString(value);// && Regular test ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789-._~:/?#[]@!$&'()*+,;=
                 }
             },
             /**
@@ -90,7 +113,7 @@
              * @returns {*} - Option value.
              * @private
              */
-            createOption: function ( optionData ) {
+            createOptionValue: function ( optionData ) {
                 var optionValue = optionData.value,
                     optionTemplate = optionData.template,
                     errorReport = {},
@@ -117,26 +140,27 @@
              * @memberof WEBSPELLCHECKER.OptionsManager#
              *
              * @param {Object} clientOptions - Options what should be processed.
-             * @param {Object} optionsTemplates - Validation and another information for clientOptions options.
+             * @param {Object} optionsTemplate - Validation and another information for clientOptions options.
              * @param {Object} errorHandler - Error callback if we have a problem with options creating.
              *
              * @returns {Object} - processed options.
              * @private
              */
-            createOptions: function(clientOptions, optionsTemplates, errorHandler) {
+            createOptions: function(clientOptions, templateName, errorHandler) {
                 var option, valid,
-                    options = Object.assign({}, clientOptions),
+                    options = new OptionsObject( clientOptions, this.createOptionValue.bind(this) ),
+                    optionsTemplate = this.getOptionsTemplate(templateName),
                     errorsObject = new ErrorsObject();
 
-                for(var k in optionsTemplates) {
-                    if( optionsTemplates.hasOwnProperty(k) === false ) continue;
-                    if(optionsTemplates[k].type instanceof OptionType === false) {
+                for(var k in optionsTemplate) {
+                    if( optionsTemplate.hasOwnProperty(k) === false ) continue;
+                    if(optionsTemplate[k].type instanceof OptionType === false) {
                         throw new Error(k + ' template "type" parameter should be instance of OptionsManager.OptionType constructor.');
                     }
-                    options[k] = this.createOption({
+                    options.addOption({
                         name: k,
                         value: options[k],
-                        template: optionsTemplates[k],
+                        template: optionsTemplate[k],
                         errorHandler: function(error) {
                             errorsObject.addError(error);
                         }
@@ -163,6 +187,26 @@
                 if(!this.optionTypes[type.name]) {
                     this.optionTypes[type.name] = new OptionType(type.name, type.validate);
                 }
+            },
+            addOptionsTemplate: function(templateName, optionsTemplate) {
+                this.optionsTemplate[templateName] = optionsTemplate;
+            },
+            getOptionsTemplate: function(templateName) {
+                var res = this.optionsTemplate[templateName];
+                if( !TypeChecker.isObject(res) ) {
+                    throw new Error('Templates name: ' + templateName + ' is not undefined.');
+                }
+                return res;
+            },
+            mergeOptionsTemplates: function() {
+                var result = {};
+                Array.prototype.forEach.call(arguments, function(el) {
+                    if( TypeChecker.isObject(el) ) {
+                        Object.assign(result, el);
+                    }
+                });
+
+                return result;
             }
         };
 
