@@ -10,6 +10,8 @@
             optionTypes = OptionsManager.optionTypes,
             optionsTemplate;
 
+        logger.isON(true);
+
         optionsTemplate = {
             lang: {
                 type: optionTypes.string,
@@ -37,11 +39,11 @@
             },
             userDictionaryName: {
                 type: optionTypes.string,
-                defaultValue: undefined
+                defaultValue: ''
             },
             customDictionaryIds: {
                 type: optionTypes.string,
-                defaultValue: undefined
+                defaultValue: ''
             },
             minWordLength: {
                 type: optionTypes.number,
@@ -63,17 +65,18 @@
             }
         };
 
+        OptionsManager.addOptionsTemplate('WebApiTemplate', optionsTemplate);
         /**
          * @constructor
          * @param {Object} clientOptions
          * @private
          */
         function WebApi(clientOptions) {
-            var self = this;
+            var self = this, isErrorsCritical;
             this._services = {};
             // options creation
-            OptionsManager.addOptionsTemplate('WebApiTemplate', optionsTemplate);
             this._options = OptionsManager.createOptions(clientOptions, 'WebApiTemplate', function errorHandler(errors) {
+                isErrorsCritical = errors.critical;
                 errors.reports.forEach(function(report) {
                     logger.log(report.message);
                 }, this);
@@ -644,17 +647,8 @@
          * @returns {Object} - WebApi Instance.
          */
         Namespace.initWebApi = function(clientOptions) {
-            var options, isErrorsCritical;
-
-            options = OptionsManager.createOptions(clientOptions, optionsTemplate, function errorHandler(errors) {
-                isErrorsCritical = errors.critical;
-                errors.reports.forEach(function(report) {
-                    logger.log(report.message);
-                }, this);
-            });
-            if(isErrorsCritical !== true) {
-                return new WebApi(options);
-            }
+            var options;
+            return new WebApi(options);
         };
     }
     if(typeof window === 'undefined') {module.exports = init;}

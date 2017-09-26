@@ -1,7 +1,7 @@
 var WebApi, WEBSPELLCHECKER,
  api, bool,
-    UD_NAME = 'test1_js_webapi_ud',
-    NEW_UD_NAME = 'new_test1_js_webapi_ud',
+    UD_NAME = 'test_js_webapi_ud',
+    NEW_UD_NAME = 'new_test_js_webapi_ud',
     WORD = 'exampl',
     WORD2 = 'mispelled',
     TEXT = 'This is an exampl of a sentence with two mispelled words. Just type text with misspelling to see how it works.',
@@ -71,7 +71,7 @@ describe("WebApi", function () {
 
         waitsFor(function() {
               return bool;
-        }, 20000);
+        });
     });
 
     it("spellCheck method should check misspells in text", function() {
@@ -87,7 +87,7 @@ describe("WebApi", function () {
 
         waitsFor(function() {
             return bool;
-        }, 20000);
+        });
     });
 
     it("spellCheck method should return correct position for misspelled words", function() {
@@ -110,7 +110,7 @@ describe("WebApi", function () {
 
         waitsFor(function() {
             return bool;
-        }, 20000);
+        });
     });
 
     it("grammarCheck method should check grammar misspells in text", function() {
@@ -126,7 +126,7 @@ describe("WebApi", function () {
 
         waitsFor(function() {
             return bool;
-        }, 20000);
+        });
     });
 
     it("getUserDictionary, createUserDictionary deleteUserDictionary methods flow should work correctly", function() {
@@ -162,7 +162,7 @@ describe("WebApi", function () {
 
             waitsFor(function() {
                 return bool;
-            }, 20000);
+            });
         });
     });
 
@@ -184,7 +184,7 @@ describe("WebApi", function () {
         });
         waitsFor(function() {
             return bool;
-        }, 20000);
+        });
     });
 
 
@@ -198,7 +198,7 @@ describe("WebApi", function () {
         });
         waitsFor(function() {
             return bool;
-        }, 20000);
+        });
     });
 
 
@@ -246,7 +246,7 @@ describe("WebApi", function () {
                 wordList[wordList.length - 1] === WORD) {
                 return true;
             }
-        }, 20000);
+        });
     });
 
     it("deleteWordFromUserDictionary method should delete words from current UD", function() {
@@ -299,128 +299,7 @@ describe("WebApi", function () {
             if( wordListLengthAfter < wordListLengthBefore  ) {
                 return true;
             }
-        }, 20000);
-
-    });
-
-    describe("UserDictionary Object", function() {
-        var ud_res, params = {
-            name: UD_NAME
-        };
-        afterEach(function() {
-            api.deleteUserDictionary({name: UD_NAME});
         });
 
-        it("'addWord' should add word", function() {
-            var ud_res;
-            params.success = function() {
-                api.getUserDictionary({
-                    name: UD_NAME,
-                    success: function(ud) {
-                        ud.addWord({
-                            word: 'tripa',
-                            success: function() {
-                                ud_res = ud;
-                            }
-                        });
-                    },
-                });
-            };
-
-            api.createUserDictionary(params);
-
-            waitsFor(function() {
-                if(ud_res) {
-                    if(ud_res.wordlist.includes('tripa')) {
-                        return true;
-                    }
-                }
-            }, 20000);
-        });
-
-        it("'deleteWord' should delete word", function() {
-            var ud_res;
-            params.success = function() {
-                api.getUserDictionary({
-                    name: UD_NAME,
-                    success: function(ud) {
-                        ud.addWord({
-                            word: 'tripa',
-                            success: function(ud) {
-                                ud.deleteWord({
-                                    word: 'tripa',
-                                    success: function(data) {
-                                        ud_res = ud;
-                                    }
-                                });
-                            }
-                        });
-                    }
-                });
-            };
-            api.createUserDictionary(params);
-            waitsFor(function() {
-                if(ud_res && !ud_res.wordlist.includes('tripa')) {
-                    return true;
-                }
-            }, 20000);
-        });
-
-        it("'rename' should rename dictionary", function() {
-            var ud_res, newN = 'temt_test_name', bool = false;
-            api.deleteUserDictionary({
-                name: newN
-            });
-            params.success = function() {
-                api.getUserDictionary({
-                    name: UD_NAME,
-                    success: function(ud) {
-                        ud.rename({
-                            newName: newN,
-                            success: function(ud) {
-                                if(ud.name === newN) {
-                                    ud.rename({
-                                        newName: UD_NAME,
-                                        success: function(ud) {
-                                            if(ud.name === UD_NAME) {
-                                                bool = true;
-                                            }
-                                        }
-                                    });
-                                }
-                            }
-                        });
-                    }
-                });
-            };
-            api.createUserDictionary(params);
-            waitsFor(function() {
-                if(bool) {
-                    return true;
-                }
-            }, 20000);
-        });
-
-        it("'delete' should delete dictionary", function() {
-            var ud_res, newN = 'temt_test_name', bool = false;
-            params.success = function() {
-                api.getUserDictionary({
-                    name: UD_NAME,
-                    success: function(ud) {
-                        ud.delete({
-                            success: function() {
-                                bool = true;
-                            }
-                        });
-                    }
-                });
-            };
-            api.createUserDictionary(params);
-            waitsFor(function() {
-                if(bool) {
-                    return true;
-                }
-            }, 20000);
-        });
     });
 });

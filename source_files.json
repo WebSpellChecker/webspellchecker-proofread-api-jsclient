@@ -1,5 +1,6 @@
 {
     "webapi": [
+        "<%= webapi_path %>/namespace.js",
         "<%= webapi_path %>/dependencies/static/utils/arrayutils.js",
         "<%= webapi_path %>/dependencies/static/utils/stringutils.js",
         "<%= webapi_path %>/dependencies/static/utils/browser.js",

@@ -49,13 +49,28 @@
             this.validatedFields = [];
         }
 
-        OptionsObject.protoype = {
+        OptionsObject.prototype = {
             constructor: OptionsObject,
             addOption: function(option) {
                 var name = option.name;
                 if( !this.validatedFields.includes(name) ) {
                     this[name] = this.createOptionValue(option);
-                    this.validatedFields.push(name);
+                    if(typeof this[name] !== 'undefined') {
+                        this.validatedFields.push(name);
+                    }
+                }
+            }
+        };
+
+        function OptionsTemplate(template) {
+            Object.assign(this, template);
+        }
+
+        OptionsTemplate.prototype = {
+            constructor: OptionsTemplate,
+            setDefaults: function(defaults) {
+                for(var k in defaults) {
+                    this[k].defaultValue = defaults[k];
                 }
             }
         };
@@ -122,7 +137,7 @@
                     validated,
                     defaultValue = optionTemplate.defaultValue;
 
-                if(optionValue === undefined && optionTemplate.required === false) return defaultValue;
+                if(optionValue === undefined && !optionTemplate.required) return defaultValue;
                 validated = optionTemplate.type.validate(optionValue);
 
                 if(validated) return optionValue;
@@ -146,12 +161,17 @@
              * @returns {Object} - processed options.
              * @private
              */
-            createOptions: function(clientOptions, templateName, errorHandler) {
+            createOptions: function(clientOptions, template, errorHandler) {
                 var option, valid,
                     options = new OptionsObject( clientOptions, this.createOptionValue.bind(this) ),
-                    optionsTemplate = this.getOptionsTemplate(templateName),
+                    optionsTemplate,
                     errorsObject = new ErrorsObject();
 
+                if( TypeChecker.isString(template) ) {
+                    optionsTemplate = this.getOptionsTemplate(template);
+                } else if( TypeChecker.isObject(template) ) {
+                    optionsTemplate = template;
+                }
                 for(var k in optionsTemplate) {
                     if( optionsTemplate.hasOwnProperty(k) === false ) continue;
                     if(optionsTemplate[k].type instanceof OptionType === false) {
@@ -189,14 +209,17 @@
                 }
             },
             addOptionsTemplate: function(templateName, optionsTemplate) {
+                if(optionsTemplate instanceof OptionsTemplate === false) {
+                    optionsTemplate = new OptionsTemplate(optionsTemplate);
+                }
                 this.optionsTemplate[templateName] = optionsTemplate;
             },
             getOptionsTemplate: function(templateName) {
                 var res = this.optionsTemplate[templateName];
-                if( !TypeChecker.isObject(res) ) {
+                if(res instanceof OptionsTemplate === false) {
                     throw new Error('Templates name: ' + templateName + ' is not undefined.');
                 }
-                return res;
+                return Object.assign({}, res);
             },
             mergeOptionsTemplates: function() {
                 var result = {};
@@ -206,7 +229,7 @@
                     }
                 });
 
-                return result;
+                return new OptionsTemplate(result);
             }
         };
 
