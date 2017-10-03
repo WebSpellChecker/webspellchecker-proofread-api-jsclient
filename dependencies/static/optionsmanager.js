@@ -219,7 +219,8 @@
                 if(res instanceof OptionsTemplate === false) {
                     throw new Error('Templates name: ' + templateName + ' is not undefined.');
                 }
-                return Object.assign({}, res);
+
+                return new OptionsTemplate(res);
             },
             mergeOptionsTemplates: function() {
                 var result = {};

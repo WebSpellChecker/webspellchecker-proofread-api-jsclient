@@ -647,8 +647,7 @@
          * @returns {Object} - WebApi Instance.
          */
         Namespace.initWebApi = function(clientOptions) {
-            var options;
-            return new WebApi(options);
+            return new WebApi(clientOptions);
         };
     }
     if(typeof window === 'undefined') {module.exports = init;}
