@@ -22,6 +22,14 @@
         function TextProcessor(moduleId, appInstance) {
             this.moduleId = moduleId;
             this.appInstance = appInstance;
+
+            var customPunctuation = this.appInstance.getOption('customPunctuation');
+
+            RegularsManager.addRegularType('customPunctuation', customPunctuation);
+
+            RegularsManager.textPunctuation
+                .composition(RegularsManager.customPunctuation)
+                .store('punctuationRegExp');
         }
 
         TextProcessor.prototype = {
@@ -37,17 +45,12 @@
              */
             replaceSepatators: function(text) {
                 var _situationalSepSetGlob,
-                    customPunctuation = this.appInstance.getOption('customPunctuation');
+                    punctuationRegExp = RegularsManager.punctuationRegExp;
 
-                    RegularsManager.addRegularType('customPunctuation', customPunctuation);
                 text = RegularsManager.HtmlSpaceSymbol.compositionGraph([
-                    RegularsManager.textPunctuation,
-                    RegularsManager.customPunctuation,
+                    punctuationRegExp,
                     RegularsManager.EOL
-                ]).g().set()
-                .init(text)
-                .replace(' ')
-                .getString();
+                ]).g().set().replace(text, ' ');
 
                 _situationalSepSetGlob = RegularsManager.situationalSeparators
                     .set().g();

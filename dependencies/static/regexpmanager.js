@@ -221,6 +221,15 @@
                 return this._updateSource(this.source + '+');
             },
             /**
+             * Transformation of regular type source to:
+             * matches the preceding item x 0 or more times.
+             *
+             * @return {Object} clone of current regular type.
+             */
+            more: function() {
+                return this._updateSource(this.source + '*');
+            },
+            /**
              * Matches a left word boundary.
              *
              * @return {Object} clone of current regular type.
@@ -311,7 +320,7 @@
              * @param {String} wrapSymbol - String what will added to sources left.
              * @param {String} subStr - The String that replaces the substring specified by regular type.
              *
-             * @return {Array} clone of current regular type.
+             * @return {Object} clone of current regular type.
              */
             replaceLeftWrapped: function(wrapSymbol, subStr) {
                 wrapSymbol = wrapSymbol || this._wrapSymbol;
@@ -322,7 +331,7 @@
              * @param {String} wrapSymbol - String what will added to sources right.
              * @param {String} subStr - The String that replaces the substring specified by regular type.
              *
-             * @return {Array} clone of current regular type.
+             * @return {Object} clone of current regular type.
              */
             replaceRightWrapped: function(wrapSymbol, subStr) {
                 wrapSymbol = wrapSymbol || this._wrapSymbol;
@@ -332,7 +341,7 @@
              * Wrap regular includes in this.string by wrapSymbols.
              * @param {String} wrapSymbol - What wrap include.
              *
-             * @return {Array} clone of current regular type.
+             * @return {Object} clone of current regular type.
              */
             wrapInclude: function(wrapSymbol) {
                 wrapSymbol = wrapSymbol || this._wrapSymbol;
@@ -385,6 +394,16 @@
                 }, this);
                 compositionObj.name = compositionName || compositionObj.name;
                 return compositionObj;
+            },
+            /**
+             * Save current combination of regular type to store.
+             * @param {String} name - Name of regular type.
+             *
+             * @return {Object} current regular type.
+             */
+            store: function(name) {
+                RegularsManager.addRegularType(name || this.name, this.source);
+                return this;
             }
         };
 
