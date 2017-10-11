@@ -47,8 +47,7 @@
 			URL: function( params ) {
 				params = params || {};
 
-				var _url = '',
-					_protocol = this.protocol = params.protocol || 'http',
+				var _protocol = this.protocol = params.protocol || 'http',
 					_host = this.host = params.host || 'localhost',
 					_port = this.port = params.port || '80',
 					_path = this.path = params.path || '',
@@ -56,7 +55,6 @@
 					request_meta_params = {};
 
 				this.addParameter = function( name, value ) {
-
 					if ( name && value ) {
 						request_params[name] = value;
 					}
@@ -77,12 +75,9 @@
 					return this;
 				};
 
-
 				this.getParameter = function( name ) {
 					return request_params[name];
 				};
-
-
 
 				this.joinParams =function(params) {
 					var result = '';
@@ -106,7 +101,6 @@
 					return this.joinParams(request_meta_params);
 				};
 
-
 				this.joinUrl = function() {
 					var urlString = '';
 
@@ -126,11 +120,18 @@
 				};
 
 				this.joinUrlWithMetadata = function() {
-					this.joinUrlWithParams( this.joinRequestMetaParams() );
+					return this.joinUrlWithParams( this.joinRequestMetaParams() );
 				};
 
 				this.build = function() {
 					return this.joinUrlWithParams( this.joinRequestParams() );
+				};
+
+				this.clear = function() {
+					request_params = {};
+					request_meta_params = {};
+
+					return this;
 				};
 			},
 			/**

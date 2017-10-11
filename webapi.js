@@ -27,11 +27,11 @@
             },
             servicePort: {
                 type: optionTypes.url_port,
-                defaultValue: 80
+                defaultValue: 2880
             },
             servicePath: {
                 type: optionTypes.url_path,
-                defaultValue: 'spellcheck31/script/ssrv.cgi'
+                defaultValue: ''
             },
             customerId: {
                 type: optionTypes.string,

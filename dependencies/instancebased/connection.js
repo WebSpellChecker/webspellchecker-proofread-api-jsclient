@@ -8,7 +8,7 @@
 
         var IO = Namespace.IO,
             _parametersMap = {
-                customer_id: 'customerid',
+                customerId: 'customerid',
                 command: 'cmd',
                 communicationFormat: 'format',
                 userDictionary: 'user_dictionary',
@@ -63,8 +63,8 @@
 				path 		: appInstance.getOption('servicePath')
             });
 
-            this.defaultParameters = {};
-            this.setDefaultParameters();
+            this.defaultParameters = this.setDefaults(['customerId', 'communicationFormat'], _parametersMap);
+            this.defaultMetaParameters =  this.setDefaults(['appType'], _metaParametersMap);
         }
 
         Connection.prototype = {
@@ -95,9 +95,12 @@
              *
              * @private
              */
-            setDefaultParameters: function() {
-                this.defaultParameters[_parametersMap.customer_id] = this.appInstance.getOption('customerId');
-                this.defaultParameters[_parametersMap.communicationFormat] = this.appInstance.getOption('communicationFormat');
+            setDefaults: function(paramsNames, map) {
+                var storage = {};
+                paramsNames.forEach(function(name) {
+                    storage[ map[name] ] = this.appInstance.getOption(name);
+                }, this);
+                return storage;
             },
             /**
              * Return clone of url object for request.
@@ -107,7 +110,7 @@
              * @private
              */
             getURL: function() {
-                return Object.assign({}, this.url);
+                return this.url.clear();
             },
             /**
              * Prepare client parameters before request.
@@ -157,7 +160,7 @@
                 return IO.get(
                     this.getURL()
                         .addParameters( this.prepareParameters(parameters, _parametersMap) )
-                        .addMetaParameters( this.prepareParameters(parameters, _metaParametersMap) ),
+                        .addMetaParameters( this.defaultMetaParameters ),
                     onSuccess,
                     onError
                 );
