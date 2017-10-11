@@ -52,7 +52,8 @@
 					_host = this.host = params.host || 'localhost',
 					_port = this.port = params.port || '80',
 					_path = this.path = params.path || '',
-					request_params = {};
+					request_params = {},
+					request_meta_params = {};
 
 				this.addParameter = function( name, value ) {
 
@@ -71,9 +72,40 @@
 					return this;
 				};
 
+				this.addMetaParameters = function(parameters) {
+					Object.assign(request_meta_params, parameters);
+					return this;
+				};
+
+
 				this.getParameter = function( name ) {
 					return request_params[name];
 				};
+
+
+
+				this.joinParams =function(params) {
+					var result = '';
+					params = params || request_params;
+					if ( Object.keys(params).length ) {
+						for( var k in params) {
+							result += k + '=' + encodeURIComponent(params[k]) + '&';
+						}
+
+						return result.slice(0, -1);
+					}
+
+					return '';
+				};
+
+				this.joinRequestParams = function() {
+					return this.joinParams(request_params);
+				};
+
+				this.joinRequestMetaParams = function() {
+					return this.joinParams(request_meta_params);
+				};
+
 
 				this.joinUrl = function() {
 					var urlString = '';
@@ -86,27 +118,19 @@
 					return urlString;
 				};
 
-				this.joinRequestParams = function() {
-					var result = '';
-					if ( Object.keys(request_params).length ) {
-						for( var k in request_params) {
-							result += k + '=' + encodeURIComponent(request_params[k]) + '&';
-						}
+				this.joinUrlWithParams = function(paramsString) {
+					var urlString = this.joinUrl();
+					urlString += paramsString ? '?' + paramsString : '';
 
-						return result.slice(0, -1);
-					}
+					return urlString;
+				};
 
-					return '';
+				this.joinUrlWithMetadata = function() {
+					this.joinUrlWithParams( this.joinRequestMetaParams() );
 				};
 
 				this.build = function() {
-					var joinedParams = this.joinRequestParams();
-
-					_url += this.joinUrl();
-					_url += joinedParams ? '?' : '';
-					_url += joinedParams;
-
-					return _url;
+					return this.joinUrlWithParams( this.joinRequestParams() );
 				};
 			},
 			/**
@@ -139,7 +163,7 @@
 				}
 
 				ajax.params = {
-					url: params.url.joinUrl(),
+					url: params.url.joinUrlWithMetadata(),
 					data: params.url.joinRequestParams(),
 					onSuccess: params.onSuccess,
 					onError: params.onError
@@ -246,12 +270,13 @@
 			 */
 			NODE: function(params) {
 				var url = params.url,
+					metaParams = url.joinRequestMetaParams(),
 					client = ( url.protocol === 'http' ) ? require('http') : require('https'),
 					requestOptions = {
 						protocol: url.protocol + ':',
 						port: url.port,
 						hostname: url.host,
-						path: '/' + url.path,
+						path: '/' + url.path + (metaParams) ? '?' + metaParams : '',
 						method: 'POST',
 						headers: {
 							'Content-Type': 'text/javascript; charset=UTF-8',

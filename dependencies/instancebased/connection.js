@@ -156,7 +156,8 @@
             request: function(parameters, onSuccess, onError) {
                 return IO.get(
                     this.getURL()
-                        .addParameters( this.prepareParameters(parameters, _parametersMap) ),
+                        .addParameters( this.prepareParameters(parameters, _parametersMap) )
+                        .addMetaParameters( this.prepareParameters(parameters, _metaParametersMap) ),
                     onSuccess,
                     onError
                 );
