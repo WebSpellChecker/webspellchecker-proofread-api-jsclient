@@ -47,7 +47,7 @@
             },
             minWordLength: {
                 type: optionTypes.number,
-                defaultValue: 4
+                defaultValue: 3
             },
             communicationFormat: {
                 type: optionTypes.string,
@@ -342,6 +342,7 @@
                     {
                         command: this._commands.grammarCheck,
                         language: parametrs.lang || this.getOption('lang'),
+                        sentences: parametrs.sentences,
                         text: parametrs.text
                     },
                     parametrs.success,
