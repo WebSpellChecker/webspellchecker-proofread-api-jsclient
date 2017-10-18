@@ -139,11 +139,11 @@
              *
              * @returns {Object} - Transport object.
              */
-            _request: function(data, success, error) {
+            _request: function(data, parametrs) {
                 return this._getService('Connection').request(
                     data,
-                    success || function(){},
-                    error || function(){}
+                    parametrs.success || function(){},
+                    parametrs.error || function(){}
                 );
             },
             _makeUDAction: function(actionName, parametrs) {
@@ -158,8 +158,7 @@
 
                 return this._request(
                     requestParametrs,
-                    parametrs.success,
-                    parametrs.error
+                    parametrs
                 );
             },
             _UDMethodWrapper: function(actionName, parameters) {
@@ -199,6 +198,43 @@
             },
             // API
             /**
+             * getInfo success Callback.
+             *
+             * @callback getInfoCallback
+             * @param {Object} data
+             * @param {Object} [data.langList={"ltr":{"en_US" : "American English","en_GB" : "British English","fr_FR" : "French","de_DE" : "German","it_IT" : "Italian","es_ES" : "Spanish"},"rtl":{}}]
+             *      Object with list of available languages. Separeted on ltr(left-to-right) and rtl(right-to-left) directions.
+             * @param {Number} [data.verLang=9] Number of available languages.
+             */
+
+            /**
+             * getInfo API method.
+             * @public
+             * @memberof WebApiInstance#
+             *
+             * @param {Object} parametrs
+             * @param {getInfoCallback} parametrs.success - Handler successful response from the server.
+             * @param {RequestCallback} parametrs.error - Handler unsuccessful response from the server.
+             * @returns {Object} - Transport object.
+             * @example
+             * wscWebApiInstance.getLangList({
+             *      success: function(data) {
+             *          console.log(data); // {"langList":{"ltr":{"en_US" : "American English","en_GB" : "British English","fr_FR" : "French","de_DE" : "German","it_IT" : "Italian","es_ES" : "Spanish"},"rtl":{}},"verLang":9}
+             *      },
+             *      error: function(error) {
+             *          console.log(error);
+             *      }
+             * })
+             */
+            getInfo: function(parametrs) {
+                return this._request(
+                    {
+                        command: this._commands.getInfo
+                    },
+                    parametrs
+                );
+            },
+            /**
              * getLangList success Callback.
              *
              * @callback GetLangListCallback
@@ -232,8 +268,7 @@
                     {
                         command: this._commands.getLangList
                     },
-                    parametrs.success,
-                    parametrs.error
+                    parametrs
                 );
             },
             /**
@@ -269,7 +304,8 @@
              * });
              */
             spellCheck: function(parametrs) {
-                var words = this._getService('TextProcessor').getWordsFromString( parametrs.text ),
+                var _parametrs = Object.assign({}, parametrs),
+                    words = this._getService('TextProcessor').getWordsFromString( _parametrs.text ),
                     text = words.wordsCollection.join(',');
 
                 function addOffsetsToMisspelled(data, offsets) {
@@ -289,19 +325,20 @@
                         return prev;
                     }, []);
                 }
+                _parametrs.success = function(data) {
+                    var misspelledsWithOffsets = addOffsetsToMisspelled(data, words.wordsOffsets);
+                    parametrs.success(misspelledsWithOffsets);
+                };
+
                 return this._request(
                     {
                         command: this._commands.spellCheck,
-                        language:  parametrs.lang || this.getOption('lang'),
+                        language:  _parametrs.lang || this.getOption('lang'),
                         customDictionary: this.getOption('customDictionaryIds'),
                         userDictionary: this.getOption('userDictionaryName'),
                         text: text
                     },
-                    function onSuccess(data) {
-                        var misspelledsWithOffsets = addOffsetsToMisspelled(data, words.wordsOffsets);
-                        parametrs.success(misspelledsWithOffsets);
-                    },
-                    parametrs.error
+                    _parametrs
                 );
             },
             /**
@@ -345,8 +382,7 @@
                         sentences: parametrs.sentences,
                         text: parametrs.text
                     },
-                    parametrs.success,
-                    parametrs.error
+                    parametrs
                 );
             },
             /**
