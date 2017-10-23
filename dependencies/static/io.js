@@ -183,20 +183,26 @@
 				}
 
 				ajax.request.onload = function() {
-					var responseData = ajax.request.responseText;
+					var responseData = ajax.request.responseText,
+					responseStatus = ajax.request.status;
+
 					ajax.success = true;
 
-					try {
-						responseData = parse(responseData);
-					} catch (error) {
-						logger.warn("CORS response parsing error: " + error);
-					}
-
-					if(responseData && responseData.error) {
-						responseData.message && logger.warn(responseData.message);
-						ajax.params.onError && ajax.params.onError(responseData);
+					if (responseStatus !== 200) {
+						ajax.params.onError && ajax.params.onError({});
 					} else {
-						ajax.params.onSuccess && ajax.params.onSuccess(responseData);
+						try {
+							responseData = parse(responseData);
+						} catch (error) {
+							logger.warn("CORS response parsing error: " + error);
+						}
+
+						if (responseData && responseData.error) {
+							responseData.message && logger.warn(responseData.message);
+							ajax.params.onError && ajax.params.onError(responseData);
+						} else {
+							ajax.params.onSuccess && ajax.params.onSuccess(responseData);
+						}
 					}
 				};
 
