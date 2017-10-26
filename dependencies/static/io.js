@@ -283,7 +283,7 @@
 						protocol: url.protocol + ':',
 						port: url.port,
 						hostname: url.host,
-						path: '/' + url.path + (metaParams) ? '?' + metaParams : '',
+						path: '/' + url.path + ( metaParams ? '?' + metaParams : '' ),
 						method: 'POST',
 						headers: {
 							'Content-Type': 'text/javascript; charset=UTF-8',

@@ -1,16 +1,16 @@
 
  var WebApi, api, bool, TextProcessor, optionTypes;
-// if(WebApi.env === 'node' && typeof describe === 'undefined') {
-//     global.describe = function(t, r) {r()};
-//     global.beforeEach = function(r){r()};
-//     global.it = function(n, r){r()};
-//     global.expect = function(){
-//         return {
-//             toBeDefined: function(){},
-//             toEqual:function(){}
-//         }
-//     };
-// }
+//if(WebApi.env === 'node' && typeof describe === 'undefined') {
+    // global.describe = function(t, r) {r()};
+    // global.beforeEach = function(r){r()};
+    // global.it = function(n, r){r()};
+    // global.expect = function(){
+    //     return {
+    //         toBeDefined: function(){},
+    //         toEqual:function(){}
+    //     }
+    // };
+//}
 
 
 describe("TextProcessor", function () {
@@ -130,6 +130,7 @@ describe("TextProcessor", function () {
 		var words = TextProcessor.getWordsFromString("soo this is a test").wordsCollection;
 
         expect(words).toEqual([
+            'soo',
             'this',
             'test'
         ]);
@@ -141,8 +142,8 @@ describe("TextProcessor", function () {
 		// Change core setting
 		storedMinWordLengthValue = api.getOption('minWordLength');
 		api.setOption('minWordLength', 1);
+        words = TextProcessor.getWordsFromString("soo this is a test").wordsCollection;
 
-		words = TextProcessor.getWordsFromString("soo this is a test").wordsCollection;
         expect(words).toEqual([
             'soo',
             'this',
@@ -154,6 +155,7 @@ describe("TextProcessor", function () {
         api.setOption('minWordLength', storedMinWordLengthValue);
         words = TextProcessor.getWordsFromString("soo this is a test").wordsCollection;
         expect(words).toEqual([
+            'soo',
             'this',
             'test'
         ]);

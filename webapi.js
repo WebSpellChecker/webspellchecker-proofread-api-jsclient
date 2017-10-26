@@ -27,11 +27,11 @@
             },
             servicePort: {
                 type: optionTypes.url_port,
-                defaultValue: 2880
+                defaultValue: 80
             },
             servicePath: {
                 type: optionTypes.url_path,
-                defaultValue: ''
+                defaultValue: 'spellcheck31/script/ssrv.cgi'
             },
             customerId: {
                 type: optionTypes.string,
@@ -57,11 +57,9 @@
                 type: optionTypes.string,
                 defaultValue: ''
             },
-            metaParameters: {
+            appType: {
                 type: optionTypes.object,
-                defaultValue: {
-                    appType: 'webapi'
-                }
+                defaultValue: 'webApi'
             }
         };
 
@@ -181,18 +179,14 @@
             },
             setOption: function(name, value) {
                 var result = false,
-                    template = optionsTemplate[name];
-                if(template) {
+                    template = {},
+                    option = {};
+
+                if(optionsTemplate[name]) {
                     result = true;
-                    this._options[name] = OptionsManager.createOption({
-                        name: name,
-                        value: value,
-                        template: template,
-                        errorHandler: function(errorReport) {
-                            logger.log(errorReport.message);
-                            result = false;
-                        }
-                    });
+                    template[name] = optionsTemplate[name];
+                    option[name] = value;
+                    this._options[name] = OptionsManager.createOptions(option, template)[name];
                 }
                 return result;
             },

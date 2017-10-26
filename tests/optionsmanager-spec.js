@@ -178,13 +178,13 @@ describe("OptionsManager", function () {
         options = OptionsManager.createOptions(clientOptions1, optionsTemplate1, function(e) {
             errors = e;
         });
-        expect(errors).not.toBeDefined();
+        expect(errors).toEqual(undefined);
         errors = undefined;
 
         options = OptionsManager.createOptions(clientOptions2, optionsTemplate1, function(e) {
             errors = e;
         });
-        expect(errors).not.toBeDefined();
+        expect(errors).toEqual(undefined);
         errors = undefined;
 
         options = OptionsManager.createOptions(clientOptions1, optionsTemplate2, function(e) {
@@ -196,7 +196,7 @@ describe("OptionsManager", function () {
         options = OptionsManager.createOptions(clientOptions2, optionsTemplate1, function(e) {
             errors = e;
         });
-        expect(errors).not.toBeDefined();
+        expect(errors).toEqual(undefined);
         errors = undefined;
     });
 });

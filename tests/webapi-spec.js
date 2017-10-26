@@ -9,6 +9,16 @@ var WebApi, WEBSPELLCHECKER,
     StringUtils,
     api, bool, TextProcessor, optionTypes;
 
+// global.describe = function(t, r) {r()};
+// global.beforeEach = function(r){r()};
+// global.it = function(n, r){r()};
+// global.expect = function(){
+//     return {
+//         toBeDefined: function(){},
+//         toEqual:function(){}
+//     }
+// };
+
 describe("WebApi", function () {
 
     beforeEach(function() {
@@ -53,7 +63,7 @@ describe("WebApi", function () {
         boolRes = api.setOption('test', true);
         value = api.getOption('test');
         expect(boolRes).toEqual(false);
-        expect(value).not.toBeDefined();
+        expect(value).toEqual(undefined);
         boolRes = api.setOption('lang', 'en_US');
         expect(boolRes).toEqual(true);
         value = api.getOption('lang');
@@ -62,7 +72,6 @@ describe("WebApi", function () {
 
     it("getLangList method should return list with available languages", function() {
         bool = false;
-
         api.getLangList({
             success: function(res) {
                 bool = true;
@@ -128,145 +137,16 @@ describe("WebApi", function () {
             return bool;
         });
     });
+    describe("UserDictionary", function () {
+        it("getUserDictionary, createUserDictionary deleteUserDictionary methods flow should work correctly", function() {
+            var bool = false;
 
-    it("getUserDictionary, createUserDictionary deleteUserDictionary methods flow should work correctly", function() {
-        var bool = false;
-
-        function createUD() {
-            api.createUserDictionary({
-                name: UD_NAME,
-                wordList: WORD + ',' + WORD2,
-                success: function(res) {
-                    if(res && !res.error) {
-                        bool = true;
-                    }
-                }
-            });
-        }
-
-        runs(function() {
-            api.getUserDictionary({
-                name: UD_NAME,
-                success: function(res) {
-                    api.deleteUserDictionary({
-                        name: UD_NAME,
-                        success: function(res) {
-                            createUD();
-                        }
-                    });
-                },
-                error: function(res) {
-                    createUD();
-                }
-            });
-
-            waitsFor(function() {
-                return bool;
-            });
-        });
-    });
-
-    it("renameUserDictionary method should change UD name", function() {
-        var bool = false;
-        api.renameUserDictionary({
-            name: UD_NAME,
-            newName: NEW_UD_NAME,
-            success: function(res) {
-                bool = true;
-                api.renameUserDictionary({
-                    name: NEW_UD_NAME,
-                    newName: UD_NAME,
-                    success: function(res) {
-                        bool = true;
-                    }
-                });
-            }
-        });
-        waitsFor(function() {
-            return bool;
-        });
-    });
-
-
-    it("deleteUserDictionary method should delete UD", function() {
-        var bool = false;
-        api.deleteUserDictionary({
-            newName: UD_NAME,
-            success: function(res) {
-                bool = true;
-            }
-        });
-        waitsFor(function() {
-            return bool;
-        });
-    });
-
-
-    it("addWordToUserDictionary method should add words to current UD", function() {
-        var bool = false,
-            wordList,
-            wordListLengthBefore,
-            wordListLengthAfter;
-
-        function addWord() {
-            api.addWordToUserDictionary({
-                name: UD_NAME,
-                word: WORD,
-                success: function(res) {
-
-                    api.getUserDictionary({
-                        name: UD_NAME,
-                        success: function(res) {
-                            wordListLengthAfter = res.wordlist.length;
-                            wordList = res.wordlist;
-                        }
-                    });
-                }
-            });
-        }
-
-        api.getUserDictionary({
-            name: UD_NAME,
-            success: function(res) {
-                wordListLengthBefore = res.wordlist.length;
-                addWord();
-            },
-            error: function() {
+            function createUD() {
                 api.createUserDictionary({
                     name: UD_NAME,
-                     success: function(res) {
-                        addWord();
-                    },
-                });
-            }
-        });
-
-        waitsFor(function() {
-            if(wordListLengthAfter === ( wordListLengthBefore + 1) &&
-                wordList[wordList.length - 1] === WORD) {
-                return true;
-            }
-        });
-    });
-
-    it("deleteWordFromUserDictionary method should delete words from current UD", function() {
-        var bool = false,
-            wordList,
-            wordListLengthBefore,
-            wordListLengthAfter;
-
-        function deleteWord() {
-            api.deleteWordFromUserDictionary({
-                name: UD_NAME,
-                word: WORD,
-                success: function(res) {
-
-                    api.getUserDictionary({
-                        name: UD_NAME,
-                        success: function(res) {
-                            wordListLengthAfter = res.wordlist.length;
-                            wordList = res.wordlist;
-                            bool = true;
+                    wordList: WORD + ',' + WORD2,
+                    success: function(res) {
+                        if(res && !res.error) {
                             api.deleteUserDictionary({
                                 newName: UD_NAME,
                                 success: function(res) {
@@ -274,32 +154,196 @@ describe("WebApi", function () {
                                 }
                             });
                         }
+                    }
+                });
+            }
+
+            runs(function() {
+                api.getUserDictionary({
+                    name: UD_NAME,
+                    success: function(res) {
+                        api.deleteUserDictionary({
+                            name: UD_NAME,
+                            success: function(res) {
+                                createUD();
+                            }
+                        });
+                    },
+                    error: function(res) {
+                        createUD();
+                    }
+                });
+
+                waitsFor(function() {
+                    return bool;
+                });
+            });
+        });
+
+        it("renameUserDictionary method should change UD name", function() {
+            var bool = false;
+            api.deleteUserDictionary({
+                name: NEW_UD_NAME,
+                success: function() {
+                    api.deleteUserDictionary({
+                        name: UD_NAME,
+                        success: function() {
+                            api.createUserDictionary({
+                                name: UD_NAME,
+                                success: function(res) {
+                                    api.renameUserDictionary({
+                                        name: UD_NAME,
+                                        newName: NEW_UD_NAME,
+                                        success: function(res) {
+                                            api.deleteUserDictionary({
+                                                name: NEW_UD_NAME,
+                                                success: function(res) {
+                                                    bool = true;
+                                                }
+                                            });
+                                        }
+                                    });
+                                },
+                            });
+                        }
                     });
                 }
             });
-        }
 
-        api.getUserDictionary({
-            name: UD_NAME,
-            success: function(res) {
-                wordListLengthBefore = res.wordlist.length;
-                deleteWord();
-            },
-            error: function(error) {
-                api.createUserDictionary({
+            waitsFor(function() {
+                return bool;
+            });
+        });
+
+
+        it("deleteUserDictionary method should delete UD", function() {
+            var bool = false;
+            api.createUserDictionary({
+                name: UD_NAME,
+                success: function(res) {
+                    api.deleteUserDictionary({
+                        newName: UD_NAME,
+                        success: function(res) {
+                            bool = true;
+                        }
+                    });
+                }
+            });
+
+            waitsFor(function() {
+                return bool;
+            });
+        });
+
+
+        it("addWordToUserDictionary method should add words to current UD", function() {
+            var bool = false,
+                wordList,
+                wordListLengthBefore,
+                wordListLengthAfter;
+
+            function addWord() {
+                api.addWordToUserDictionary({
                     name: UD_NAME,
-                     success: function(res) {
-                        deleteWord();
-                    },
+                    word: WORD,
+                    success: function(res) {
+
+                        api.getUserDictionary({
+                            name: UD_NAME,
+                            success: function(res) {
+                                wordListLengthAfter = res.wordlist.length;
+                                wordList = res.wordlist;
+                                api.deleteUserDictionary({
+                                    name: UD_NAME,
+                                    success: function(res) {
+                                        bool = true;
+                                    }
+                                });
+                            }
+                        });
+                    }
                 });
             }
+
+            api.getUserDictionary({
+                name: UD_NAME,
+                success: function(res) {
+                    wordListLengthBefore = res.wordlist.length;
+                    addWord();
+                },
+                error: function() {
+                    api.createUserDictionary({
+                        name: UD_NAME,
+                        success: function(res) {
+                            addWord();
+                        },
+                    });
+                }
+            });
+
+            waitsFor(function() {
+                if(wordListLengthAfter === ( wordListLengthBefore + 1) &&
+                    wordList[wordList.length - 1] === WORD &&
+                    bool === true) {
+                    return true;
+                }
+            });
         });
 
-        waitsFor(function() {
-            if( wordListLengthAfter < wordListLengthBefore  ) {
-                return true;
+        it("deleteWordFromUserDictionary method should delete words from current UD", function() {
+            var bool = false,
+                wordList,
+                wordListLengthBefore,
+                wordListLengthAfter;
+
+            function deleteWord() {
+                api.deleteWordFromUserDictionary({
+                    name: UD_NAME,
+                    word: WORD,
+                    success: function(res) {
+
+                        api.getUserDictionary({
+                            name: UD_NAME,
+                            success: function(res) {
+                                wordListLengthAfter = res.wordlist.length;
+                                wordList = res.wordlist;
+                                bool = true;
+                                api.deleteUserDictionary({
+                                    newName: UD_NAME,
+                                    success: function(res) {
+                                        bool = true;
+                                    }
+                                });
+                            }
+                        });
+                    }
+                });
             }
-        });
 
+            api.getUserDictionary({
+                name: UD_NAME,
+                success: function(res) {
+                    wordListLengthBefore = res.wordlist.length;
+                    deleteWord();
+                },
+                error: function(error) {
+                    wordListLengthBefore = 2;
+                    api.createUserDictionary({
+                        name: UD_NAME,
+                        wordList: WORD + ',' + WORD2,
+                        success: function(res) {
+                            deleteWord();
+                        },
+                    });
+                }
+            });
+
+            waitsFor(function() {
+                if( wordListLengthAfter < wordListLengthBefore  ) {
+                    return true;
+                }
+            });
+
+        });
     });
 });

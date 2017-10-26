@@ -45,18 +45,18 @@
                 return options;
             }
             Object.assign(this, options);
-            this.createOptionValue = createOptionValue;
-            this.validatedFields = [];
+            this._createOptionValue = createOptionValue;
+            this._validatedFields = [];
         }
 
         OptionsObject.prototype = {
             constructor: OptionsObject,
             addOption: function(option) {
                 var name = option.name;
-                if( !this.validatedFields.includes(name) ) {
-                    this[name] = this.createOptionValue(option);
+                if( !this._validatedFields.includes(name) ) {
+                    this[name] = this._createOptionValue(option);
                     if(typeof this[name] !== 'undefined') {
-                        this.validatedFields.push(name);
+                        this._validatedFields.push(name);
                     }
                 }
             }

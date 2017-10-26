@@ -2,12 +2,20 @@ var WebApi,
  api, bool, RegularsManager, optionTypes,
     regSpace;
 
-
+    // global.describe = function(t, r) {r()};
+    // global.beforeEach = function(r){r()};
+    // global.it = function(n, r){r()};
+    // global.expect = function(){
+    //     return {
+    //         toBeDefined: function(){},
+    //         toEqual:function(){}
+    //     }
+    // };
 describe("RegularsManager", function () {
 
     beforeEach(function() {
         WebApi = (typeof window === 'undefined') ? require("../") : WEBSPELLCHECKER;
-        
+
         RegularsManager = WebApi.RegularsManager;
         regSpace = RegularsManager.space.init('text');
     });
@@ -26,7 +34,7 @@ describe("RegularsManager", function () {
         expect(typeof RegularsManager.space).toEqual('object');
         regSpace = RegularsManager.space.init('list');
         expect(typeof regSpace).toEqual('object');
-        expect(RegularsManager.space).not.toEqual(regSpace);
+        expect(RegularsManager.space === regSpace).toEqual(false);
     });
 
     it('clone method should return regularObject with equal fields', function() {
@@ -179,8 +187,9 @@ describe("RegularsManager", function () {
             RegularsManager.dot,
             RegularsManager.EOL,
             RegularsManager.digits
-        ]).g().init('test .\r2test .2. ');
-        var text = punctuation.replace('').getString();
+        ]).g();
+
+        var text = punctuation.replace('test .\r2test .2. ', '');
         expect(text).toEqual('testtest .2. ');
     });
 });
