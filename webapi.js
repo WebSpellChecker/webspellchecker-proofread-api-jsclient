@@ -63,7 +63,7 @@
             }
         };
 
-        OptionsManager.addOptionsTemplate('WebApiTemplate', optionsTemplate);
+        OptionsManager.exportOptionsTemplate('WebApiTemplate', optionsTemplate);
         /**
          * @constructor
          * @param {Object} clientOptions

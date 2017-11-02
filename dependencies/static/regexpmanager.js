@@ -40,7 +40,7 @@
              * @return {RegExp} RegExp.
              */
             _getRegExp: function() {
-                if(!this.regExp || (this.regExp.source !== this.source)) {
+                if(!this.regExp || (this.regExp.source !== this.source) || (this.regExp.flags !== this.flags) ) {
                     this.regExp = new RegExp(this.source, this.flags);
                 }
                 return this.regExp;
