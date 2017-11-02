@@ -168,7 +168,7 @@
                     errorsObject = new ErrorsObject();
 
                 if( TypeChecker.isString(template) ) {
-                    optionsTemplate = this.getOptionsTemplate(template);
+                    optionsTemplate = this.importOptionsTemplate(template);
                 } else if( TypeChecker.isObject(template) ) {
                     optionsTemplate = template;
                 }
@@ -208,13 +208,13 @@
                     this.optionTypes[type.name] = new OptionType(type.name, type.validate);
                 }
             },
-            addOptionsTemplate: function(templateName, optionsTemplate) {
+            exportOptionsTemplate: function(templateName, optionsTemplate) {
                 if(optionsTemplate instanceof OptionsTemplate === false) {
                     optionsTemplate = new OptionsTemplate(optionsTemplate);
                 }
                 this.optionsTemplate[templateName] = optionsTemplate;
             },
-            getOptionsTemplate: function(templateName) {
+            importOptionsTemplate: function(templateName) {
                 var res = this.optionsTemplate[templateName];
                 if(res instanceof OptionsTemplate === false) {
                     throw new Error('Templates name: ' + templateName + ' is not undefined.');
