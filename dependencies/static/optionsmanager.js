@@ -40,11 +40,7 @@
             };
         }
 
-        function OptionsObject(options, createOptionValue) {
-            if(options instanceof this.constructor) {
-                return options;
-            }
-            Object.assign(this, options);
+        function OptionsObject( createOptionValue ) {
             this._createOptionValue = createOptionValue;
             this._validatedFields = [];
         }
@@ -162,15 +158,24 @@
              * @private
              */
             createOptions: function(clientOptions, template, errorHandler) {
-                var option, valid,
-                    options = new OptionsObject( clientOptions, this.createOptionValue.bind(this) ),
-                    optionsTemplate,
+                var option, valid, options, optionsTemplate,
                     errorsObject = new ErrorsObject();
+
+                clientOptions = clientOptions || {};
+                if(clientOptions instanceof OptionsObject === true) {
+                    options = clientOptions;
+                } else {
+                    options = new OptionsObject( this.createOptionValue.bind(this) );
+                }
 
                 if( TypeChecker.isString(template) ) {
                     optionsTemplate = this.importOptionsTemplate(template);
                 } else if( TypeChecker.isObject(template) ) {
-                    optionsTemplate = template;
+                    if( template instanceof OptionsTemplate === true) {
+                        optionsTemplate = template;
+                    } else {
+                        optionsTemplate = new OptionsTemplate(template);
+                    }
                 }
                 for(var k in optionsTemplate) {
                     if( optionsTemplate.hasOwnProperty(k) === false ) continue;
@@ -179,7 +184,7 @@
                     }
                     options.addOption({
                         name: k,
-                        value: options[k],
+                        value: clientOptions[k],
                         template: optionsTemplate[k],
                         errorHandler: function(error) {
                             errorsObject.addError(error);
