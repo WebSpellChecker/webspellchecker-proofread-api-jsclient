@@ -402,7 +402,7 @@
              * @return {Object} current regular type.
              */
             store: function(name) {
-                RegularsManager.addRegularType(name || this.name, this.source);
+                RegularsManager.addRegularType(name || this.name, this.source, this.flags);
                 return this;
             }
         };
@@ -417,8 +417,8 @@
                  * @param {String} name - Name of regular type.
                  * @param {String} source - Regular expression source.
                  */
-                addRegularType: function(name, source) {
-                    var type = new RegularType(name, source);
+                addRegularType: function(name, source, flags) {
+                    var type = new RegularType(name, source, flags);
                     this[name] = type;
                     return type;
                 },
