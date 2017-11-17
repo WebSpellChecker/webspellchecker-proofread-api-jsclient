@@ -3,7 +3,7 @@
  * @namespace WEBSPELLCHECKER
  */
 (function(){
-    function init( Namespace ) {
+    function init(Namespace) {
         // Private
         var OptionsManager = Namespace.OptionsManager,
             logger = Namespace.logger,
@@ -64,23 +64,29 @@
         };
 
         OptionsManager.exportOptionsTemplate('WebApiTemplate', optionsTemplate);
+
         /**
          * @constructor
          * @param {Object} clientOptions
          * @private
          */
         function WebApi(clientOptions) {
-            var self = this, isErrorsCritical;
+            var self = this,
+                isErrorsCritical,
+                connection;
+
             this._services = {};
-            // options creation
+
+            // Create options based on clientOptions from user and with WebApiTemplate template.
             this._options = OptionsManager.createOptions(clientOptions, 'WebApiTemplate', function errorHandler(errors) {
                 isErrorsCritical = errors.critical;
+
                 errors.reports.forEach(function(report) {
                     logger.log(report.message);
                 }, this);
             });
 
-            // Instancebased dependencies
+            // Instance based dependencies
             this._dependencies = {
                 'TextProcessor': Namespace.TextProcessor,
                 'Connection': Namespace.Connection
@@ -90,25 +96,9 @@
                 this._services[k] = new this._dependencies[k](k, this);
             }
 
-            var connection = this._services['Connection'];
+            connection = this._services['Connection'];
             this._commands = connection.getCommands();
-            this._UDActions = connection.getUDActions();
-        }
-
-        /**
-         * UserDictionary  constructor.
-         * Encapsulates the construction of a query for UD request.
-         *
-         * @typedef {(Object)} UserDictionary
-         * @namespace UserDictionary
-         * @property {String} parametrs.name - List of available UD actions.
-         * @property {function} parametrs.wordlist - List of words in current dictionary.
-         * @property {function} parametrs.makeUDAction - Request-maker function.
-         */
-        function UserDictionary(parameters) {
-            this.name = parameters.name;
-            this.wordlist = parameters.wordlist;
-            this.makeUDAction = parameters.makeUDAction;
+            this._udActions = connection.getUdActions();
         }
 
         /**
@@ -116,9 +106,9 @@
          */
         WebApi.prototype = {
             constructor: WebApi,
-            // Private
             /**
              * Return instance of dependencie.
+             * @private
              *
              * @param {String} name - Name of instancebased service.
              *
@@ -140,40 +130,38 @@
             _request: function(data, parametrs) {
                 return this._getService('Connection').request(
                     data,
-                    parametrs.success || function(){},
-                    parametrs.error || function(){}
+                    parametrs.success || function() {},
+                    parametrs.error || function() {}
                 );
             },
-            _makeUDAction: function(actionName, parametrs) {
+            _makeUdAction: function(actionName, parametrs) {
                 var requestParametrs = {
-                    command: this._commands.userDictionary,
-                    UDAction: this._UDActions[actionName],
-                    UDName: parametrs.name,
-                    newUDName: parametrs.newName,
-                    wordList: parametrs.wordList,
-                    UDWord: parametrs.word
-                };
+                        command: this._commands.userDictionary,
+                        UDAction: this._udActions[actionName],
+                        UDName: parametrs.name,
+                        newUDName: parametrs.newName,
+                        wordList: parametrs.wordList,
+                        UDWord: parametrs.word
+                    };
 
-                return this._request(
-                    requestParametrs,
-                    parametrs
-                );
+                return this._request(requestParametrs, parametrs);
             },
-            _UDMethodWrapper: function(actionName, parameters) {
+            _udMethodWrapper: function(actionName, parameters) {
                 var self = this,
                     success = parameters.success || function(){};
 
                 parameters.success = function(responseInfo) {
                     var ud = new UserDictionary({
-                        wordlist: responseInfo.wordlist,
-                        name: responseInfo.name,
-                        makeUDAction: self._makeUDAction.bind(self)
-                    });
+                            wordlist: responseInfo.wordlist,
+                            name: responseInfo.name,
+                            makeUdAction: self._makeUdAction.bind(self)
+                        });
+
                     success(ud);
                 };
-                return this._makeUDAction(actionName, parameters);
+
+                return this._makeUdAction(actionName, parameters);
             },
-            // Accessors
             getOption: function(name) {
                 return this._options[name];
             },
@@ -182,15 +170,15 @@
                     template = {},
                     option = {};
 
-                if(optionsTemplate[name]) {
+                if (optionsTemplate[name]) {
                     result = true;
                     template[name] = optionsTemplate[name];
                     option[name] = value;
                     this._options[name] = OptionsManager.createOptions(option, template)[name];
                 }
+
                 return result;
             },
-            // API
             /**
              * getInfo success Callback.
              *
@@ -221,8 +209,7 @@
              * })
              */
             getInfo: function(parametrs) {
-                return this._request(
-                    {
+                return this._request({
                         command: this._commands.getInfo
                     },
                     parametrs
@@ -258,8 +245,7 @@
              * })
              */
             getLangList: function(parametrs) {
-                return this._request(
-                    {
+                return this._request({
                         command: this._commands.getLangList
                     },
                     parametrs
@@ -304,28 +290,33 @@
 
                 function addOffsetsToMisspelled(data, offsets) {
                     var misspelled;
+
                     return offsets.reduce(function(prev, offsetsObj) {
-                        for(var i = 0; i < data.length; i += 1) {
+                        for (var i = 0; i < data.length; i += 1) {
                             misspelled = data[i];
-                            if(misspelled.word === offsetsObj.word) {
+
+                            if (misspelled.word === offsetsObj.word) {
                                 prev.push( Object.assign(
                                     {},
                                     misspelled,
                                     offsetsObj
                                 ) );
+
                                 return prev;
                             }
                         }
+
                         return prev;
                     }, []);
                 }
+
                 _parametrs.success = function(data) {
                     var misspelledsWithOffsets = addOffsetsToMisspelled(data, words.wordsOffsets);
+
                     parametrs.success(misspelledsWithOffsets);
                 };
 
-                return this._request(
-                    {
+                return this._request({
                         command: this._commands.spellCheck,
                         language:  _parametrs.lang || this.getOption('lang'),
                         customDictionary: this.getOption('customDictionaryIds'),
@@ -369,8 +360,7 @@
              * });
              */
             grammarCheck: function(parametrs) {
-                return this._request(
-                    {
+                return this._request({
                         command: this._commands.grammarCheck,
                         language: parametrs.lang || this.getOption('lang'),
                         sentences: parametrs.sentences,
@@ -408,7 +398,7 @@
              * });
              */
             getUserDictionary: function(parametrs) {
-                return this._UDMethodWrapper('getDict', parametrs);
+                return this._udMethodWrapper('getDict', parametrs);
             },
             /**
              * createUserDictionary API method.
@@ -434,7 +424,7 @@
              * });
              */
             createUserDictionary: function(parametrs) {
-                return this._UDMethodWrapper('create', parametrs);
+                return this._udMethodWrapper('create', parametrs);
             },
             /**
              * deleteUserDictionary API method.
@@ -458,7 +448,7 @@
              * });
              */
             deleteUserDictionary: function(parametrs) {
-                return this._UDMethodWrapper('delete', parametrs);
+                return this._udMethodWrapper('delete', parametrs);
             },
             /**
              * renameUserDictionary API method.
@@ -483,7 +473,7 @@
              * });
              */
             renameUserDictionary: function(parametrs) {
-                return this._UDMethodWrapper('rename' , parametrs);
+                return this._udMethodWrapper('rename' , parametrs);
             },
             /**
              * addWordToUserDictionary API method.
@@ -509,7 +499,7 @@
              * });
              */
             addWordToUserDictionary: function(parametrs) {
-                return this._UDMethodWrapper('addWord', parametrs);
+                return this._udMethodWrapper('addWord', parametrs);
             },
             /**
              * deleteWordFromUserDictionary API method.
@@ -535,14 +525,30 @@
              * });
              */
             deleteWordFromUserDictionary: function(parametrs) {
-                return this._UDMethodWrapper('deleteWord', parametrs);
+                return this._udMethodWrapper('deleteWord', parametrs);
             }
         };
+
+        /**
+         * UserDictionary constructor.
+         * Encapsulates the construction of a query for UD request.
+         *
+         * @typedef {(Object)} UserDictionary
+         * @namespace UserDictionary
+         * @property {String} parametrs.name - List of available UD actions.
+         * @property {function} parametrs.wordlist - List of words in current dictionary.
+         * @property {function} parametrs.makeUdAction - Request-maker function.
+         */
+        function UserDictionary(parameters) {
+            this.name = parameters.name;
+            this.wordlist = parameters.wordlist;
+            this.makeUdAction = parameters.makeUdAction;
+        }
 
         UserDictionary.prototype = {
             constructor: UserDictionary,
             _action: function(actionName, parameters) {
-                this.makeUDAction(actionName, Object.assign({
+                this.makeUdAction(actionName, Object.assign({
                     name: this.name
                 }, parameters) );
             },
@@ -583,11 +589,13 @@
 
                 parameters.success = function(responseInfo) {
                     var wordlist = [];
-                    for(var i = 0; i < self.wordlist.length; i += 1) {
-                        if(self.wordlist[i] !== word) {
+
+                    for (var i = 0; i < self.wordlist.length; i += 1) {
+                        if (self.wordlist[i] !== word) {
                             wordlist.push(wordlist[i]);
                         }
                     }
+
                     self.wordlist = wordlist;
                     success(self);
                 };
@@ -681,6 +689,12 @@
             return new WebApi(clientOptions);
         };
     }
-    if(typeof window === 'undefined') {module.exports = init;}
-	if(typeof WEBSPELLCHECKER !== 'undefined') {init(WEBSPELLCHECKER);}
+
+    if (typeof window === 'undefined') {
+        module.exports = init;
+    }
+
+	if (typeof WEBSPELLCHECKER !== 'undefined') {
+        init(WEBSPELLCHECKER);
+    }
 })();

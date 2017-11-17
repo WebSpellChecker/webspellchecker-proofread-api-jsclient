@@ -87,7 +87,7 @@
              * @returns {Object} - List of UD actions.
              * @private
              */
-            getUDActions: function() {
+            getUdActions: function() {
                 return _UDActionsMap;
             },
             /**

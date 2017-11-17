@@ -1,10 +1,13 @@
 (function() {
     // Define local variables
-    var env, glob, envTypes = {
-        node    : 'node',
-        browser : 'browser'
-    };
-    // Define envirement (Browser or Node)
+    var envTypes = {
+            node: 'node',
+            browser: 'browser'
+        },
+        env,
+        glob;
+
+    // Define environment (Browser or Node)
     if (typeof window === 'undefined') {
         glob = global;
         env = envTypes.node;
@@ -12,13 +15,12 @@
         glob = window;
         env = envTypes.browser;
     }
-    /**
-     * @namespace
-     */
+
     glob.WEBSPELLCHECKER = glob.WEBSPELLCHECKER || {};
     glob.WEBSPELLCHECKER.env = env;
     glob.WEBSPELLCHECKER.envTypes = envTypes;
-    if(glob.WEBSPELLCHECKER.env === glob.WEBSPELLCHECKER.envTypes.node) {
+
+    if (env === envTypes.node) {
         module.exports = glob.WEBSPELLCHECKER;
     }
 })();
