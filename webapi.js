@@ -2,7 +2,7 @@
 /**
  * @namespace WEBSPELLCHECKER
  */
-(function(){
+(function() {
     function init(Namespace) {
         // Private
         var OptionsManager = Namespace.OptionsManager,

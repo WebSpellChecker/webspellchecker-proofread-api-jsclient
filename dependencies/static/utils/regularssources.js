@@ -2,8 +2,8 @@
 /**
  * @fileoverview Static Module.
  */
-(function(){
-    function init( Namespace ) {
+(function() {
+    function init(Namespace) {
         'use strict';
 
         var RegularsSources = {
@@ -14,7 +14,6 @@
             comma: '\\,',
             EOL: '[\r\n(\r\n)]',
             digits : '[0-9]',
-
             //Punctuations
             HtmlSpaceSymbol:  String.fromCharCode(160),
             // \u061F - Arabic question mark, \u060C - Arabic comma, \u061B - Arabic semicolon
@@ -29,6 +28,12 @@
 
         Namespace.RegularsSources = RegularsSources;
     }
-    if(typeof window === 'undefined') {module.exports = init;}
-	if(typeof WEBSPELLCHECKER !== 'undefined') {init(WEBSPELLCHECKER);}
+
+    if (typeof window === 'undefined') {
+        module.exports = init;
+    }
+
+    if (typeof WEBSPELLCHECKER !== 'undefined') {
+        init(WEBSPELLCHECKER);
+    }
 })();

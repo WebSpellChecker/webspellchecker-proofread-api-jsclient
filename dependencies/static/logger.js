@@ -1,8 +1,8 @@
 // logger.js
 /**
- * @fileoverview Static Module. logger manager for WEBSPELLCHECKER
+ * @fileoverview Static Module. Logger manager for WEBSPELLCHECKER
  */
-(function(){
+(function() {
 	function init( Namespace ) {
 		'use strict';
 
@@ -22,23 +22,22 @@
 		 * @exports WEBSPELLCHECKER.logger
 		 */
 		var logger = {
-
 			/**
 			 * Enable/disable logging in SCAYT
 			 * @memberof SCAYT.prototype#
 			 * @param {boolean} state - State
-			 * @returns {boolean}  - Variable
+			 * @returns {boolean} - Variable
 			 */
 			isON: function(state) {
 				state = state || false;
-				trigger = (!!state ? true : (/scaytDebug\b/.test(location.hash)));
+				trigger = ( !!state ? true : (/scaytDebug\b/.test(location.hash)) );
 			},
 
 			/**
 			 * Check browser
 			 * @memberof SCAYT.prototype#
 			 * @type {boolean}
-			 * @returns {boolean}  - true/false
+			 * @returns {boolean} - true/false
 			 */
 			isIE: (browser) ? browser.ie : false,
 
@@ -46,7 +45,7 @@
 			 * function for logging
 			 * @memberof SCAYT.prototype#
 			 * @param {object} data - incoming messages
-			 * @returns {string}  - output message
+			 * @returns {string} - output message
 			 */
 			log: function(data) {
 				var options = data || {},
@@ -86,6 +85,12 @@
 		 */
 		Namespace.logger = logger;
 	}
-    if(typeof window === 'undefined') {module.exports = init;}
-	if(typeof WEBSPELLCHECKER !== 'undefined') {init(WEBSPELLCHECKER);}
+
+	if (typeof window === 'undefined') {
+		module.exports = init;
+	}
+
+	if (typeof WEBSPELLCHECKER !== 'undefined') {
+		init(WEBSPELLCHECKER);
+	}
 })();

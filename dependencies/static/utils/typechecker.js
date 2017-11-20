@@ -1,5 +1,9 @@
-(function(){
-	function init( Namespace ) {
+// typechecker.js
+/**
+ * @fileoverview Static Module. WEBSPELLCHECKER TypeChecker module.
+ */
+(function() {
+	function init(Namespace) {
        var TypeChecker = {
             isString: function(value) {
                 return typeof value === 'string';
@@ -32,6 +36,7 @@
             },
             isEmpty: function(value) {
                 var attr;
+
                 // Null and undefined are empty
                 if (!TypeChecker.isDefined(value)) {
                     return true;
@@ -60,8 +65,9 @@
                 // If we find at least one property we consider it non empty
                 if (TypeChecker.isObject(value)) {
                     for (attr in value) {
-                    return false;
+                        return false;
                     }
+                    
                     return true;
                 }
 
@@ -91,6 +97,12 @@
         Namespace.Utils = Namespace.Utils || {};
         Namespace.Utils.TypeChecker = TypeChecker;
     }
-    if(typeof window === 'undefined') {module.exports = init;}
-	if(typeof WEBSPELLCHECKER !== 'undefined') {init(WEBSPELLCHECKER);}
+
+    if (typeof window === 'undefined') {
+        module.exports = init;
+    }
+
+    if (typeof WEBSPELLCHECKER !== 'undefined') {
+        init(WEBSPELLCHECKER);
+    }
 })();

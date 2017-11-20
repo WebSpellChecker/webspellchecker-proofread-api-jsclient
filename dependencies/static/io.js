@@ -1,10 +1,10 @@
 
 // io.js
 /**
- * @fileoverview Static Module. ImputOutput Manager of WEBSPELLCHECKER
+ * @fileoverview Static Module. InputOutput Manager of WEBSPELLCHECKER
  */
 (function() {
-	function init( Namespace ) {
+	function init(Namespace) {
 		var Utils = Namespace.Utils,
 			logger = Namespace.logger.console;
 
@@ -14,7 +14,6 @@
 		 * @privat
 		 */
 		var isMocked = false,
-
 			/**
 			 * Mocked params
 			 * @static
@@ -26,7 +25,6 @@
 		 * @exports WEBSPELLCHECKER.IO
 		 */
 		var IO = {
-
 			/**
 			 * Link to XMLHttpRequest constructor
 			 *
@@ -54,8 +52,8 @@
 					request_params = {},
 					request_meta_params = {};
 
-				this.addParameter = function( name, value ) {
-					if ( name && value ) {
+				this.addParameter = function(name, value) {
+					if (name && value) {
 						request_params[name] = value;
 					}
 
@@ -63,7 +61,7 @@
 				};
 
 				this.addParameters = function(parameters) {
-					for(var param in parameters) {
+					for (var param in parameters) {
 						this.addParameter(param, parameters[param]);
 					}
 
@@ -72,18 +70,21 @@
 
 				this.addMetaParameters = function(parameters) {
 					Object.assign(request_meta_params, parameters);
+
 					return this;
 				};
 
-				this.getParameter = function( name ) {
+				this.getParameter = function(name) {
 					return request_params[name];
 				};
 
 				this.joinParams =function(params) {
 					var result = '';
+
 					params = params || request_params;
+
 					if ( Object.keys(params).length ) {
-						for( var k in params) {
+						for (var k in params) {
 							result += k + '=' + encodeURIComponent(params[k]) + '&';
 						}
 
@@ -114,6 +115,7 @@
 
 				this.joinUrlWithParams = function(paramsString) {
 					var urlString = this.joinUrl();
+
 					urlString += paramsString ? '?' + paramsString : '';
 
 					return urlString;
@@ -146,16 +148,15 @@
 				var ajax = {},
 					parse = JSON.parse || function() { return arguments };
 
-				if( isMocked ) {
+				if (isMocked) {
 
-					for ( var i = 0; i < mockParams.length; i++ ) {
-
-						if( mockParams[i].success ) {
-							params.onSuccess( mockParams[i].success );
+					for (var i = 0; i < mockParams.length; i++) {
+						if (mockParams[i].success) {
+							params.onSuccess(mockParams[i].success);
 						}
 
-						if( mockParams[i].error ) {
-							params.onError( mockParams[i].error );
+						if (mockParams[i].error) {
+							params.onError(mockParams[i].error);
 						}
 					}
 
@@ -184,7 +185,7 @@
 
 				ajax.request.onload = function() {
 					var responseData = ajax.request.responseText,
-					responseStatus = ajax.request.status;
+						responseStatus = ajax.request.status;
 
 					ajax.success = true;
 
@@ -240,16 +241,15 @@
 				var callbackName = ( "callback" + Math.random().toString(20).substr(2,9) ),
 					callbackFunctionPath = "WEBSPELLCHECKER.IO.";
 
-				if( isMocked ) {
+				if (isMocked) {
 
-					for ( var i = 0; i < mockParams.length; i++ ) {
-
-						if( mockParams[i].success ) {
-							params.onSuccess( mockParams[i].success );
+					for (var i = 0; i < mockParams.length; i++) {
+						if (mockParams[i].success) {
+							params.onSuccess(mockParams[i].success);
 						}
 
-						if( mockParams[i].error ) {
-							params.onError( mockParams[i].error );
+						if (mockParams[i].error) {
+							params.onError(mockParams[i].error);
 						}
 					}
 
@@ -278,12 +278,12 @@
 			NODE: function(params) {
 				var url = params.url,
 					metaParams = url.joinRequestMetaParams(),
-					client = ( url.protocol === 'http' ) ? require('http') : require('https'),
+					client = (url.protocol === 'http') ? require('http') : require('https'),
 					requestOptions = {
 						protocol: url.protocol + ':',
 						port: url.port,
 						hostname: url.host,
-						path: '/' + url.path + ( metaParams ? '?' + metaParams : '' ),
+						path: '/' + url.path + (metaParams ? '?' + metaParams : ''),
 						method: 'POST',
 						headers: {
 							'Content-Type': 'text/javascript; charset=UTF-8',
@@ -295,12 +295,15 @@
 					if (response.statusCode < 200 || response.statusCode > 299) {
 						params.onError && params.onError('Failed to load page, status code: ' + response.statusCode);
 					}
+
 					// temporary data holder
 					var body = [];
+
 					// on every content chunk, push it to the data array
 					response.on('data', function(chunk) {
 						body.push(chunk);
 					});
+
 					// we are done, resolve promise with those joined chunks
 					response.on('end', function(){
 						var responseData = body.join('');
@@ -310,6 +313,7 @@
 						} catch (error) {
 							logger.warn("CORS response parsing error: " + error);
 						}
+
 						if(responseData && responseData.error) {
 							responseData.message && logger.warn(responseData.message);
 							params.onError && params.onError(responseData);
@@ -318,9 +322,11 @@
 						}
 					});
 				});
+
 				request.on('error', function(error) {
 					params.onError && params.onError({});
 				});
+
 				request.write( params.url.joinRequestParams() );
 				request.end();
 
@@ -331,12 +337,12 @@
 			 * @param {Object} params Define params that we need
 			 * @param {String} [params.url=''] URL for script src attribute
 			 * @param {String} [params.id=''] ID for script id attribute
-			* @param {String} params.callbackName Callback name for JSONP request
-			* @param {String} params.onSuccess Handler successful response from the server
-			* @param {String} params.onError Handler unsuccessful response from the server
-			* @return {HTMLScriptElement} HTML Script Element
-			* @constructor
-			*/
+			 * @param {String} params.callbackName Callback name for JSONP request
+			 * @param {String} params.onSuccess Handler successful response from the server
+			 * @param {String} params.onError Handler unsuccessful response from the server
+			 * @return {HTMLScriptElement} HTML Script Element
+			 * @constructor
+			 */
 			Script: function( params ) {
 				params = params || {};
 				var self = this,
@@ -476,6 +482,7 @@
 				isMocked = false;
 			}
 		};
+
 		/**
 		 * Define list of request types
 		 *
@@ -502,7 +509,6 @@
 			IO.requestTypes.NODE :
 			IO.requestTypes.AJAX ;
 
-
 		/**
 		 * Static Module. Imput&Output (IO) Manager of SCAYT
 		 *
@@ -511,6 +517,11 @@
 		Namespace.IO = IO;
 	}
 
-    if(typeof window === 'undefined') {module.exports = init;}
-	if(typeof WEBSPELLCHECKER !== 'undefined') {init(WEBSPELLCHECKER);}
+	if (typeof window === 'undefined') {
+		module.exports = init;
+	}
+
+	if (typeof WEBSPELLCHECKER !== 'undefined') {
+		init(WEBSPELLCHECKER);
+	}
 })();

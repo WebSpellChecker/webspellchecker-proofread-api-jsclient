@@ -2,7 +2,6 @@
 /**
  * @fileoverview Static Module. WEBSPELLCHECKER Polyfills module.
  */
-
 (function() {
     'use strict';
 
@@ -38,12 +37,15 @@
                 if (getterType !== 'function') {
                     throw new TypeError('Getter must be a function');
                 }
+
                 if (!supportsAccessors) {
                     throw new TypeError(ERR_ACCESSORS_NOT_SUPPORTED);
                 }
+
                 if (hasValueOrWritable) {
                     throw new TypeError(ERR_VALUE_ACCESSORS);
                 }
+
                 object.__defineGetter__(propertyString, descriptor.get);
             } else {
                 object[propertyString] = descriptor.value;
@@ -54,12 +56,15 @@
                 if (setterType !== 'function') {
                     throw new TypeError('Setter must be a function');
                 }
+
                 if (!supportsAccessors) {
                     throw new TypeError(ERR_ACCESSORS_NOT_SUPPORTED);
                 }
+
                 if (hasValueOrWritable) {
                     throw new TypeError(ERR_VALUE_ACCESSORS);
                 }
+
                 object.__defineSetter__(propertyString, descriptor.set);
             }
 
@@ -79,13 +84,16 @@
             writable: true,
             value: function(target, firstSource) {
                 var desc;
+
                 if (target === undefined || target === null) {
                     throw new TypeError('Cannot convert first argument to object');
                 }
 
                 var to = Object(target);
+
                 for (var i = 1; i < arguments.length; i++) {
                     var nextSource = arguments[i];
+
                     if (nextSource === undefined || nextSource === null) {
                         continue;
                     }
@@ -96,6 +104,7 @@
                         // In IE8 getOwnPropertyDescriptor throw error "Object expected"
                         try {
                             desc = Object.getOwnPropertyDescriptor(nextSource, nextKey);
+
                             if (desc !== undefined && desc.enumerable) {
                                 to[nextKey] = nextSource[nextKey];
                             }
@@ -104,6 +113,7 @@
                         }
                     }
                 }
+
                 return to;
             }
         });
@@ -117,38 +127,41 @@
             function Temp() {}
 
             // make a safe reference to Object.prototype.hasOwnProperty
-            var hasOwn = Object.prototype.hasOwnProperty;
+            var hasOwnProperty = Object.prototype.hasOwnProperty;
 
             return function (O) {
-            // 1. If Type(O) is not Object or Null throw a TypeError exception.
-            if (typeof O != 'object') {
-                throw TypeError('Object prototype may only be an Object or null');
-            }
-
-            // 2. Let obj be the result of creating a new object as if by the
-            //    expression new Object() where Object is the standard built-in
-            //    constructor with that name
-            // 3. Set the [[Prototype]] internal property of obj to O.
-            Temp.prototype = O;
-            var obj = new Temp();
-            Temp.prototype = null; // Let's not keep a stray reference to O...
-
-            // 4. If the argument Properties is present and not undefined, add
-            //    own properties to obj as if by calling the standard built-in
-            //    function Object.defineProperties with arguments obj and
-            //    Properties.
-            if (arguments.length > 1) {
-                // Object.defineProperties does ToObject on its first argument.
-                var Properties = Object(arguments[1]);
-                for (var prop in Properties) {
-                if (hasOwn.call(Properties, prop)) {
-                    obj[prop] = Properties[prop];
+                // 1. If Type(O) is not Object or Null throw a TypeError exception.
+                if (typeof O != 'object') {
+                    throw TypeError('Object prototype may only be an Object or null');
                 }
-                }
-            }
 
-            // 5. Return obj
-            return obj;
+                // 2. Let obj be the result of creating a new object as if by the
+                //    expression new Object() where Object is the standard built-in
+                //    constructor with that name
+                // 3. Set the [[Prototype]] internal property of obj to O.
+                Temp.prototype = O;
+
+                var obj = new Temp();
+
+                Temp.prototype = null; // Let's not keep a stray reference to O...
+
+                // 4. If the argument Properties is present and not undefined, add
+                //    own properties to obj as if by calling the standard built-in
+                //    function Object.defineProperties with arguments obj and
+                //    Properties.
+                if (arguments.length > 1) {
+                    // Object.defineProperties does ToObject on its first argument.
+                    var Properties = Object(arguments[1]);
+
+                    for (var prop in Properties) {
+                        if (hasOwnProperty.call(Properties, prop) ) {
+                            obj[prop] = Properties[prop];
+                        }
+                    }
+                }
+
+                // 5. Return obj
+                return obj;
             };
         })();
     }
@@ -158,13 +171,13 @@
             var hasOwnProperty = Object.prototype.hasOwnProperty,
                 hasDontEnumBug = !({ toString: null }).propertyIsEnumerable('toString'),
                 dontEnums = [
-                'toString',
-                'toLocaleString',
-                'valueOf',
-                'hasOwnProperty',
-                'isPrototypeOf',
-                'propertyIsEnumerable',
-                'constructor'
+                    'toString',
+                    'toLocaleString',
+                    'valueOf',
+                    'hasOwnProperty',
+                    'isPrototypeOf',
+                    'propertyIsEnumerable',
+                    'constructor'
                 ],
                 dontEnumsLength = dontEnums.length;
 
@@ -176,18 +189,19 @@
                 var result = [], prop, i;
 
                 for (prop in obj) {
-                    if (hasOwnProperty.call(obj, prop)) {
-                    result.push(prop);
+                    if ( hasOwnProperty.call(obj, prop) ) {
+                        result.push(prop);
                     }
                 }
 
                 if (hasDontEnumBug) {
                     for (i = 0; i < dontEnumsLength; i++) {
-                    if (hasOwnProperty.call(obj, dontEnums[i])) {
-                        result.push(dontEnums[i]);
-                    }
+                        if ( hasOwnProperty.call(obj, dontEnums[i]) ) {
+                            result.push(dontEnums[i]);
+                        }
                     }
                 }
+
                 return result;
             };
         }());
@@ -196,19 +210,19 @@
     if (!Function.prototype.bind) {
         Function.prototype.bind = function(oThis) {
             if (typeof this !== 'function') {
-            // closest thing possible to the ECMAScript 5
-            // internal IsCallable function
-            throw new TypeError('Function.prototype.bind - what is trying to be bound is not callable');
+                // closest thing possible to the ECMAScript 5
+                // internal IsCallable function
+                throw new TypeError('Function.prototype.bind - what is trying to be bound is not callable');
             }
 
             var aArgs = Array.prototype.slice.call(arguments, 1),
                 fToBind = this,
                 fNOP    = function() {},
                 fBound  = function() {
-                return fToBind.apply(this instanceof fNOP && oThis
-                        ? this
-                        : oThis,
-                        aArgs.concat(Array.prototype.slice.call(arguments)));
+                    return fToBind.apply(this instanceof fNOP && oThis
+                            ? this
+                            : oThis,
+                            aArgs.concat(Array.prototype.slice.call(arguments)));
                 };
 
             fNOP.prototype = this.prototype;
@@ -227,64 +241,64 @@
     if (!Array.prototype.includes) {
         Object.defineProperty(Array.prototype, 'includes', {
             value: function(searchElement, fromIndex) {
-
-            // 1. Let O be ? ToObject(this value).
-            if (this == null) {
-                throw new TypeError('"this" is null or not defined');
-            }
-
-            var o = Object(this);
-
-            // 2. Let len be ? ToLength(? Get(O, "length")).
-            var len = o.length >>> 0;
-
-            // 3. If len is 0, return false.
-            if (len === 0) {
-                return false;
-            }
-
-            // 4. Let n be ? ToInteger(fromIndex).
-            //    (If fromIndex is undefined, this step produces the value 0.)
-            var n = fromIndex | 0;
-
-            // 5. If n ≥ 0, then
-            //  a. Let k be n.
-            // 6. Else n < 0,
-            //  a. Let k be len + n.
-            //  b. If k < 0, let k be 0.
-            var k = Math.max(n >= 0 ? n : len - Math.abs(n), 0);
-
-            function sameValueZero(x, y) {
-                return x === y || (typeof x === 'number' && typeof y === 'number' && isNaN(x) && isNaN(y));
-            }
-
-            // 7. Repeat, while k < len
-            while (k < len) {
-                // a. Let elementK be the result of ? Get(O, ! ToString(k)).
-                // b. If SameValueZero(searchElement, elementK) is true, return true.
-                // c. Increase k by 1.
-                if (sameValueZero(o[k], searchElement)) {
-                return true;
+                // 1. Let O be ? ToObject(this value).
+                if (this == null) {
+                    throw new TypeError('"this" is null or not defined');
                 }
-                k++;
-            }
 
-            // 8. Return false
-            return false;
+                var o = Object(this);
+
+                // 2. Let len be ? ToLength(? Get(O, "length")).
+                var len = o.length >>> 0;
+
+                // 3. If len is 0, return false.
+                if (len === 0) {
+                    return false;
+                }
+
+                // 4. Let n be ? ToInteger(fromIndex).
+                //    (If fromIndex is undefined, this step produces the value 0.)
+                var n = fromIndex | 0;
+
+                // 5. If n ≥ 0, then
+                //  a. Let k be n.
+                // 6. Else n < 0,
+                //  a. Let k be len + n.
+                //  b. If k < 0, let k be 0.
+                var k = Math.max(n >= 0 ? n : len - Math.abs(n), 0);
+
+                function sameValueZero(x, y) {
+                    return x === y || (typeof x === 'number' && typeof y === 'number' && isNaN(x) && isNaN(y));
+                }
+
+                // 7. Repeat, while k < len
+                while (k < len) {
+                    // a. Let elementK be the result of ? Get(O, ! ToString(k)).
+                    // b. If SameValueZero(searchElement, elementK) is true, return true.
+                    // c. Increase k by 1.
+                    if (sameValueZero(o[k], searchElement)) {
+                        return true;
+                    }
+
+                    k++;
+                }
+
+                // 8. Return false
+                return false;
             }
         });
     }
+
     // Production steps of ECMA-262, Edition 5, 15.4.4.14
     // Reference: http://es5.github.io/#x15.4.4.14
     if (!Array.prototype.indexOf) {
         Array.prototype.indexOf = function(searchElement, fromIndex) {
-
             var k;
 
             // 1. Let o be the result of calling ToObject passing
             //    the this value as the argument.
             if (this == null) {
-            throw new TypeError('"this" is null or not defined');
+                throw new TypeError('"this" is null or not defined');
             }
 
             var o = Object(this);
@@ -296,7 +310,7 @@
 
             // 4. If len is 0, return -1.
             if (len === 0) {
-            return -1;
+                return -1;
             }
 
             // 5. If argument fromIndex was passed let n be
@@ -305,7 +319,7 @@
 
             // 6. If n >= len, return -1.
             if (n >= len) {
-            return -1;
+                return -1;
             }
 
             // 7. If n >= 0, then Let k be n.
@@ -330,8 +344,10 @@
                 if (k in o && o[k] === searchElement) {
                     return k;
                 }
+
                 k++;
             }
+
             return -1;
         };
     }
@@ -345,12 +361,14 @@
 
             var t = Object(this);
             var len = t.length >>> 0;
+
             if (typeof fun !== 'function') {
                 throw new TypeError();
             }
 
             var res = [];
             var thisArg = arguments.length >= 2 ? arguments[1] : void 0;
+
             for (var i = 0; i < len; i++) {
                 if (i in t) {
                     var val = t[i];
@@ -382,60 +400,59 @@
     if (!Array.prototype.reduce) {
         Object.defineProperty(Array.prototype, 'reduce', {
             value: function(callback /*, initialValue*/) {
-            if (this === null) {
-                throw new TypeError( 'Array.prototype.reduce ' +
-                'called on null or undefined' );
-            }
-            if (typeof callback !== 'function') {
-                throw new TypeError( callback +
-                ' is not a function');
-            }
+                if (this === null) {
+                    throw new TypeError('Array.prototype.reduce ' + 'called on null or undefined');
+                }
+                
+                if (typeof callback !== 'function') {
+                    throw new TypeError(callback + ' is not a function');
+                }
 
-            // 1. Let O be ? ToObject(this value).
-            var o = Object(this);
+                // 1. Let O be ? ToObject(this value).
+                var o = Object(this);
 
-            // 2. Let len be ? ToLength(? Get(O, "length")).
-            var len = o.length >>> 0;
+                // 2. Let len be ? ToLength(? Get(O, "length")).
+                var len = o.length >>> 0;
 
-            // Steps 3, 4, 5, 6, 7
-            var k = 0;
-            var value;
+                // Steps 3, 4, 5, 6, 7
+                var k = 0;
+                var value;
 
-            if (arguments.length >= 2) {
-                value = arguments[1];
-            } else {
-                while (k < len && !(k in o)) {
+                if (arguments.length >= 2) {
+                    value = arguments[1];
+                } else {
+                    while (k < len && !(k in o)) {
+                        k++;
+                    }
+
+                    // 3. If len is 0 and initialValue is not present,
+                    //    throw a TypeError exception.
+                    if (k >= len) {
+                        throw new TypeError('Reduce of empty array ' + 'with no initial value');
+                    }
+
+                    value = o[k++];
+                }
+
+                // 8. Repeat, while k < len
+                while (k < len) {
+                    // a. Let Pk be ! ToString(k).
+                    // b. Let kPresent be ? HasProperty(O, Pk).
+                    // c. If kPresent is true, then
+                    //    i.  Let kValue be ? Get(O, Pk).
+                    //    ii. Let accumulator be ? Call(
+                    //          callbackfn, undefined,
+                    //          « accumulator, kValue, k, O »).
+                    if (k in o) {
+                        value = callback(value, o[k], k, o);
+                    }
+
+                    // d. Increase k by 1.
                     k++;
                 }
 
-                // 3. If len is 0 and initialValue is not present,
-                //    throw a TypeError exception.
-                if (k >= len) {
-                    throw new TypeError( 'Reduce of empty array ' +
-                        'with no initial value' );
-                }
-                value = o[k++];
-            }
-
-            // 8. Repeat, while k < len
-            while (k < len) {
-                // a. Let Pk be ! ToString(k).
-                // b. Let kPresent be ? HasProperty(O, Pk).
-                // c. If kPresent is true, then
-                //    i.  Let kValue be ? Get(O, Pk).
-                //    ii. Let accumulator be ? Call(
-                //          callbackfn, undefined,
-                //          « accumulator, kValue, k, O »).
-                if (k in o) {
-                    value = callback(value, o[k], k, o);
-                }
-
-                // d. Increase k by 1.
-                k++;
-            }
-
-            // 9. Return accumulator.
-            return value;
+                // 9. Return accumulator.
+                return value;
             }
         });
     }
@@ -443,9 +460,7 @@
     // Production steps of ECMA-262, Edition 5, 15.4.4.18
     // Reference: http://es5.github.io/#x15.4.4.18
     if (!Array.prototype.forEach) {
-
         Array.prototype.forEach = function(callback/*, thisArg*/) {
-
             var T, k;
 
             if (this == null) {
@@ -470,7 +485,7 @@
             // 5. If thisArg was supplied, let T be thisArg; else let
             // T be undefined.
             if (arguments.length > 1) {
-            T = arguments[1];
+                T = arguments[1];
             }
 
             // 6. Let k be 0.
@@ -478,7 +493,6 @@
 
             // 7. Repeat while k < len.
             while (k < len) {
-
                 var kValue;
 
                 // a. Let Pk be ToString(k).
@@ -488,7 +502,6 @@
                 //    This step can be combined with c.
                 // c. If kPresent is true, then
                 if (k in O) {
-
                     // i. Let kValue be the result of calling the Get internal
                     // method of O with argument Pk.
                     kValue = O[k];
@@ -497,6 +510,7 @@
                     // the this value and argument list containing kValue, k, and O.
                     callback.call(T, kValue, k, O);
                 }
+
                 // d. Increase k by 1.
                 k++;
             }
@@ -504,34 +518,40 @@
         };
     }
 
-    if (![].includes) {
+    if (!Array.prototype.includes) {
         Array.prototype.includes = function(searchElement/*, fromIndex*/) {
             var O = Object(this);
             var len = parseInt(O.length) || 0;
+
             if (len === 0) {
                 return false;
             }
+
             var n = parseInt(arguments[1]) || 0;
             var k;
+
             if (n >= 0) {
                 k = n;
             } else {
                 k = len + n;
+
                 if (k < 0) {
-                k = 0;
+                    k = 0;
                 }
             }
+
             while (k < len) {
                 var currentElement = O[k];
-                if (searchElement === currentElement ||
-                (searchElement !== searchElement && currentElement !== currentElement)
-                ) {
+
+                if ( searchElement === currentElement ||
+                    (searchElement !== searchElement && currentElement !== currentElement) ) {
                     return true;
                 }
+                
                 k++;
             }
+
             return false;
         };
     }
 })();
-

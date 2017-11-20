@@ -2,12 +2,13 @@
 /**
  * @fileoverview Static Module. RegularsManager of WEBSPELLCHECKER
  */
-(function(){
+(function() {
     'use strict';
-	function init( Namespace ) {
+
+	function init(Namespace) {
         function removeSetBrackets(string) {
-            for(var i = 0; i < string.length; i += 1) {
-                if(string[i - 1] !== '\\' && (string[i] === '[' || string[i] === ']')) {
+            for (var i = 0; i < string.length; i++) {
+                if (string[i - 1] !== '\\' && (string[i] === '[' || string[i] === ']')) {
                     string = string.substring(0, i) + string.substring(i + 1);
                 }
             }
@@ -21,8 +22,8 @@
          * @constructor
          *
          * @param {String} name - type name.
-         * @param {String} source -string source of regular expression.
-         * @param {String} flags -regExp flags (g,i etc.).
+         * @param {String} source - string source of regular expression.
+         * @param {String} flags - regExp flags (g,i etc.).
          */
         function RegularType(name, source, flags) {
             this.name = name;
@@ -40,9 +41,10 @@
              * @return {RegExp} RegExp.
              */
             _getRegExp: function() {
-                if(!this.regExp || (this.regExp.source !== this.source) || (this.regExp.flags !== this.flags) ) {
+                if ( !this.regExp || (this.regExp.source !== this.source) || (this.regExp.flags !== this.flags) ) {
                     this.regExp = new RegExp(this.source, this.flags);
                 }
+
                 return this.regExp;
             },
             /**
@@ -53,20 +55,23 @@
              * @param {String} options.separator - string element what separate two regular sources.
              * @param {String} options.nameSeparator - string element what separate two names of regular types.
              * @param {String} options.compositionName - Name of result composition.
-             *      If not specified name generate automatically based on Regular Type names and name separator parameter.
+             *                                           If not specified name generate automatically based on Regular Type names and name separator parameter.
              *
              * @return {Object} Combined regular types.
              */
             _combine: function(options) {
                 var regExpObject = options.regExpObject;
-                if(regExpObject instanceof RegularType === false) {
+
+                if (regExpObject instanceof RegularType === false) {
                     throw new Error(regExpObject.name + ' should be instance of RegularType constructor.');
                 }
+
                 var separator = options.separator || '';
                 var nameSeparator = options.nameSeparator || '&';
                 var source = this.source + separator + regExpObject.source;
                 var name = options.compositionName || (this.name + options.nameSeparator + regExpObject.name);
                 var combainRegType = new RegularType(name, source).init(this.string);
+
                 combainRegType = combainRegType.addFlags(regExpObject.flags + this.flags);
 
                 return combainRegType;
@@ -81,7 +86,9 @@
              */
             _replaceWithAnotherSource: function(subStr, source) {
                 var clone = this._updateSource(source).replace(subStr);
+
                 clone.source = this.source;
+
                 return clone;
             },
             /**
@@ -93,7 +100,9 @@
              */
             _updateSource: function(source) {
                 var clone = this.clone();
+
                 clone.source = source;
+
                 return clone;
             },
             /**
@@ -105,7 +114,9 @@
              */
             init: function(string) {
                  var clone = this.clone();
+
                  clone.string = string;
+
                  return clone;
             },
             /**
@@ -115,6 +126,7 @@
              */
             clone: function() {
                 var clone = Object.create(RegularType.prototype);
+
                 return Object.assign(clone, this) ;
             },
             /**
@@ -140,6 +152,7 @@
              */
             setLastIndex: function(index) {
                 var regExp = this._getRegExp();
+
                 regExp.lastIndex = index;
             },
             /**
@@ -151,11 +164,13 @@
             addFlags: function(flags) {
                 var clone = this.clone(),
                     flagsArr = flags.split('');
+                
                 flagsArr.forEach(function(flag) {
-                    if( clone.flags.indexOf(flag) === -1 ) {
+                    if ( clone.flags.indexOf(flag) === -1 ) {
                         clone.flags += flag;
                     }
                 }, this);
+
                 return clone;
             },
             /**
@@ -182,6 +197,7 @@
              */
             set: function() {
                 var source = removeSetBrackets(this.source);
+
                 return this._updateSource('[' + source + ']');
             },
             /**
@@ -270,6 +286,7 @@
              */
             split: function(string) {
                 string = string || this.string;
+
                 return string.split( this._getRegExp() );
             },
             /**
@@ -279,6 +296,7 @@
              */
             match: function(string) {
                 string = string || this.string;
+
                 return string.match( this._getRegExp() );
             },
             /**
@@ -289,6 +307,7 @@
              */
             search: function(string) {
                 string = string || this.string;
+
                 return string.search( this._getRegExp() );
             },
             /**
@@ -306,12 +325,14 @@
              * @return {Array}
              */
             replace: function(string, subStr) {
-                if(subStr !== undefined) {
+                if (subStr !== undefined) {
                     return string.replace( this._getRegExp(), subStr );
                 } else {
                     var clone = this.clone();
+
                     subStr = string;
                     clone.string = clone.string.replace( this._getRegExp(), subStr );
+
                     return clone;
                 }
             },
@@ -324,6 +345,7 @@
              */
             replaceLeftWrapped: function(wrapSymbol, subStr) {
                 wrapSymbol = wrapSymbol || this._wrapSymbol;
+
                 return this._replaceWithAnotherSource(subStr, wrapSymbol + this.source);
             },
             /**
@@ -335,6 +357,7 @@
              */
             replaceRightWrapped: function(wrapSymbol, subStr) {
                 wrapSymbol = wrapSymbol || this._wrapSymbol;
+
                 return this._replaceWithAnotherSource(subStr, this.source + wrapSymbol);
             },
             /**
@@ -345,7 +368,8 @@
              */
             wrapInclude: function(wrapSymbol) {
                 wrapSymbol = wrapSymbol || this._wrapSymbol;
-                return this.group().replace(wrapSymbol+"$1"+wrapSymbol);
+
+                return this.group().replace(wrapSymbol + "$1" + wrapSymbol);
             },
             /**
              * Add provided regular type to current.
@@ -389,10 +413,13 @@
              */
             compositionGraph: function(listOfRegExpObjects, compositionName) {
                 var compositionObj = (this instanceof RegularType) ? this : undefined;
+
                 listOfRegExpObjects.forEach(function(element) {
                     compositionObj = (compositionObj) ? compositionObj.composition(element) : element;
                 }, this);
+
                 compositionObj.name = compositionName || compositionObj.name;
+
                 return compositionObj;
             },
             /**
@@ -403,6 +430,7 @@
              */
             store: function(name) {
                 RegularsManager.addRegularType(name || this.name, this.source, this.flags);
+
                 return this;
             }
         };
@@ -419,7 +447,9 @@
                  */
                 addRegularType: function(name, source, flags) {
                     var type = new RegularType(name, source, flags);
+
                     this[name] = type;
+
                     return type;
                 },
                 wrap: function(source) {
@@ -428,13 +458,18 @@
             },
             RegularsSources = Namespace.RegularsSources;
 
-        for(var k in RegularsSources){
+        for (var k in RegularsSources){
             RegularsManager.addRegularType(k, RegularsSources[k]);
         }
 
         Namespace.RegularsManager = RegularsManager;
     }
-    if(typeof window === 'undefined') {module.exports = init;}
-	if(typeof WEBSPELLCHECKER !== 'undefined') {init(WEBSPELLCHECKER);}
 
+    if (typeof window === 'undefined') {
+        module.exports = init;
+    }
+
+    if (typeof WEBSPELLCHECKER !== 'undefined') {
+        init(WEBSPELLCHECKER);
+    }
 })();

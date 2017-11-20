@@ -2,7 +2,7 @@
 /**
  * @fileoverview Static Module. OptionsManager
  */
-(function(){
+(function() {
 	function init( Namespace ) {
         var TypeChecker = Namespace.Utils.TypeChecker,
             ArrayUtils = Namespace.Utils.ArrayUtils, validators,
@@ -32,15 +32,16 @@
             this.count = 0;
             this.reports = [];
             this.addError = function(error) {
-                if(error.critical && this.critical === false) {
+                if (error.critical && this.critical === false) {
                     this.critical = true;
                 }
+
                 this.reports.push(error);
                 this.count += 1;
             };
         }
 
-        function OptionsObject( createOptionValue ) {
+        function OptionsObject(createOptionValue) {
             this._createOptionValue = createOptionValue;
             this._validatedFields = [];
         }
@@ -49,9 +50,11 @@
             constructor: OptionsObject,
             addOption: function(option) {
                 var name = option.name;
-                if( !this._validatedFields.includes(name) ) {
+
+                if ( !this._validatedFields.includes(name) ) {
                     this[name] = this._createOptionValue(option);
-                    if(typeof this[name] !== 'undefined') {
+
+                    if (typeof this[name] !== 'undefined') {
                         this._validatedFields.push(name);
                     }
                 }
@@ -65,11 +68,12 @@
         OptionsTemplate.prototype = {
             constructor: OptionsTemplate,
             setDefaults: function(defaults) {
-                for(var k in defaults) {
+                for (var k in defaults) {
                     this[k].defaultValue = defaults[k];
                 }
             }
         };
+
         /**
          * @exports WEBSPELLCHECKER.OptionsManager
          */
@@ -97,18 +101,19 @@
                     return value === 'http' || value === 'https';
                 },
                 url_host:function(value) {
-                    return TypeChecker.notEmptyString(value);// && Regular test ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789-._~:/?#[]@!$&'()*+,;=
+                    return TypeChecker.notEmptyString(value); // && Regular test ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789-._~:/?#[]@!$&'()*+,;=
                 },
                 url_port: function(value) {
-                    if( TypeChecker.isNumber(value) ) {
+                    if ( TypeChecker.isNumber(value) ) {
                         return TypeChecker.isInteger(value);
-                    } else if(TypeChecker.isString) {
+                    } else if (TypeChecker.isString) {
                         return TypeChecker.isInteger( parseFloat(value) );
                     }
+
                     return false;
                 },
                 url_path: function(value) {
-                    return TypeChecker.notEmptyString(value);// && Regular test ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789-._~:/?#[]@!$&'()*+,;=
+                    return TypeChecker.notEmptyString(value); // && Regular test ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789-._~:/?#[]@!$&'()*+,;=
                 }
             },
             /**
@@ -124,7 +129,7 @@
              * @returns {*} - Option value.
              * @private
              */
-            createOptionValue: function ( optionData ) {
+            createOptionValue: function (optionData) {
                 var optionValue = optionData.value,
                     optionTemplate = optionData.template,
                     errorReport = {},
@@ -133,10 +138,15 @@
                     validated,
                     defaultValue = optionTemplate.defaultValue;
 
-                if(optionValue === undefined && !optionTemplate.required) return defaultValue;
+                if (optionValue === undefined && !optionTemplate.required) {
+                    return defaultValue;
+                }
+
                 validated = optionTemplate.type.validate(optionValue);
 
-                if(validated) return optionValue;
+                if (validated) {
+                    return optionValue;
+                }
 
                 errorReport.critical = optionTemplate.required || false;
                 errorReport.optionName = optionName;
@@ -162,26 +172,32 @@
                     errorsObject = new ErrorsObject();
 
                 clientOptions = clientOptions || {};
-                if(clientOptions instanceof OptionsObject === true) {
+
+                if (clientOptions instanceof OptionsObject === true) {
                     options = clientOptions;
                 } else {
                     options = new OptionsObject( this.createOptionValue.bind(this) );
                 }
 
-                if( TypeChecker.isString(template) ) {
+                if ( TypeChecker.isString(template) ) {
                     optionsTemplate = this.importOptionsTemplate(template);
-                } else if( TypeChecker.isObject(template) ) {
-                    if( template instanceof OptionsTemplate === true) {
+                } else if ( TypeChecker.isObject(template) ) {
+                    if (template instanceof OptionsTemplate === true) {
                         optionsTemplate = template;
                     } else {
                         optionsTemplate = new OptionsTemplate(template);
                     }
                 }
+
                 for(var k in optionsTemplate) {
-                    if( optionsTemplate.hasOwnProperty(k) === false ) continue;
-                    if(optionsTemplate[k].type instanceof OptionType === false) {
+                    if ( optionsTemplate.hasOwnProperty(k) === false ) {
+                        continue;
+                    }
+
+                    if (optionsTemplate[k].type instanceof OptionType === false) {
                         throw new Error(k + ' template "type" parameter should be instance of OptionsManager.OptionType constructor.');
                     }
+
                     options.addOption({
                         name: k,
                         value: clientOptions[k],
@@ -192,7 +208,8 @@
                     });
 
                 }
-                if(errorHandler && errorsObject.count > 0) {
+
+                if (errorHandler && errorsObject.count > 0) {
                     errorHandler(errorsObject);
                 }
 
@@ -208,20 +225,25 @@
              * @private
              */
             extendOptionTypes: function(type) {
-                if( !type.name || !TypeChecker.isFunction(type.validate) ) return false;
-                if(!this.optionTypes[type.name]) {
+                if ( !type.name || !TypeChecker.isFunction(type.validate) ) {
+                    return false;
+                }
+
+                if (!this.optionTypes[type.name]) {
                     this.optionTypes[type.name] = new OptionType(type.name, type.validate);
                 }
             },
             exportOptionsTemplate: function(templateName, optionsTemplate) {
-                if(optionsTemplate instanceof OptionsTemplate === false) {
+                if (optionsTemplate instanceof OptionsTemplate === false) {
                     optionsTemplate = new OptionsTemplate(optionsTemplate);
                 }
+
                 this.optionsTemplate[templateName] = optionsTemplate;
             },
             importOptionsTemplate: function(templateName) {
                 var res = this.optionsTemplate[templateName];
-                if(res instanceof OptionsTemplate === false) {
+
+                if (res instanceof OptionsTemplate === false) {
                     throw new Error('Templates name: ' + templateName + ' is not undefined.');
                 }
 
@@ -229,6 +251,7 @@
             },
             mergeOptionsTemplates: function() {
                 var result = {};
+
                 Array.prototype.forEach.call(arguments, function(el) {
                     if( TypeChecker.isObject(el) ) {
                         Object.assign(result, el);
@@ -241,12 +264,19 @@
 
         validators = OptionsManager.optionsValidators;
         OptionsManager.optionTypes = {};
-        for(var type in validators) {
+
+        for (var type in validators) {
             OptionsManager.optionTypes[type] = new OptionType(type, validators[type]);
         }
 
         Namespace.OptionsManager = OptionsManager;
     }
-    if(typeof window === 'undefined') {module.exports = init;}
-	if(typeof WEBSPELLCHECKER !== 'undefined') {init(WEBSPELLCHECKER);}
+
+    if (typeof window === 'undefined') {
+        module.exports = init;
+    }
+
+    if (typeof WEBSPELLCHECKER !== 'undefined') {
+        init(WEBSPELLCHECKER);
+    }
 })();
