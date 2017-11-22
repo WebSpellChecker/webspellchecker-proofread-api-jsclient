@@ -41,8 +41,7 @@
             };
         }
 
-        function OptionsObject(createOptionValue) {
-            this._createOptionValue = createOptionValue;
+        function OptionsObject() {
             this._validatedFields = [];
         }
 
@@ -58,7 +57,47 @@
                         this._validatedFields.push(name);
                     }
                 }
-            }
+            },
+            /**
+             * Method return option value based on option parameters.
+             * @memberof WEBSPELLCHECKER.OptionsManager#
+             *
+             * @param {Object} optionData - Object with option parameters.
+             * @param {String} optionData.name - Option name.
+             * @param {*} optionData.value - Option user value.
+             * @param {Object} optionData.template - Object with object info.
+             * @param {Function} optionData.errorHandler - Problem Handler. Receive object with error info.
+             *
+             * @returns {*} - Option value.
+             * @private
+             */
+            _createOptionValue: function (optionData) {
+                var optionValue = optionData.value,
+                    optionTemplate = optionData.template,
+                    errorReport = {},
+                    optionName = optionData.name,
+                    optionErrorHandler = optionData.errorHandler,
+                    validated,
+                    defaultValue = optionTemplate.defaultValue;
+
+                if (optionValue === undefined && !optionTemplate.required) {
+                    return defaultValue;
+                }
+
+                validated = optionTemplate.type.validate(optionValue);
+
+                if (validated) {
+                    return optionValue;
+                }
+
+                errorReport.critical = optionTemplate.required || false;
+                errorReport.optionName = optionName;
+                errorReport.message = 'Parameter ' + optionName + ' should have a type - ' + optionTemplate.type.name + '.';
+
+                optionErrorHandler(errorReport);
+
+                return defaultValue;
+            },
         };
 
         function OptionsTemplate(template) {
@@ -117,46 +156,6 @@
                 }
             },
             /**
-             * Method return option value based on option parameters.
-             * @memberof WEBSPELLCHECKER.OptionsManager#
-             *
-             * @param {Object} optionData - Object with option parameters.
-             * @param {String} optionData.name - Option name.
-             * @param {*} optionData.value - Option user value.
-             * @param {Object} optionData.template - Object with object info.
-             * @param {Function} optionData.errorHandler - Problem Handler. Receive object with error info.
-             *
-             * @returns {*} - Option value.
-             * @private
-             */
-            createOptionValue: function (optionData) {
-                var optionValue = optionData.value,
-                    optionTemplate = optionData.template,
-                    errorReport = {},
-                    optionName = optionData.name,
-                    optionErrorHandler = optionData.errorHandler,
-                    validated,
-                    defaultValue = optionTemplate.defaultValue;
-
-                if (optionValue === undefined && !optionTemplate.required) {
-                    return defaultValue;
-                }
-
-                validated = optionTemplate.type.validate(optionValue);
-
-                if (validated) {
-                    return optionValue;
-                }
-
-                errorReport.critical = optionTemplate.required || false;
-                errorReport.optionName = optionName;
-                errorReport.message = 'Parameter ' + optionName + ' should have a type - ' + optionTemplate.type.name + '.';
-
-                optionErrorHandler(errorReport);
-
-                return defaultValue;
-            },
-            /**
              * Method what porocces client options.
              * @memberof WEBSPELLCHECKER.OptionsManager#
              *
@@ -167,7 +166,7 @@
              * @returns {Object} - processed options.
              * @private
              */
-            createOptions: function(clientOptions, template, errorHandler) {
+            createOptions: function(clientOptions, template, errorsHandler) {
                 var option, valid, options, optionsTemplate,
                     errorsObject = new ErrorsObject();
 
@@ -176,7 +175,7 @@
                 if (clientOptions instanceof OptionsObject === true) {
                     options = clientOptions;
                 } else {
-                    options = new OptionsObject( this.createOptionValue.bind(this) );
+                    options = new OptionsObject();
                 }
 
                 if ( TypeChecker.isString(template) ) {
@@ -189,7 +188,7 @@
                     }
                 }
 
-                for(var k in optionsTemplate) {
+                for (var k in optionsTemplate) {
                     if ( optionsTemplate.hasOwnProperty(k) === false ) {
                         continue;
                     }
@@ -209,8 +208,8 @@
 
                 }
 
-                if (errorHandler && errorsObject.count > 0) {
-                    errorHandler(errorsObject);
+                if (errorsHandler && errorsObject.count > 0) {
+                    errorsHandler(errorsObject);
                 }
 
                 return options;
@@ -244,10 +243,10 @@
                 var res = this.optionsTemplate[templateName];
 
                 if (res instanceof OptionsTemplate === false) {
-                    throw new Error('Templates name: ' + templateName + ' is not undefined.');
+                    throw new Error('Templates name: ' + templateName + ' is not defined.');
                 }
 
-                return new OptionsTemplate(res);
+                return res;
             },
             mergeOptionsTemplates: function() {
                 var result = {};
