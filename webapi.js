@@ -18,19 +18,19 @@
                 defaultValue: 'en_US'
             },
             serviceProtocol: {
-                type: optionTypes.url_protocol,
+                type: optionTypes.urlProtocol,
                 defaultValue: 'http'
             },
             serviceHost: {
-                type: optionTypes.url_host,
+                type: optionTypes.urlHost,
                 defaultValue: 'svc.webspellchecker.net'
             },
             servicePort: {
-                type: optionTypes.url_port,
+                type: optionTypes.urlPort,
                 defaultValue: 80
             },
             servicePath: {
-                type: optionTypes.url_path,
+                type: optionTypes.urlPath,
                 defaultValue: 'spellcheck31/script/ssrv.cgi'
             },
             customerId: {
@@ -135,6 +135,9 @@
                 );
             },
             _makeUdAction: function(actionName, parametrs) {
+                if (typeof parametrs.name === 'undefined') {
+                    parametrs.name = this.getOption('userDictionaryName');
+                }
                 var requestParametrs = {
                         command: this._commands.userDictionary,
                         UDAction: this._udActions[actionName],

@@ -136,13 +136,13 @@
                 number: TypeChecker.isNumber,
                 object: TypeChecker.isObject,
                 string: TypeChecker.isString,
-                url_protocol: function(value) {
+                urlProtocol: function(value) {
                     return value === 'http' || value === 'https';
                 },
-                url_host:function(value) {
+                urlHost:function(value) {
                     return TypeChecker.notEmptyString(value); // && Regular test ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789-._~:/?#[]@!$&'()*+,;=
                 },
-                url_port: function(value) {
+                urlPort: function(value) {
                     if ( TypeChecker.isNumber(value) ) {
                         return TypeChecker.isInteger(value);
                     } else if (TypeChecker.isString) {
@@ -151,8 +151,12 @@
 
                     return false;
                 },
-                url_path: function(value) {
+                urlPath: function(value) {
                     return TypeChecker.notEmptyString(value); // && Regular test ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789-._~:/?#[]@!$&'()*+,;=
+                },
+                // Type when we always want use default value
+                defaultValue: function() {
+                    return false;
                 }
             },
             /**
@@ -205,7 +209,6 @@
                             errorsObject.addError(error);
                         }
                     });
-
                 }
 
                 if (errorsHandler && errorsObject.count > 0) {
@@ -224,6 +227,10 @@
              * @private
              */
             extendOptionTypes: function(type) {
+                if ( TypeChecker.isArray(type) ) {
+                    type.forEach(OptionsManager.extendOptionTypes.bind(this));
+                }
+
                 if ( !type.name || !TypeChecker.isFunction(type.validate) ) {
                     return false;
                 }
@@ -253,7 +260,15 @@
 
                 Array.prototype.forEach.call(arguments, function(el) {
                     if( TypeChecker.isObject(el) ) {
-                        Object.assign(result, el);
+                        for (var k in el) {
+                            if ( el.hasOwnProperty(k) === false ) {
+                                continue;
+                            }
+                            if ( result[k] ) {
+                                throw new Error('Template for ' + k + ' defined twice.');
+                            }
+                            result[k] = el[k];
+                        }
                     }
                 });
 
