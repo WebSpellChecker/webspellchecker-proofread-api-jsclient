@@ -91,8 +91,8 @@
              * @private
              */
             removeSpecialCharacters: function(text) {
-                return RegularsManager.specialCharacters.
-                    init(text).g().replace('').getString();
+                return RegularsManager.specialCharacters
+                    .set().g().replace(text, '');
             },
             /**
              * Method what collect offsets in text for current word.
