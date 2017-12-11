@@ -9,6 +9,7 @@
         var RegularsSources = {
             space: "[\\s\\xA0]",
             commonSpace: " ",
+            quotes: "'\"",
             nonWhiteSpaceChar: "\\S",
             dot: '\\.',
             anyChar: '.',
