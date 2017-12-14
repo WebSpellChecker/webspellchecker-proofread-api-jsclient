@@ -151,13 +151,19 @@
 				if (isMocked) {
 
 					for (var i = 0; i < mockParams.length; i++) {
-						if (mockParams[i].success) {
-							params.onSuccess(mockParams[i].success);
-						}
+						(function(i) {
+							if (mockParams[i].success) {
+								setTimeout(function() {
+									params.onSuccess(mockParams[i].success);
+								}, 0);
+							}
 
-						if (mockParams[i].error) {
-							params.onError(mockParams[i].error);
-						}
+							if (mockParams[i].error) {
+								setTimeout(function() {
+									params.onError(mockParams[i].error);
+								}, 0);
+							}
+						})(i);
 					}
 
 					// TODO: create Object for GET method and refactor current method

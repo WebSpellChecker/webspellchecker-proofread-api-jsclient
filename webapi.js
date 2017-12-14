@@ -613,7 +613,7 @@
              * @param {UserDictionaryCallback} parametrs.success - Handler successful response from the server.
              * @param {RequestCallback} parametrs.error - Handler unsuccessful response from the server.
              */
-            delete: function(parameters) {
+            'delete': function(parameters) {
                 var success = parameters.success,
                     self = this;
 
