@@ -214,6 +214,7 @@
 				};
 
 				ajax.request.onerror = function() {
+					console.warn('The WebSpellChecker Service is currently unavailable.');
 					ajax.error = true;
 					ajax.params.onError && ajax.params.onError({});
 				};
