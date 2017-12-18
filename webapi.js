@@ -529,7 +529,39 @@
              */
             deleteWordFromUserDictionary: function(parametrs) {
                 return this._udMethodWrapper('deleteWord', parametrs);
-            }
+            },
+            /**
+             * getDictionariesModifyTime API method.
+             * @public
+             * @memberof WebApiInstance#
+             *
+             * @param {Object} parametrs
+             * @param {String} parametrs.userDictionary - User dictionary name.
+             * @param {String} parametrs.customDictionary - Custom dictionary name.
+             * @param {GetDictionariesModifyTime} parametrs.success - Handler successful response from the server.
+             * @param {RequestCallback} parametrs.error - Handler unsuccessful response from the server.
+             * @returns {Object} - Transport object.
+             * @example
+             * wscWebApiInstance.getDictionariesModifyTime({
+             *      userDictionary: 'udName',
+             *      customDictionary: '1',
+             *      success: function(data) {
+             *          console.log(data); // {"customDicts":{},"userDicts":{"udName": 1513613189}}
+             *      },
+             *      error: function(error) {
+             *          console.log(error);
+             *      }
+             * })
+             */
+            getDictionariesModifyTime: function(parametrs) {
+                return this._request({
+                        command: this._commands.getDictionariesModifyTime,
+                        UDName: parametrs.userDictionary,
+                        customDictionary: parametrs.customDictionary
+                    },
+                    parametrs
+                );
+            },
         };
 
         /**

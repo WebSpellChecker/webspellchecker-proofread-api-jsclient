@@ -32,7 +32,8 @@
                 grammarCheck: 'grammar_check',
                 userDictionary: 'user_dictionary',
                 getLangList: 'get_lang_list',
-                getInfo: 'get_info'
+                getInfo: 'get_info',
+                getDictionariesModifyTime: 'get_dicts_modify_time'
             },
             _UDActionsMap = {
                 create: 'create',
