@@ -127,27 +127,27 @@
              *
              * @returns {Object} - Transport object.
              */
-            _request: function(data, parametrs) {
+            _request: function(data, parameters) {
                 return this._getService('Connection').request(
                     data,
-                    parametrs.success || function() {},
-                    parametrs.error || function() {}
+                    parameters.success || function() {},
+                    parameters.error || function() {}
                 );
             },
-            _makeUdAction: function(actionName, parametrs) {
-                if (typeof parametrs.name === 'undefined') {
-                    parametrs.name = this.getOption('userDictionaryName');
+            _makeUdAction: function(actionName, parameters) {
+                if (typeof parameters.name === 'undefined') {
+                    parameters.name = this.getOption('userDictionaryName');
                 }
-                var requestParametrs = {
+                var requestparameters = {
                         command: this._commands.userDictionary,
                         UDAction: this._udActions[actionName],
-                        UDName: parametrs.name,
-                        newUDName: parametrs.newName,
-                        wordList: parametrs.wordList,
-                        UDWord: parametrs.word
+                        UDName: parameters.name,
+                        newUDName: parameters.newName,
+                        wordList: parameters.wordList,
+                        UDWord: parameters.word
                     };
 
-                return this._request(requestParametrs, parametrs);
+                return this._request(requestparameters, parameters);
             },
             _udMethodWrapper: function(actionName, parameters) {
                 var self = this,
@@ -197,12 +197,12 @@
              * @public
              * @memberof WebApiInstance#
              *
-             * @param {Object} parametrs
-             * @param {getInfoCallback} parametrs.success - Handler successful response from the server.
-             * @param {RequestCallback} parametrs.error - Handler unsuccessful response from the server.
+             * @param {Object} parameters
+             * @param {getInfoCallback} parameters.success - Handler successful response from the server.
+             * @param {RequestCallback} parameters.error - Handler unsuccessful response from the server.
              * @returns {Object} - Transport object.
              * @example
-             * wscWebApiInstance.getLangList({
+             * wscWebApiInstance.getInfo({
              *      success: function(data) {
              *          console.log(data); // {"langList":{"ltr":{"en_US" : "American English","en_GB" : "British English","fr_FR" : "French","de_DE" : "German","it_IT" : "Italian","es_ES" : "Spanish"},"rtl":{}},"verLang":9}
              *      },
@@ -211,11 +211,11 @@
              *      }
              * })
              */
-            getInfo: function(parametrs) {
+            getInfo: function(parameters) {
                 return this._request({
                         command: this._commands.getInfo
                     },
-                    parametrs
+                    parameters
                 );
             },
             /**
@@ -233,9 +233,9 @@
              * @public
              * @memberof WebApiInstance#
              *
-             * @param {Object} parametrs
-             * @param {GetLangListCallback} parametrs.success - Handler successful response from the server.
-             * @param {RequestCallback} parametrs.error - Handler unsuccessful response from the server.
+             * @param {Object} parameters
+             * @param {GetLangListCallback} parameters.success - Handler successful response from the server.
+             * @param {RequestCallback} parameters.error - Handler unsuccessful response from the server.
              * @returns {Object} - Transport object.
              * @example
              * wscWebApiInstance.getLangList({
@@ -247,11 +247,11 @@
              *      }
              * })
              */
-            getLangList: function(parametrs) {
+            getLangList: function(parameters) {
                 return this._request({
                         command: this._commands.getLangList
                     },
-                    parametrs
+                    parameters
                 );
             },
             /**
@@ -269,11 +269,11 @@
              * @public
              * @memberof WebApiInstance#
              *
-             * @param {Object} parametrs
-             * @param {String} parametrs.text - Text to check spelling.
-             * @param {String} parametrs.lang - Spellcheck language. If not provided then take from constructor.
-             * @param {SpellCheckCallback} parametrs.success - Handler successful response from the server.
-             * @param {RequestCallback} parametrs.error - Handler unsuccessful response from the server.
+             * @param {Object} parameters
+             * @param {String} parameters.text - Text to check spelling.
+             * @param {String} parameters.lang - Spellcheck language. If not provided then take from constructor.
+             * @param {SpellCheckCallback} parameters.success - Handler successful response from the server.
+             * @param {RequestCallback} parameters.error - Handler unsuccessful response from the server.
              * @returns {Object} - Transport object.
              * @example
              * wscWebApiInstance.spellCheck({
@@ -286,9 +286,9 @@
              *      }
              * });
              */
-            spellCheck: function(parametrs) {
-                var _parametrs = Object.assign({}, parametrs),
-                    words = this._getService('TextProcessor').getWordsFromString( _parametrs.text ),
+            spellCheck: function(parameters) {
+                var _parameters = Object.assign({}, parameters),
+                    words = this._getService('TextProcessor').getWordsFromString( _parameters.text ),
                     text = words.wordsCollection.join(',');
 
                 function addOffsetsToMisspelled(data, offsets) {
@@ -313,20 +313,20 @@
                     }, []);
                 }
 
-                _parametrs.success = function(data) {
+                _parameters.success = function(data) {
                     var misspelledsWithOffsets = addOffsetsToMisspelled(data, words.wordsOffsets);
 
-                    parametrs.success(misspelledsWithOffsets);
+                    parameters.success(misspelledsWithOffsets);
                 };
 
                 return this._request({
                         command: this._commands.spellCheck,
-                        language:  _parametrs.lang || this.getOption('lang'),
+                        language:  _parameters.lang || this.getOption('lang'),
                         customDictionary: this.getOption('customDictionaryIds'),
                         userDictionary: this.getOption('userDictionaryName'),
                         text: text
                     },
-                    _parametrs
+                    _parameters
                 );
             },
             /**
@@ -345,11 +345,11 @@
              * @public
              * @memberof WebApiInstance#
              *
-             * @param {Object} parametrs
-             * @param {String} parametrs.text - Text to grammar checking.
-             * @param {String} parametrs.lang - Grammarcheck language. If not provided then take from constructor.
-             * @param {GrammarCheckCallback} parametrs.success - Handler successful response from the server.
-             * @param {RequestCallback} parametrs.error - Handler unsuccessful response from the server.
+             * @param {Object} parameters
+             * @param {String} parameters.text - Text to grammar checking.
+             * @param {String} parameters.lang - Grammarcheck language. If not provided then take from constructor.
+             * @param {GrammarCheckCallback} parameters.success - Handler successful response from the server.
+             * @param {RequestCallback} parameters.error - Handler unsuccessful response from the server.
              * @returns {Object} - Transport object.
              * @example
              * wscWebApiInstance.grammarCheck({
@@ -362,14 +362,14 @@
              *      }
              * });
              */
-            grammarCheck: function(parametrs) {
+            grammarCheck: function(parameters) {
                 return this._request({
                         command: this._commands.grammarCheck,
-                        language: parametrs.lang || this.getOption('lang'),
-                        sentences: parametrs.sentences,
-                        text: parametrs.text
+                        language: parameters.lang || this.getOption('lang'),
+                        sentences: parameters.sentences,
+                        text: parameters.text
                     },
-                    parametrs
+                    parameters
                 );
             },
             /**
@@ -384,10 +384,10 @@
              * @public
              * @memberof WebApiInstance#
              *
-             * @param {Object} parametrs
-             * @param {String} parametrs.name - User dictionary name.
-             * @param {UserDictionaryCallback} parametrs.success - Handler successful response from the server.
-             * @param {RequestCallback} parametrs.error - Handler unsuccessful response from the server.
+             * @param {Object} parameters
+             * @param {String} parameters.name - User dictionary name.
+             * @param {UserDictionaryCallback} parameters.success - Handler successful response from the server.
+             * @param {RequestCallback} parameters.error - Handler unsuccessful response from the server.
              * @returns {Object} - Transport object.
              * @example
              * wscWebApiInstance.getUserDictionary({
@@ -400,20 +400,20 @@
              *      }
              * });
              */
-            getUserDictionary: function(parametrs) {
-                return this._udMethodWrapper('getDict', parametrs);
+            getUserDictionary: function(parameters) {
+                return this._udMethodWrapper('getDict', parameters);
             },
             /**
              * createUserDictionary API method.
              * @public
              * @memberof WebApiInstance#
              *
-             * @param {Object} parametrs
-             * @param {String} parametrs.name - User dictionary name.
-             * @param {String} parametrs.wordList - Word list.
+             * @param {Object} parameters
+             * @param {String} parameters.name - User dictionary name.
+             * @param {String} parameters.wordList - Word list.
              *
-             * @param {UserDictionaryCallback} parametrs.success - Handler successful response from the server.
-             * @param {RequestCallback} parametrs.error - Handler unsuccessful response from the server.
+             * @param {UserDictionaryCallback} parameters.success - Handler successful response from the server.
+             * @param {RequestCallback} parameters.error - Handler unsuccessful response from the server.
              * @returns {Object} - Transport object.
              * @example
              * wscWebApiInstance.createUserDictionary({
@@ -426,18 +426,18 @@
              *      }
              * });
              */
-            createUserDictionary: function(parametrs) {
-                return this._udMethodWrapper('create', parametrs);
+            createUserDictionary: function(parameters) {
+                return this._udMethodWrapper('create', parameters);
             },
             /**
              * deleteUserDictionary API method.
              * @public
              * @memberof WebApiInstance#
              *
-             * @param {Object} parametrs
-             * @param {String} parametrs.name - User dictionary name.
-             * @param {UserDictionaryCallback} parametrs.success - Handler successful response from the server.
-             * @param {RequestCallback} parametrs.error - Handler unsuccessful response from the server.
+             * @param {Object} parameters
+             * @param {String} parameters.name - User dictionary name.
+             * @param {UserDictionaryCallback} parameters.success - Handler successful response from the server.
+             * @param {RequestCallback} parameters.error - Handler unsuccessful response from the server.
              * @returns {Object} - Transport object.
              * @example
              * wscWebApiInstance.deleteUserDictionary({
@@ -450,19 +450,19 @@
              *      }
              * });
              */
-            deleteUserDictionary: function(parametrs) {
-                return this._udMethodWrapper('delete', parametrs);
+            deleteUserDictionary: function(parameters) {
+                return this._udMethodWrapper('delete', parameters);
             },
             /**
              * renameUserDictionary API method.
              * @public
              * @memberof WebApiInstance#
              *
-             * @param {Object} parametrs
-             * @param {String} parametrs.name - User dictionary name.
-             * @param {String} parametrs.newName - New user dictionary name.
-             * @param {UserDictionaryCallback} parametrs.success - Handler successful response from the server.
-             * @param {RequestCallback} parametrs.error - Handler unsuccessful response from the server.
+             * @param {Object} parameters
+             * @param {String} parameters.name - User dictionary name.
+             * @param {String} parameters.newName - New user dictionary name.
+             * @param {UserDictionaryCallback} parameters.success - Handler successful response from the server.
+             * @param {RequestCallback} parameters.error - Handler unsuccessful response from the server.
              * @returns {Object} - Transport object.
              * @example
              * wscWebApiInstance.renameUserDictionary({
@@ -475,19 +475,19 @@
              *      }
              * });
              */
-            renameUserDictionary: function(parametrs) {
-                return this._udMethodWrapper('rename' , parametrs);
+            renameUserDictionary: function(parameters) {
+                return this._udMethodWrapper('rename' , parameters);
             },
             /**
              * addWordToUserDictionary API method.
              * @public
              * @memberof WebApiInstance#
              *
-             * @param {Object} parametrs
-             * @param {String} parametrs.name - User dictionary name.
-             * @param {String} parametrs.word - Word what will be added to UD.
-             * @param {UserDictionaryCallback} parametrs.success - Handler successful response from the server.
-             * @param {RequestCallback} parametrs.error - Handler unsuccessful response from the server.
+             * @param {Object} parameters
+             * @param {String} parameters.name - User dictionary name.
+             * @param {String} parameters.word - Word what will be added to UD.
+             * @param {UserDictionaryCallback} parameters.success - Handler successful response from the server.
+             * @param {RequestCallback} parameters.error - Handler unsuccessful response from the server.
              * @returns {Object} - Transport object.
              * @example
              * wscWebApiInstance.addWordToUserDictionary({
@@ -501,19 +501,19 @@
              *      }
              * });
              */
-            addWordToUserDictionary: function(parametrs) {
-                return this._udMethodWrapper('addWord', parametrs);
+            addWordToUserDictionary: function(parameters) {
+                return this._udMethodWrapper('addWord', parameters);
             },
             /**
              * deleteWordFromUserDictionary API method.
              * @public
              * @memberof WebApiInstance#
              *
-             * @param {Object} parametrs
-             * @param {String} parametrs.name - User dictionary name.
-             * @param {String} parametrs.word - Word what will be deleted from UD.
-             * @param {UserDictionaryCallback} parametrs.success - Handler successful response from the server.
-             * @param {RequestCallback} parametrs.error - Handler unsuccessful response from the server.
+             * @param {Object} parameters
+             * @param {String} parameters.name - User dictionary name.
+             * @param {String} parameters.word - Word what will be deleted from UD.
+             * @param {UserDictionaryCallback} parameters.success - Handler successful response from the server.
+             * @param {RequestCallback} parameters.error - Handler unsuccessful response from the server.
              * @returns {Object} - Transport object.
              * @example
              * wscWebApiInstance.deleteWordFromUserDictionary({
@@ -527,19 +527,19 @@
              *      }
              * });
              */
-            deleteWordFromUserDictionary: function(parametrs) {
-                return this._udMethodWrapper('deleteWord', parametrs);
+            deleteWordFromUserDictionary: function(parameters) {
+                return this._udMethodWrapper('deleteWord', parameters);
             },
             /**
              * getDictionariesModifyTime API method.
              * @public
              * @memberof WebApiInstance#
              *
-             * @param {Object} parametrs
-             * @param {String} parametrs.userDictionary - User dictionary name.
-             * @param {String} parametrs.customDictionary - Custom dictionary name.
-             * @param {GetDictionariesModifyTime} parametrs.success - Handler successful response from the server.
-             * @param {RequestCallback} parametrs.error - Handler unsuccessful response from the server.
+             * @param {Object} parameters
+             * @param {String} parameters.userDictionary - User dictionary name.
+             * @param {String} parameters.customDictionary - Custom dictionary name.
+             * @param {GetDictionariesModifyTime} parameters.success - Handler successful response from the server.
+             * @param {RequestCallback} parameters.error - Handler unsuccessful response from the server.
              * @returns {Object} - Transport object.
              * @example
              * wscWebApiInstance.getDictionariesModifyTime({
@@ -553,13 +553,13 @@
              *      }
              * })
              */
-            getDictionariesModifyTime: function(parametrs) {
+            getDictionariesModifyTime: function(parameters) {
                 return this._request({
                         command: this._commands.getDictionariesModifyTime,
-                        UDName: parametrs.userDictionary,
-                        customDictionary: parametrs.customDictionary
+                        UDName: parameters.userDictionary,
+                        customDictionary: parameters.customDictionary
                     },
-                    parametrs
+                    parameters
                 );
             },
         };
@@ -570,9 +570,9 @@
          *
          * @typedef {(Object)} UserDictionary
          * @namespace UserDictionary
-         * @property {String} parametrs.name - List of available UD actions.
-         * @property {function} parametrs.wordlist - List of words in current dictionary.
-         * @property {function} parametrs.makeUdAction - Request-maker function.
+         * @property {String} parameters.name - List of available UD actions.
+         * @property {function} parameters.wordlist - List of words in current dictionary.
+         * @property {function} parameters.makeUdAction - Request-maker function.
          */
         function UserDictionary(parameters) {
             this.name = parameters.name;
@@ -590,12 +590,12 @@
             /**
              *  Add word to current user dictionary.
              *
-             * @property {Object} parametrs
+             * @property {Object} parameters
              * @memberof UserDictionary
              *
-             * @property {String} parametrs.word - Word what will be added to UD.
-             * @property {UserDictionaryCallback} parametrs.success - Handler successful response from the server.
-             * @property {RequestCallback} parametrs.error - Handler unsuccessful response from the server.
+             * @property {String} parameters.word - Word what will be added to UD.
+             * @property {UserDictionaryCallback} parameters.success - Handler successful response from the server.
+             * @property {RequestCallback} parameters.error - Handler unsuccessful response from the server.
              */
             addWord: function(parameters) {
                 var success = parameters.success,
@@ -611,11 +611,11 @@
              *  Delete word to current user dictionary.
              *
              * @memberof UserDictionary
-             * @param {Object} parametrs
+             * @param {Object} parameters
              *
-             * @param {String} parametrs.word - Word what will be deleted from UD.
-             * @param {UserDictionaryCallback} parametrs.success - Handler successful response from the server.
-             * @param {RequestCallback} parametrs.error - Handler unsuccessful response from the server.
+             * @param {String} parameters.word - Word what will be deleted from UD.
+             * @param {UserDictionaryCallback} parameters.success - Handler successful response from the server.
+             * @param {RequestCallback} parameters.error - Handler unsuccessful response from the server.
              */
             deleteWord: function(parameters) {
                 var success = parameters.success,
@@ -640,10 +640,10 @@
              *  Delete current user dictionary.
              *
              * @memberof UserDictionary
-             * @param {Object} parametrs
+             * @param {Object} parameters
              *
-             * @param {UserDictionaryCallback} parametrs.success - Handler successful response from the server.
-             * @param {RequestCallback} parametrs.error - Handler unsuccessful response from the server.
+             * @param {UserDictionaryCallback} parameters.success - Handler successful response from the server.
+             * @param {RequestCallback} parameters.error - Handler unsuccessful response from the server.
              */
             'delete': function(parameters) {
                 var success = parameters.success,
@@ -660,11 +660,11 @@
              *  Rename current user dictionary.
              *
              * @memberof UserDictionary
-             * @param {Object} parametrs
+             * @param {Object} parameters
              *
-             * @param {String} parametrs.newName - New Ud name.
-             * @param {UserDictionaryCallback} parametrs.success - Handler successful response from the server.
-             * @param {RequestCallback} parametrs.error - Handler unsuccessful response from the server.
+             * @param {String} parameters.newName - New Ud name.
+             * @param {UserDictionaryCallback} parameters.success - Handler successful response from the server.
+             * @param {RequestCallback} parameters.error - Handler unsuccessful response from the server.
              */
             rename: function(parameters) {
                 var success = parameters.success,
