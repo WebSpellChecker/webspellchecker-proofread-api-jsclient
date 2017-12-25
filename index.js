@@ -1,4 +1,4 @@
- var source_files = require('./source_files.json'),
+var source_files = require('./source_files.json'),
     webapi_path = require('./package.json').webapi_path,
     template = require('simple-replace-template'),
     namespace = require('./namespace'),
