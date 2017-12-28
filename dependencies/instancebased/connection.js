@@ -18,6 +18,7 @@
                 newUDName: 'new_name',
                 removeUDCookie: 'remove_ud_cookie',
                 UDWord: 'word',
+                userWordlist: 'user_wordlist',
                 wordList: 'wordlist',
                 language: 'slang',
                 outType: 'out_type',

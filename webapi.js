@@ -322,11 +322,15 @@
                 return this._request({
                         command: this._commands.spellCheck,
                         language:  _parameters.lang || this.getOption('lang'),
+                        userWordlist: parameters.userWordlist,
                         customDictionary: this.getOption('customDictionaryIds'),
                         userDictionary: this.getOption('userDictionaryName'),
                         text: text
                     },
-                    _parameters
+                    {
+                        success: _parameters.success,
+                        error: _parameters.error
+                    }
                 );
             },
             /**
