@@ -106,6 +106,9 @@
 
         OptionsTemplate.prototype = {
             constructor: OptionsTemplate,
+            getDefaultValue: function(optionName) {
+                return this[optionName].defaultValue;
+            },
             setDefaults: function(defaults) {
                 for (var k in defaults) {
                     this[k].defaultValue = defaults[k];
