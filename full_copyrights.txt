@@ -1,0 +1,1 @@
+<p>&copy; 2000-<%= new Date().getFullYear() %> <a style='text-decoration: underline;' href='http://www.webspellchecker.net/' class='link-external sc-focusable sc-link-external' target='_blank'>WebSpellChecker LLC.</a> All Rights Reserved.</p>

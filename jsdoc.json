@@ -1,0 +1,18 @@
+{
+	"plugins": [
+		"plugins/markdown"
+	],
+	"templates": {
+		"cleverLinks": true,
+		"monospaceLinks": true,
+		"default": {
+			"outputSourceFiles": false,
+			"includeDate": false
+		}
+	},
+	"opts": {
+		"encoding": "utf8",
+		"recurse": true,
+		"template": "./node_modules/postman-jsdoc-theme"
+	}
+}
