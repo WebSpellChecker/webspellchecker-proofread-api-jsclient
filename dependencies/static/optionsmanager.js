@@ -45,6 +45,25 @@
             this._validatedFields = [];
         }
 
+        function deepClone(data) {
+            var res;
+            if( TypeChecker.isHash(data) ) {
+                res = {};
+                for(var k in data) {
+                    res[k] = deepClone(data[k]);
+                }
+            } else if( TypeChecker.isArray(data) ) {
+                res = data.slice(0);
+                for(var i = 0; i < res.length; i += 1) {
+                    res[i] = deepClone(res[i]);
+                }
+            } else {
+                res = data;
+            }
+
+            return res;
+        }
+
         OptionsObject.prototype = {
             constructor: OptionsObject,
             addOption: function(option) {
@@ -78,7 +97,7 @@
                     optionName = optionData.name,
                     optionErrorHandler = optionData.errorHandler,
                     validated,
-                    defaultValue = optionTemplate.defaultValue;
+                    defaultValue = deepClone(optionTemplate.defaultValue);
 
                 if (optionValue === undefined && !optionTemplate.required) {
                     return defaultValue;
