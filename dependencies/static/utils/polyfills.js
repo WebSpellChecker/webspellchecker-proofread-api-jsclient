@@ -9,10 +9,22 @@
     (function (nativeDefineProperty) {
 
         var supportsAccessors = Object.prototype.hasOwnProperty('__defineGetter__');
+        var res;
         var ERR_ACCESSORS_NOT_SUPPORTED = 'Getters & setters cannot be defined on this javascript engine';
         var ERR_VALUE_ACCESSORS = 'A property cannot both have accessors and be writable or have a value';
 
-	    Object.defineProperty = nativeDefineProperty || function defineProperty(object, property, descriptor) {
+	    Object.defineProperty = function defineProperty(object, property, descriptor) {
+
+            // Where native support exists, assume it
+            if (nativeDefineProperty) {
+                try {
+                    res = nativeDefineProperty(object, property, descriptor);
+                } catch(e) {}
+
+                if(res) {
+                    return res;
+                }
+            }
 
             if (object === null || !(object instanceof Object || typeof object === 'object')) {
                 throw new TypeError('Object.defineProperty called on non-object');
