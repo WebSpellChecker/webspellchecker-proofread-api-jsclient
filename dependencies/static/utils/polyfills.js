@@ -12,12 +12,7 @@
         var ERR_ACCESSORS_NOT_SUPPORTED = 'Getters & setters cannot be defined on this javascript engine';
         var ERR_VALUE_ACCESSORS = 'A property cannot both have accessors and be writable or have a value';
 
-	    Object.defineProperty = function defineProperty(object, property, descriptor) {
-
-            // Where native support exists, assume it
-            // if (nativeDefineProperty && (object === window || object === document || object === Element.prototype || object instanceof Element)) {
-            //     return nativeDefineProperty(object, property, descriptor);
-            // }
+	    Object.defineProperty = nativeDefineProperty || function defineProperty(object, property, descriptor) {
 
             if (object === null || !(object instanceof Object || typeof object === 'object')) {
                 throw new TypeError('Object.defineProperty called on non-object');
