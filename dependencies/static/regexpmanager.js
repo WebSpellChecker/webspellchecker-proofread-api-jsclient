@@ -41,11 +41,15 @@
              * @return {RegExp} RegExp.
              */
             _getRegExp: function() {
-                if ( !this.regExp || (this.regExp.source !== this.source) || (this.regExp.flags !== this.flags) ) {
-                    this.regExp = new RegExp(this.source, this.flags);
+                if(this.regExp) {
+                    // IE 8 hasn't field "flags"
+                    var regExpFlags = this.regExp.toString().match(/[gimuy]*$/)[0];
+                    if (this.regExp.source === this.source && regExpFlags === this.flags) {
+                        return this.regExp;
+                    }
                 }
 
-                return this.regExp;
+                return new RegExp(this.source, this.flags);
             },
             /**
              * Combine provided regularType with current.
@@ -164,7 +168,7 @@
             addFlags: function(flags) {
                 var clone = this.clone(),
                     flagsArr = flags.split('');
-                
+
                 flagsArr.forEach(function(flag) {
                     if ( clone.flags.indexOf(flag) === -1 ) {
                         clone.flags += flag;
