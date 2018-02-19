@@ -195,7 +195,7 @@
 
 					ajax.success = true;
 
-					if (responseStatus !== 200) {
+					if (responseStatus && responseStatus !== 200) {
 						ajax.params.onError && ajax.params.onError({});
 					} else {
 						try {
