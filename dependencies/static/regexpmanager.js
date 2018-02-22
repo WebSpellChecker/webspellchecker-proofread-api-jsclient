@@ -48,8 +48,7 @@
                         return this.regExp;
                     }
                 }
-
-                return new RegExp(this.source, this.flags);
+                return this.regExp = new RegExp(this.source, this.flags);
             },
             /**
              * Combine provided regularType with current.
