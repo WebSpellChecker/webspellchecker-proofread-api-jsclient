@@ -202,6 +202,8 @@
 							responseData = parse(responseData);
 						} catch (error) {
 							logger.warn("CORS response parsing error: " + error);
+							ajax.params.onError && ajax.params.onError();
+							return;
 						}
 
 						if (responseData && responseData.error) {
