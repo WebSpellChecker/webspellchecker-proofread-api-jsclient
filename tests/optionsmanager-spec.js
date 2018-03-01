@@ -36,14 +36,14 @@ describe("OptionsManager", function () {
 
     it('should set default value if clientOptions field is empty.', function() {
         var clientOptions = {
-            customerId: '1:ABC'
+            serviceId: '1:ABC'
         },
         optionsTemplate = {
             lang: {
                 type: optionTypes.string,
                 defaultValue: 'en_US'
             },
-            customerId: {
+            serviceId: {
                 type: optionTypes.string,
                 defaultValue: '1:CBA'
             }
@@ -52,16 +52,16 @@ describe("OptionsManager", function () {
 
         options = OptionsManager.createOptions(clientOptions, optionsTemplate);
 
-        expect(clientOptions.customerId).toEqual(options.customerId);
+        expect(clientOptions.serviceId).toEqual(options.serviceId);
         expect(options.lang).toEqual(optionsTemplate.lang.defaultValue);
     });
 
     it('should throw error if use wrong parameter type.', function() {
         var clientOptions = {
-            customerId: '1:ABC'
+            serviceId: '1:ABC'
         },
         optionsTemplate = {
-            customerId: {
+            serviceId: {
                 type: 'string',
                 defaultValue: '1:CBA'
             }
@@ -77,7 +77,7 @@ describe("OptionsManager", function () {
 
     it('should set default value if type of field does not match.', function() {
         var clientOptions = {
-            customerId: 123,
+            serviceId: 123,
             lang: ['en_US']
         },
         optionsTemplate = {
@@ -85,7 +85,7 @@ describe("OptionsManager", function () {
                 type: optionTypes.string,
                 defaultValue: 'en_US'
             },
-            customerId: {
+            serviceId: {
                 type: optionTypes.string,
                 defaultValue: '1:CBA'
             }
@@ -94,13 +94,13 @@ describe("OptionsManager", function () {
 
         options = OptionsManager.createOptions(clientOptions, optionsTemplate);
 
-        expect(options.customerId).toEqual(optionsTemplate.customerId.defaultValue);
+        expect(options.serviceId).toEqual(optionsTemplate.serviceId.defaultValue);
         expect(options.lang).toEqual(optionsTemplate.lang.defaultValue);
     });
 
     it('error handler should recive object with validation errors', function() {
         var clientOptions = {
-            customerId: 1442115,
+            serviceId: 1442115,
             lang: ['en_US']
         },
         optionsTemplate = {
@@ -108,7 +108,7 @@ describe("OptionsManager", function () {
                 type: optionTypes.string,
                 defaultValue: 'en_US'
             },
-            customerId: {
+            serviceId: {
                 type: optionTypes.string,
                 defaultValue: '1:CBA'
             }
@@ -116,13 +116,13 @@ describe("OptionsManager", function () {
         options = OptionsManager.createOptions(clientOptions, optionsTemplate, function(errors) {
             expect(errors.count).toEqual(2);
             expect(errors.reports[0].optionName).toEqual('lang');
-            expect(errors.reports[1].optionName).toEqual('customerId');
+            expect(errors.reports[1].optionName).toEqual('serviceId');
         });
     });
 
     it('"critical" flag should set only if does not match required field.', function() {
         var clientOptions = {
-            customerId: 1442115,
+            serviceId: 1442115,
             lang: ['en_US']
         },
         optionsTemplate = {
@@ -131,7 +131,7 @@ describe("OptionsManager", function () {
                 defaultValue: 'en_US',
                 required: true
             },
-            customerId: {
+            serviceId: {
                 type: optionTypes.string,
                 defaultValue: '1:CBA'
             }
@@ -151,27 +151,27 @@ describe("OptionsManager", function () {
     it('method "extendOptionTypes" should work correctly', function() {
         var TypeChecker = WebApi.Utils.TypeChecker;
         OptionsManager.extendOptionTypes({
-            name: 'customerId',
+            name: 'serviceId',
             validate: function(value) {
                 return TypeChecker.isString(value) && value.indexOf("1:") === 0;
             }
         });
 
         var clientOptions1 = {
-            customerId: 'ABCD',
+            serviceId: 'ABCD',
         },
         clientOptions2 = {
-            customerId: '1:ABCD',
+            serviceId: '1:ABCD',
         },
         optionsTemplate1 = {
-            customerId: {
+            serviceId: {
                 type: optionTypes.string,
                 defaultValue: '1:CBA'
             }
         },
         optionsTemplate2 = {
-            customerId: {
-                type: optionTypes.customerId,
+            serviceId: {
+                type: optionTypes.serviceId,
                 defaultValue: '1:CBA'
             }
         }, options, errors;

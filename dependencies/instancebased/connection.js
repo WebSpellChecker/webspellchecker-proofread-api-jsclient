@@ -8,7 +8,7 @@
 
         var IO = Namespace.IO,
             _parametersMap = {
-                customerId: 'customerid',
+                serviceId: 'customerid',
                 command: 'cmd',
                 communicationFormat: 'format',
                 userDictionary: 'user_dictionary',
@@ -66,7 +66,7 @@
 				path 		: appInstance.getOption('servicePath')
             });
 
-            this.defaultParameters = this.setDefaults(['customerId', 'communicationFormat'], _parametersMap);
+            this.defaultParameters = this.setDefaults(['serviceId', 'communicationFormat'], _parametersMap);
             this.defaultMetaParameters =  this.setDefaults(['appType'], _metaParametersMap);
         }
 

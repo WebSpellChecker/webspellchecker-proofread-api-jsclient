@@ -33,7 +33,7 @@
                 type: optionTypes.urlPath,
                 defaultValue: 'spellcheck31/script/ssrv.cgi'
             },
-            customerId: {
+            serviceId: {
                 type: optionTypes.string,
                 defaultValue: '1:KpkvQ2-6KNUj-L1W3u2-C9j0K1-Zv2tY1-CfDOx-WfGRg2-qXtci-YyyE34-j09H42-b0aCt3-d9a'
             },
@@ -718,7 +718,7 @@
          *
          * @param {String} [clientOptions.userDictionaryName=''] - The parameter activates a User Dictionary in SCAYT.
          *
-         * @param {String} [clientOptions.customerId='1:KpkvQ2-6KNUj-L1W3u2-C9j0K1-Zv2tY1-CfDOx-WfGRg2-qXtci-YyyE34-j09H42-b0aCt3-d9a'] - The parameter sets the customer ID for SCAYT. It used for a migration from free,
+         * @param {String} [clientOptions.serviceId='1:KpkvQ2-6KNUj-L1W3u2-C9j0K1-Zv2tY1-CfDOx-WfGRg2-qXtci-YyyE34-j09H42-b0aCt3-d9a'] - The parameter sets the customer ID for SCAYT. It used for a migration from free,
          * ad-supported version to paid, ad-free version.
          *
          * @param {String} [clientOptions.customPunctuation=''] - The parameter that receives a string with characters that will considered as separators.

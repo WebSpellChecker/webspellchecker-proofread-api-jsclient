@@ -24,7 +24,7 @@ or for browsers
 ```javascript
 var proofreadApi = new WEBSPELLCHECKER({
     lang: 'en_US',
-    customerId: '<your customer id>',
+    serviceId: '<your customer id>',
 });
 proofreadApi.spellCheck({
     text: 'mispeled text',
