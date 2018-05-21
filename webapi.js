@@ -58,7 +58,7 @@
                 defaultValue: ''
             },
             appType: {
-                type: optionTypes.object,
+                type: optionTypes.string,
                 defaultValue: 'webApi'
             }
         };
