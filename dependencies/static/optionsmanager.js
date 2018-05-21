@@ -16,9 +16,18 @@
          * @param {Function} validate - Parameter validation checker.
          * @private
          */
-        function OptionType(name, validate) {
-            this.name = name;
-            this.validate = validate;
+        function OptionType(typeData) {
+            this.name = typeData.name;
+            this.validate = typeData.validate;
+            this.erroMessageTemplate = typeData.erroMessageTemplate ||
+                'Parameter %optionName% should have a type - ' + this.name + '.';
+        }
+
+        OptionType.prototype = {
+            constructor: OptionType,
+            createErrorMessage: function(optionName) {
+                return this.erroMessageTemplate.replace(/%optionName%/g, optionName);
+            }
         }
         /**
          * Constructor for errors Object.
@@ -111,7 +120,7 @@
 
                 errorReport.critical = optionTemplate.required || false;
                 errorReport.optionName = optionName;
-                errorReport.message = 'Parameter ' + optionName + ' should have a type - ' + optionTemplate.type.name + '.';
+                errorReport.message = optionTemplate.type.createErrorMessage(optionName);
 
                 optionErrorHandler(errorReport);
 
@@ -258,7 +267,7 @@
                 }
 
                 if (!this.optionTypes[type.name]) {
-                    this.optionTypes[type.name] = new OptionType(type.name, type.validate);
+                    this.optionTypes[type.name] = new OptionType(type);
                 }
             },
             exportOptionsTemplate: function(templateName, optionsTemplate) {
@@ -302,7 +311,7 @@
         OptionsManager.optionTypes = {};
 
         for (var type in validators) {
-            OptionsManager.optionTypes[type] = new OptionType(type, validators[type]);
+            OptionsManager.optionTypes[type] = new OptionType({name: type, validate: validators[type]});
         }
 
         Namespace.OptionsManager = OptionsManager;
