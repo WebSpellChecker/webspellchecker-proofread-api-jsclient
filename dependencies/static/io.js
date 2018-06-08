@@ -380,6 +380,7 @@
 				script['type'] = 'text/javascript';
 				script['id'] = params.id ? params.id : '';
 				script['src'] = params.url ? params.url : '';
+				script['charset'] = 'UTF-8';
 
 				script.onload = function() {
 					if (this.success) return; // for tests and for single call in IE8
