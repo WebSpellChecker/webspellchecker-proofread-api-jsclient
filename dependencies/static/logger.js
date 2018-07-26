@@ -90,7 +90,7 @@
 		module.exports = init;
 	}
 
-	if (typeof WEBSPELLCHECKER !== 'undefined') {
+	if (typeof WEBSPELLCHECKER !== 'undefined' && !('logger' in WEBSPELLCHECKER)) {
 		init(WEBSPELLCHECKER);
 	}
 })();

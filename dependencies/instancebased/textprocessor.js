@@ -160,6 +160,5 @@
         Namespace.TextProcessor = TextProcessor;
     }
     if(typeof window === 'undefined') {module.exports = init;}
-	if(typeof WEBSPELLCHECKER !== 'undefined') {init(WEBSPELLCHECKER);}
-
+	if(typeof WEBSPELLCHECKER !== 'undefined' && !('Connection' in WEBSPELLCHECKER)) {init(WEBSPELLCHECKER);}
 })();

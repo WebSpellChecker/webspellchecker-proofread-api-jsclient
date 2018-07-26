@@ -472,7 +472,7 @@
         module.exports = init;
     }
 
-    if (typeof WEBSPELLCHECKER !== 'undefined') {
+    if (typeof WEBSPELLCHECKER !== 'undefined' && !('RegularsManager' in WEBSPELLCHECKER)) {
         init(WEBSPELLCHECKER);
     }
 })();

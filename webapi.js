@@ -733,7 +733,7 @@
         module.exports = init;
     }
 
-	if (typeof WEBSPELLCHECKER !== 'undefined') {
+	if (typeof WEBSPELLCHECKER !== 'undefined' && !('initWebApi' in WEBSPELLCHECKER)) {
         init(WEBSPELLCHECKER);
     }
 })();
