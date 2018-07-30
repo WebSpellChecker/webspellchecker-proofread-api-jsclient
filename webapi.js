@@ -157,6 +157,7 @@
                     var ud = new UserDictionary({
                             wordlist: responseInfo.wordlist,
                             name: responseInfo.name,
+                            modificationTime: responseInfo.modificationTime,
                             makeUdAction: self._makeUdAction.bind(self)
                         });
 
@@ -581,6 +582,7 @@
         function UserDictionary(parameters) {
             this.name = parameters.name;
             this.wordlist = parameters.wordlist;
+            this.modificationTime = parameters.modificationTime;
             this.makeUdAction = parameters.makeUdAction;
         }
 
