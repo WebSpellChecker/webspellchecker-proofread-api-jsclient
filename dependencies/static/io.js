@@ -531,7 +531,7 @@
 		module.exports = init;
 	}
 
-	if (typeof WEBSPELLCHECKER !== 'undefined') {
+	if (typeof WEBSPELLCHECKER !== 'undefined' && !('IO' in WEBSPELLCHECKER)) {
 		init(WEBSPELLCHECKER);
 	}
 })();

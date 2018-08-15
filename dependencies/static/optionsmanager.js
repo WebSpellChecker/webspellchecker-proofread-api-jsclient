@@ -311,8 +311,7 @@
     if (typeof window === 'undefined') {
         module.exports = init;
     }
-
-    if (typeof WEBSPELLCHECKER !== 'undefined') {
+    if (typeof WEBSPELLCHECKER !== 'undefined' && !('OptionsManager' in WEBSPELLCHECKER)) {
         init(WEBSPELLCHECKER);
     }
 })();
