@@ -191,6 +191,7 @@
              * @param {Object} [data.langList={"ltr":{"en_US" : "American English","en_GB" : "British English","fr_FR" : "French","de_DE" : "German","it_IT" : "Italian","es_ES" : "Spanish"},"rtl":{}}]
              *      Object with list of available languages. Separeted on ltr(left-to-right) and rtl(right-to-left) directions.
              * @param {Number} [data.verLang=9] Number of available languages.
+             * @param {Boolean} [data.banner=false] Banner parameter for integrations.
              */
 
             /**
