@@ -23,7 +23,7 @@ or for browsers
 
 ### Simple example
 ```javascript
-var proofreadApi = WEBSPELLCHECKER.initWebApi({({
+var proofreadApi = WEBSPELLCHECKER.initWebApi({
     lang: 'en_US',
     serviceId: '<your customer id>',
 });
