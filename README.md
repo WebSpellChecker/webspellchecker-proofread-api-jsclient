@@ -14,7 +14,7 @@ npm install webspellchecker-api --save
 ```
 
 ```javascript
-var WEBSPELLCHECKER = reqire('webspellchecker-api');
+var WEBSPELLCHECKER = require('webspellchecker-api');
 ```
 or for browsers
 ```html
@@ -23,7 +23,7 @@ or for browsers
 
 ### Simple example
 ```javascript
-var proofreadApi = new WEBSPELLCHECKER({
+var proofreadApi = WEBSPELLCHECKER.initWebApi({({
     lang: 'en_US',
     serviceId: '<your customer id>',
 });
