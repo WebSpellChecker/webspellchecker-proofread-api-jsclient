@@ -1,6 +1,6 @@
 # Spellcheck | Grammarcheck JavaScript API
 
-Browser and Node Javascript API which provide methods for spell and grammar check and methods for managing user dictionary. Full list of parameters and methods you can find by following 
+Browser and Node API which provide methods for spell and grammar check and methods for managing user dictionary. Full list of parameters and methods you can find by following
 <a target="_blank" href="http://dev.webspellchecker.net/api/webapi/WEBSPELLCHECKER.html#.initWebApi">link</a>
 
 ## Getting Started
@@ -16,23 +16,33 @@ npm install webspellchecker-api --save
 ```javascript
 var WEBSPELLCHECKER = require('webspellchecker-api');
 ```
-or for browsers
-```html
-<script type="text/javascript" src="//www.webspellchecker.net/jswebapi/webspellchecker-api.js"></script>
-```
 
 ### Simple example
 ```javascript
 var proofreadApi = WEBSPELLCHECKER.initWebApi({
     lang: 'en_US',
-    serviceId: '<your customer id>',
+    serviceId: '<your service id>' // https://webspellchecker.net/webspellchecker-hosted-services.html,
 });
 proofreadApi.spellCheck({
     text: 'mispeled text',
     success: function(data) {
         console.log(data); //[{"word":"mispeled","ud":"false","suggestions":["misspelled","dispelled","morseled","misdeed","impelled","misapplied","misdeeds","misfiled","misspelt","airspeed","chiseled","misruled","misspell","misspend","tinseled"]}]
     },
-    error: funcion() {}
+    error: function() {}
+});
+
+proofreadApi.grammarCheck({
+    text: 'mispeled text',
+    success: function(data) {
+        console.log(data); //[ { sentence: 'mispeled text', matches: [ [Object] ] } ]
+        console.log(data[0].matches);
+        // [ { message: 'This sentence does not start with an uppercase letter',
+        //     offset: 0,
+        //     length: 8,
+        //     rule: { id: 'UPPERCASE_SENTENCE_START' },
+        //     suggestions: [ 'Mispeled' ] } ]
+    },
+    error: function() {}
 });
 ```
 
