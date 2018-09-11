@@ -8,22 +8,39 @@ module.exports = function(grunt) {
     grunt.initConfig({
         pkg: pkg,
         source_files: source_files,
-        copy: {
-            documentationAboutWebApi: {
-				src: 'AboutWebApi.md',
-				dest: 'tmp/AboutWebApi.md'
-			},
-        },
-        'string-replace': {
-            documentationAboutWebApi: {
-                files: {
-					'tmp/AboutWebApi.md': 'tmp/AboutWebApi.md'
-				},
+        'replace': {
+			wscbundle: {
+				files: [{
+					expand: true,
+					flatten: false,
+					src: ['<%= concat.wscbundle.dest %>']
+				}],
 				options: {
-					replacements: [{
-						pattern: /(<#COPYRIGHTS#>)/ig,
-						replacement: '<%= full_text_copyrights %>'
+					patterns: [{
+						match: "VERSION",
+						replacement: '<%= pkg.full_version %>'
+					}, {
+						json: "<%= links %>"
 					}]
+				}
+            }
+        },
+        'replace': {
+            documentationAboutWebApi: {
+                files: [{
+					expand: true,
+					flatten: false,
+					src: ['documentation/*.html']
+				}],
+				options: {
+					patterns: [
+						{
+							json: {
+                                "COPYRIGHTS": "<%= full_text_copyrights %>",
+                                "BRANDING_CUSTOM_DICT_MANUAL_URL": "http://wiki.webspellchecker.net/doku.php?id=installationandconfiguration:customdictionaries:licensed"
+							}
+						}
+					]
 				}
             }
         },
@@ -46,16 +63,13 @@ module.exports = function(grunt) {
         },
         jsdoc: {
             documentationWebApi: {
-				src: ['<%= pkg.webapi_path %>/webapi.js', 'tmp/AboutWebApi.md'],
+				src: ['<%= pkg.webapi_path %>/webapi.js', 'AboutWebApi.md'],
 				options: {
 					destination : '<%= pkg.webapi_path %>/documentation',
 					configure : "jsdoc.json"
 				}
 			},
-        },
-        clean: {
-			tmp: ['tmp/']
-		}
+        }
     });
 
     // file copy
@@ -66,8 +80,8 @@ module.exports = function(grunt) {
 	grunt.loadNpmTasks('grunt-contrib-concat');
 	// Load the plugin that provides the "uglify" task.
     grunt.loadNpmTasks('grunt-contrib-uglify');
-	// replace string
-    grunt.loadNpmTasks('grunt-string-replace');
+    // replace string
+	grunt.loadNpmTasks('grunt-replace');
 
     grunt.loadNpmTasks('grunt-jsdoc');
 
@@ -75,10 +89,8 @@ module.exports = function(grunt) {
         var full_text_copyrights = grunt.option('full_text_copyrights') || grunt.file.read('full_copyrights.txt');
         grunt.config.data.full_text_copyrights = full_text_copyrights;
 
-        grunt.task.run(['copy:documentationAboutWebApi']);
-        grunt.task.run(['string-replace:documentationAboutWebApi']);
         grunt.task.run(['jsdoc:documentationWebApi']);
-        grunt.task.run(['clean:tmp']);
+        grunt.task.run(['replace:documentationAboutWebApi']);
     });
 
 	grunt.registerTask('default', ["concat:webApi", "uglify:webApi"]);
