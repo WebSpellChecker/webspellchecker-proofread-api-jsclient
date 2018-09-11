@@ -23,13 +23,7 @@
             this.moduleId = moduleId;
             this.appInstance = appInstance;
 
-            var customPunctuation = this.appInstance.getOption('customPunctuation');
-
-            RegularsManager.addRegularType('customPunctuation', customPunctuation);
-
-            RegularsManager.textPunctuation
-                .composition(RegularsManager.customPunctuation)
-                .store('punctuationRegExp');
+            RegularsManager.textPunctuation.store('punctuationRegExp');
         }
 
         TextProcessor.prototype = {
@@ -49,7 +43,8 @@
 
                 text = RegularsManager.HtmlSpaceSymbol.compositionGraph([
                     punctuationRegExp,
-                    RegularsManager.EOL
+                    RegularsManager.EOL,
+                    RegularsManager.wrap( this.appInstance.getOption('customPunctuation') )
                 ]).g().set().replace(text, ' ');
 
                 _situationalSepSetGlob = RegularsManager.situationalSeparators

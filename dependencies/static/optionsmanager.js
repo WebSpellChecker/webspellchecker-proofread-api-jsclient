@@ -5,8 +5,7 @@
 (function() {
 	function init( Namespace ) {
         var TypeChecker = Namespace.Utils.TypeChecker,
-            ArrayUtils = Namespace.Utils.ArrayUtils, validators,
-            RegularsManager = Namespace.RegularsManager;
+            ArrayUtils = Namespace.Utils.ArrayUtils, validators;
 
         /**
          * Constructor for option type.
