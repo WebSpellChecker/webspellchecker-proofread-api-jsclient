@@ -698,37 +698,40 @@
          * Method check client options and return WebApi instance.
          * @memberof WEBSPELLCHECKER
          * @method WEBSPELLCHECKER.initWebApi
-         * @param {Object} clientOptions
-         * @param {String} [clientOptions.lang='en_US'] - The parameter sets the default spell checking language for SCAYT. Possible values are:
+         * @param {Object} options
+         * <start options doc>
+         * @property {string} [options.lang='en_US'] - The parameter sets the default spell checking language for WEBSPELLCHECKER. Possible values are:
          * 'en_US', 'en_GB', 'pt_BR', 'da_DK',
          * 'nl_NL', 'en_CA', 'fi_FI', 'fr_FR',
          * 'fr_CA', 'de_DE', 'el_GR', 'it_IT',
          * 'nb_NO', 'pt_PT', 'es_ES', 'sv_SE'.
          *
-         * @param {String} [clientOptions.serviceProtocol='http'] - The parameter allows to specify protocol for WSC service (entry point is ssrv.cgi) full path.
+         * @property {string} [options.serviceProtocol='http'] - The parameter allows specifying a protocol for the WSC service (the entry point is ssrv.cgi) full path.
          *
-         * @param {String} [clientOptions.serviceHost='svc.webspellchecker.net'] - The parameter allows to specify host for WSC service (entry point is ssrv.cgi) full path.
+         * @property {string} [options.serviceHost='svc.webspellchecker.net'] - The parameter allows specifying a host for the WSC service (the entry point is ssrv.cgi) full path.
          *
-         * @param {Number} [clientOptions.servicePort='80'] - The parameter allows to specify default port for WSC service (entry point is ssrv.cgi) full path.
+         * @property {number} [options.servicePort='80'] - The parameter allows specifying a default port for the WSC service (the entry point is ssrv.cgi) full path.
          *
-         * @param {String} [clientOptions.servicePath='spellcheck31/script/ssrv.cgi'] - The parameter allows to specify path for WSC service (entry point is ssrv.cgi) full path.
+         * @property {string} [options.servicePath='spellcheck31/script/ssrv.cgi'] - The parameter is used to specify a path to the WSC service (the entry point is ssrv.cgi) full path.
          *
-         * @param {Number} [clientOptions.minWordLength=4] - The parameter defines minimum length of the letters that will be collected from container's text for spell checking.
+         * @property {number} [options.minWordLength=3] - The parameter defines minimum length of the letters that will be collected from container's text for spell checking.
          * Possible value is any positive number.
          *
-         * @param {String} [clientOptions.customDictionaryIds=''] - The parameter links SCAYT to custom dictionaries. Here is a string containing dictionary IDs separated by commas (',').
-         * Further details can be found at [http://wiki.webspellchecker.net/doku.php?id=installationandconfiguration:customdictionaries:licensed](http://wiki.webspellchecker.net/doku.php?id=installationandconfiguration:customdictionaries:licensed).
+         * @property {string} [options.customDictionaryIds=''] - The parameter links WEBSPELLCHECKER to custom dictionaries. Here is a string containing dictionary IDs separated by commas (',').
+         * Further details can be found at [link](@@BRANDING_CUSTOM_DICT_MANUAL_URL).
          *
-         * @param {String} [clientOptions.userDictionaryName=''] - The parameter activates a User Dictionary in SCAYT.
+         * @property {string} [options.userDictionaryName=''] - The parameter activates a User Dictionary in WEBSPELLCHECKER.
          *
-         * @param {String} [clientOptions.serviceId='1:KpkvQ2-6KNUj-L1W3u2-C9j0K1-Zv2tY1-CfDOx-WfGRg2-qXtci-YyyE34-j09H42-b0aCt3-d9a'] - The parameter sets the customer ID for SCAYT. It used for a migration from free,
+         * @property {string} [options.serviceId=''] - The parameter sets the service ID for WEBSPELLCHECKER. It used for a migration from free,
          * ad-supported version to paid, ad-free version.
          *
-         * @param {String} [clientOptions.customPunctuation=''] - The parameter that receives a string with characters that will considered as separators.
-         * @returns {Object} - WebApi Instance.
+         * @property {String} [options.customPunctuation=''] - The parameter that receives a string with characters that will considered as separators.
+         *
+         * <end options doc>
+         * @returns {WebApiInstance} - WebApi Instance.
          */
-        Namespace.initWebApi = function(clientOptions) {
-            return new WebApi(clientOptions);
+        Namespace.initWebApi = function(options) {
+            return new WebApi(options);
         };
     }
 

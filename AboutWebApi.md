@@ -4,4 +4,4 @@ WebSpellChecker is a spell checking solution that specially designed for integra
 
 ---
 
-<#COPYRIGHTS#>
+@@COPYRIGHTS
