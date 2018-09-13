@@ -26,7 +26,22 @@ var proofreadApi = WEBSPELLCHECKER.initWebApi({
 proofreadApi.spellCheck({
     text: 'mispeled text',
     success: function(data) {
-        console.log(data); //[{"word":"mispeled","ud":"false","suggestions":["misspelled","dispelled","morseled","misdeed","impelled","misapplied","misdeeds","misfiled","misspelt","airspeed","chiseled","misruled","misspell","misspend","tinseled"]}]
+        console.log(data);
+        //[ { word: 'mispeled',
+        //    ud: false,
+        //    suggestions:[
+        //        'misspelled',
+        //        'dispelled',
+        //        'morseled',
+        //        'misdeed',
+        //        'HiSpeed',
+        //        'impelled',
+        //        'misapplied',
+        //        'misdeeds'
+        //    ],
+        //    startOffset: 0,
+        //    endOffset: 8
+        //} ]
     },
     error: function() {}
 });
