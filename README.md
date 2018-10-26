@@ -60,7 +60,7 @@ proofreadApi.spellCheck({
 
 ## Grammarcheck API
 
-```
+```javascript
 proofreadApi.grammarCheck({
     text: 'mispeled text',
     success: function(data) {
@@ -78,7 +78,7 @@ proofreadApi.grammarCheck({
 
 ## Add word to User Dictionary
 
-```
+```javascript
 proofreadApi.addWordToUserDictionary({
      name: 'testDictionary',
      word: 'exaple',
