@@ -23,9 +23,7 @@
                 language: 'slang',
                 outType: 'out_type',
                 text: 'text',
-                sentences: 'sentences'
-            },
-            _metaParametersMap = {
+                sentences: 'sentences',
                 appType: 'app_type'
             },
             _commandsMap = {
@@ -66,8 +64,7 @@
 				path 		: appInstance.getOption('servicePath')
             });
 
-            this.defaultParameters = this.setDefaults(['serviceId', 'communicationFormat'], _parametersMap);
-            this.defaultMetaParameters =  this.setDefaults(['appType'], _metaParametersMap);
+            this.defaultParameters = this.setDefaults(['serviceId', 'communicationFormat', 'appType'], _parametersMap);
         }
 
         Connection.prototype = {
