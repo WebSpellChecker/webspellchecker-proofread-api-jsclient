@@ -1,6 +1,6 @@
 {
   "name": "webspellchecker-api",
-  "version": "1.0.4",
+  "version": "1.0.5",
   "description": "WebSpellChecker API is a browser, Node.js client that introduces more convenient way to work with WebSpellChecker Service. It provides methods for spell- and grammar checking on multiple languages, and various methods to work with personal user dictionaries.",
   "webapi_path": "./",
   "homepage": "https://webspellchecker.net/",
