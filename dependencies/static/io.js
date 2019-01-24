@@ -90,8 +90,10 @@
 
 						return result.slice(0, -1);
 					}
+				};
 
-					return '';
+				this.joinPostParams =function() {
+					return (Object.keys(request_params).length) ? JSON.stringify(request_params) : '';
 				};
 
 				this.joinRequestParams = function() {
@@ -105,10 +107,10 @@
 				this.joinUrl = function() {
 					var urlString = '';
 
-					urlString += _protocol + '://';
-					urlString += _host;
-					urlString += _port == '80' ? '/' : ':' +_port + '/';
-					urlString += _path.replace(/^\/*/, '');
+					urlString += this.protocol + '://';
+					urlString += this.host;
+					urlString += this.port == '80' ? '/' : ':' + this.port + '/';
+					urlString += this.path.replace(/^\/*/, '');
 
 					return urlString;
 				};
@@ -132,6 +134,9 @@
 				this.clear = function() {
 					request_params = {};
 					request_meta_params = {};
+					if(this._joinRequestParams) {
+						this.joinRequestParams = this._joinRequestParams;
+					}
 
 					return this;
 				};

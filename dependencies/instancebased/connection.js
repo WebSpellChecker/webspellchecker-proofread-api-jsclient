@@ -8,6 +8,7 @@
 
         var IO = Namespace.IO,
             _parametersMap = {
+                instances: 'instances',
                 serviceId: 'customerid',
                 command: 'cmd',
                 communicationFormat: 'format',
@@ -109,8 +110,17 @@
              * @returns {Object} - Clone of IO url object.
              * @private
              */
-            getURL: function() {
-                return this.url.clear();
+            getURL: function(type) {
+                var url = this.url.clear();
+                // TODO: implement on server work with common JSON.
+                if (type === 'PostJSON') {
+                    url._joinRequestParams = url.joinRequestParams;
+                    url.host = '127.0.0.1';
+                    url.path = 'v1/models/my_model:predict';
+                    url.port = 8083;
+                    url.joinRequestParams = url.joinPostParams;
+                }
+                return url;
             },
             /**
              * Prepare client parameters before request.
@@ -129,10 +139,9 @@
 
                 for(var k in parameters) {
                     paramName = map[k];
-                    if(!paramName) {
-                        throw new Error('parameter ' + k + ' is not specified.');
+                    if(paramName) {
+                        result[paramName] = parameters[k];
                     }
-                    result[paramName] = parameters[k];
                 }
                 result = Object.assign({}, this.defaultParameters, result);
 
@@ -158,7 +167,7 @@
              */
             request: function(parameters, onSuccess, onError) {
                 return IO.get(
-                    this.getURL()
+                    this.getURL(parameters.type)
                         .addParameters( this.prepareParameters(parameters, _parametersMap) )
                         .addMetaParameters( this.defaultMetaParameters ),
                     onSuccess,
