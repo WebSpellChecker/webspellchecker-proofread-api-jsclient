@@ -117,7 +117,7 @@
                     url._joinRequestParams = url.joinRequestParams;
                     url.host = '127.0.0.1';
                     url.path = 'v1/models/my_model:predict';
-                    url.port = 8083;
+                    url.port = 8080;
                     url.joinRequestParams = url.joinPostParams;
                 }
                 return url;
