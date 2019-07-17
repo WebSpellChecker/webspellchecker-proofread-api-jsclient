@@ -49,6 +49,7 @@ xdescribe("WebApi", function () {
             'deleteWordFromUserDictionary',
             'spellCheck',
             'grammarCheck',
+            'check',
             'getLangList'
         ];
 
@@ -132,6 +133,22 @@ xdescribe("WebApi", function () {
                     }
                 }
             });
+
+        waitsFor(function() {
+            return bool;
+        });
+    });
+
+    it("check method should check problems in text", function() {
+        var bool = false;
+        api.check({
+            sentences: TEXTGRAMMAR,
+            success: function(res) {
+                if (res && !res.error) {
+                    bool = true;
+                }
+            }
+        });
 
         waitsFor(function() {
             return bool;
