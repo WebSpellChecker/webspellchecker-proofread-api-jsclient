@@ -24,7 +24,9 @@
                 outType: 'out_type',
                 text: 'text',
                 sentences: 'sentences',
-                appType: 'app_type'
+                appType: 'app_type',
+                spelling: 'spelling',
+                grammar: 'grammar'
             },
             _commandsMap = {
                 spellCheck: 'check_spelling',
