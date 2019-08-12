@@ -407,6 +407,8 @@
                         userWordlist: parameters.userWordlist,
                         customDictionary: this.getOption('customDictionaryIds'),
                         userDictionary: this.getOption('userDictionaryName'),
+                        customPunctuation: this.getOption('customPunctuation'),
+                        minWordLength: this.getOption('minWordLength'),
                         spelling: parameters.spelling || true,
                         grammar: parameters.grammar || this.getOption('enableGrammar'),
                         sentences: parameters.sentences,

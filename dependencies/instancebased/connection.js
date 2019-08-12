@@ -25,6 +25,8 @@
                 text: 'text',
                 sentences: 'sentences',
                 appType: 'app_type',
+                customPunctuation: 'custom_punctuation',
+                minWordLength: 'min_word_length',
                 spelling: 'spelling',
                 grammar: 'grammar'
             },
