@@ -20,15 +20,16 @@
                 UDWord: 'word',
                 userWordlist: 'user_wordlist',
                 wordList: 'wordlist',
-                language: 'slang',
+                language: 'lang',
                 outType: 'out_type',
                 text: 'text',
                 sentences: 'sentences',
                 appType: 'app_type',
                 customPunctuation: 'custom_punctuation',
                 minWordLength: 'min_word_length',
-                spelling: 'spelling',
-                grammar: 'grammar'
+                shortAnswer: 'short_answer',
+                disableSpelling: 'disable_spelling',
+                disableGrammar: 'disable_grammar'
             },
             _commandsMap = {
                 spellCheck: 'check_spelling',

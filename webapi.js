@@ -404,13 +404,13 @@
                 return this._request({
                         command: this._commands.check,
                         language: parameters.lang || this.getOption('lang'),
+                        shortAnswer: true,
                         userWordlist: parameters.userWordlist,
                         customDictionary: this.getOption('customDictionaryIds'),
                         userDictionary: this.getOption('userDictionaryName'),
                         customPunctuation: this.getOption('customPunctuation'),
                         minWordLength: this.getOption('minWordLength'),
-                        spelling: parameters.spelling || true,
-                        grammar: parameters.grammar || this.getOption('enableGrammar'),
+                        disableGrammar: !this.getOption('enableGrammar') ? true : false,
                         sentences: parameters.sentences,
                         text: parameters.text
                     },
