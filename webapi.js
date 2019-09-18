@@ -411,7 +411,7 @@
                         customPunctuation: this.getOption('customPunctuation'),
                         minWordLength: this.getOption('minWordLength'),
                         disableGrammar: !this.getOption('enableGrammar') ? true : false,
-                        sentences: parameters.sentences,
+                        tokens: parameters.tokens,
                         text: parameters.text
                     },
                         parameters

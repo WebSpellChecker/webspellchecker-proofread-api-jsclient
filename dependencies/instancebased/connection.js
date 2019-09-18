@@ -24,6 +24,7 @@
                 outType: 'out_type',
                 text: 'text',
                 sentences: 'sentences',
+                tokens: 'tokens',
                 appType: 'app_type',
                 customPunctuation: 'custom_punctuation',
                 minWordLength: 'min_word_length',
