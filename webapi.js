@@ -379,6 +379,45 @@
                 );
             },
             /**
+             * check API method.
+             * @public
+             * @memberof WebApiInstance#
+             *
+             * @param {Object} parameters
+             * @param {String} parameters.text - Text to checking.
+             * @param {String} parameters.lang - Check language. If not provided then take from constructor.
+             * @param {GrammarCheckCallback} parameters.success - Handler successful response from the server.
+             * @param {RequestCallback} parameters.error - Handler unsuccessful response from the server.
+             * @returns {Object} - Transport object.
+             * @example
+             * wscWebApiInstance.check({
+             *      text: 'These are an examples of a sentences with two misspelled words and gramar problems. Just type text with mispelling to see how it works.',
+             *      success: function(data) {
+             *          console.log(data);
+             *      },
+             *      error: function(error) {
+             *          console.log(error);
+             *      }
+             * });
+             */
+            check: function(parameters) {
+                return this._request({
+                        command: this._commands.check,
+                        language: parameters.lang || this.getOption('lang'),
+                        shortAnswer: true,
+                        userWordlist: parameters.userWordlist,
+                        customDictionary: this.getOption('customDictionaryIds'),
+                        userDictionary: this.getOption('userDictionaryName'),
+                        customPunctuation: this.getOption('customPunctuation'),
+                        minWordLength: this.getOption('minWordLength'),
+                        disableGrammar: !this.getOption('enableGrammar') ? true : false,
+                        tokens: parameters.tokens,
+                        text: parameters.text
+                    },
+                        parameters
+                );
+            },
+            /**
              * userDictionary success Callback.
              *
              * @callback UserDictionaryCallback
