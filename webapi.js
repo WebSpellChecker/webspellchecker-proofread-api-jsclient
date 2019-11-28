@@ -216,8 +216,8 @@
             getInfo: function(parameters) {
                 return this._request({
                         command: this._commands.getInfo,
-                        locale: parameters.locale,
-                        version: parameters.version
+                        locale: parameters.locale || this.getOption('localization'),
+                        version: parameters.version || 2
                     },
                     parameters
                 );
