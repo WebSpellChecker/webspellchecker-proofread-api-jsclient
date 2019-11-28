@@ -215,7 +215,9 @@
              */
             getInfo: function(parameters) {
                 return this._request({
-                        command: this._commands.getInfo
+                        command: this._commands.getInfo,
+                        locale: parameters.locale,
+                        version: parameters.version
                     },
                     parameters
                 );
