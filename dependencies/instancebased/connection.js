@@ -30,7 +30,9 @@
                 minWordLength: 'min_word_length',
                 shortAnswer: 'short_answer',
                 disableSpelling: 'disable_spelling',
-                disableGrammar: 'disable_grammar'
+                disableGrammar: 'disable_grammar',
+                version: 'version',
+                locale: 'locale'
             },
             _commandsMap = {
                 spellCheck: 'check_spelling',
