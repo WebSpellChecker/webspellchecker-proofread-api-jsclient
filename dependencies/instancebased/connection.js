@@ -32,7 +32,11 @@
                 disableSpelling: 'disable_spelling',
                 disableGrammar: 'disable_grammar',
                 version: 'version',
-                locale: 'locale'
+                locale: 'locale',
+                action: 'action',
+                newText: 'new_text',
+                type: 'type',
+                context: 'context'
             },
             _commandsMap = {
                 spellCheck: 'check_spelling',
@@ -41,7 +45,8 @@
                 userDictionary: 'user_dictionary',
                 getLangList: 'get_lang_list',
                 getInfo: 'get_info',
-                getDictionariesModifyTime: 'get_dicts_modify_time'
+                getDictionariesModifyTime: 'get_dicts_modify_time',
+                statistics: 'statistics'
             },
             _UDActionsMap = {
                 create: 'create',
