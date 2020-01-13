@@ -458,6 +458,7 @@
                     newText: parameters.newText,
                     language: parameters.lang || this.getOption('lang'),
                     type: parameters.type,
+                    category: parameters.category,
                     context: parameters.context
                 },
                     parameters

@@ -36,6 +36,7 @@
                 action: 'action',
                 newText: 'new_text',
                 type: 'type',
+                category: 'category',
                 context: 'context'
             },
             _commandsMap = {
