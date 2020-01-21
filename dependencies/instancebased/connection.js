@@ -38,7 +38,8 @@
                 type: 'type',
                 category: 'category',
                 context: 'context',
-                session: 'session'
+                session: 'session',
+                offset: 'offset'
             },
             _commandsMap = {
                 spellCheck: 'check_spelling',

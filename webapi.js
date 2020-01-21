@@ -460,6 +460,7 @@
                     language: parameters.lang || this.getOption('lang'),
                     type: parameters.type,
                     category: parameters.category,
+                    offset: parameters.offset,
                     context: parameters.context
                 },
                     parameters
