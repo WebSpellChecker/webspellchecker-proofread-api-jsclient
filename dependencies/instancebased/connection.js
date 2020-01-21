@@ -37,7 +37,8 @@
                 newText: 'new_text',
                 type: 'type',
                 category: 'category',
-                context: 'context'
+                context: 'context',
+                session: 'session'
             },
             _commandsMap = {
                 spellCheck: 'check_spelling',

@@ -454,6 +454,7 @@
                 return this._request({
                     command: this._commands.statistics,
                     action: parameters.action,
+                    session: this.getOption('session'),
                     text: parameters.text,
                     newText: parameters.newText,
                     language: parameters.lang || this.getOption('lang'),
