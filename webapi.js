@@ -461,6 +461,7 @@
                     language: parameters.lang || this.getOption('lang'),
                     type: parameters.type,
                     category: parameters.category,
+                    rule: parameters.rule || '',
                     offset: parameters.offset,
                     context: parameters.context
                 },

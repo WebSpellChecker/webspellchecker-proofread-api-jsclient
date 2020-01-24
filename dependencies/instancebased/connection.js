@@ -37,6 +37,7 @@
                 newText: 'new_text',
                 type: 'type',
                 category: 'category',
+                rule: 'rule',
                 context: 'context',
                 session: 'session',
                 offset: 'offset',
