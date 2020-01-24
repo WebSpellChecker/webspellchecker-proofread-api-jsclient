@@ -455,6 +455,7 @@
                     command: this._commands.statistics,
                     action: parameters.action,
                     session: this.getOption('session'),
+                    timestamp: new Date().getTime(),
                     text: parameters.text,
                     newText: parameters.newText,
                     language: parameters.lang || this.getOption('lang'),
