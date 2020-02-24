@@ -420,6 +420,55 @@
                 );
             },
             /**
+             * statistics API method.
+             * @private
+             * @memberof WebApiInstance#
+             *
+             * @param {Object} parameters
+             * @param {String} parameters.action - Statistics action type.
+             * @param {String} parameters.text - Text related to the action.
+             * @param {String | Undefined} parameters.newText - New text related to the replace action only.
+             * @param {String} parameters.lang - Check language.
+             * @param {String} parameters.type - Type of the problem.
+             * @param {String | Undefined} parameters.context - Context of the problem.
+             * @param {StatisticsCallback} parameters.success - Handler for successful response from the server.
+             * @param {RequestCallback} parameters.error - Handler for unsuccessful response from the server.
+             * @returns {Object} - Transport object.
+             * @example
+             * wscWebApiInstance.statistics({
+             *      action: 'replace',
+             *      text: 'Hhello',
+             *      newText: 'Hello',
+             *      lang: 'en_US',
+             *      type: 'spelling',
+             *      context: 'Hhello man.',
+             *      success: function(data) {
+             *          console.log(data);
+             *      },
+             *      error: function(error) {
+             *          console.log(error);
+             *      }
+             * });
+             */
+            statistics: function(parameters) {
+                return this._request({
+                    command: this._commands.statistics,
+                    action: parameters.action,
+                    session: this.getOption('session'),
+                    timestamp: new Date().getTime(),
+                    text: parameters.text,
+                    newText: parameters.newText,
+                    language: parameters.lang || this.getOption('lang'),
+                    type: parameters.type,
+                    category: parameters.category,
+                    rule: parameters.rule || '',
+                    offset: parameters.offset,
+                    context: parameters.context
+                },
+                    parameters
+                );
+            },
+            /**
              * userDictionary success Callback.
              *
              * @callback UserDictionaryCallback
