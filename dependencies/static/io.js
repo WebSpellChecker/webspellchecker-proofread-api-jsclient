@@ -191,28 +191,29 @@
 
 				ajax.request.onload = function() {
 					var responseData = ajax.request.responseText,
-						responseStatus = ajax.request.status;
+						responseStatus = ajax.request.status || 0;
 
 					ajax.success = true;
 
-					if (responseStatus && responseStatus !== 200) {
-						ajax.params.onError && ajax.params.onError({});
-					} else {
-						try {
-							responseData = parse(responseData);
-						} catch (error) {
-							logger.warn("CORS response parsing error: " + error);
-							ajax.params.onError && ajax.params.onError();
-							return;
-						}
+					try {
+						responseData = parse(responseData);
+					} catch (error) {
+						logger.warn("CORS response parsing error: " + error);
+						ajax.params.onError && ajax.params.onError();
 
-						if (responseData && responseData.error) {
-							responseData.message && logger.warn(responseData.message);
-							ajax.params.onError && ajax.params.onError(responseData);
-						} else {
-							ajax.params.onSuccess && ajax.params.onSuccess(responseData);
-						}
+						return;
 					}
+
+					responseData = responseData || {};
+
+					if (responseStatus !== 200 || responseData.error) {
+						responseData.message && logger.warn(responseData.message);
+						ajax.params.onError && ajax.params.onError(responseData);
+
+						return;
+					}
+
+					ajax.params.onSuccess && ajax.params.onSuccess(responseData);
 				};
 
 				ajax.request.onerror = function() {
