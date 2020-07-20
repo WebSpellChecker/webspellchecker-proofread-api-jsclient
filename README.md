@@ -1,11 +1,11 @@
 # WebSpellChecker API
 
-WebSpellChecker API is a browser, Node.js client that introduces more convenient way to work with WebSpellChecker Service. It provides methods for spell- and grammar checking on multiple languages, and various methods to work with personal user dictionaries.
+WebSpellChecker API is a browser, Node.js client that introduces more convenient way to work with WebSpellChecker service. It provides methods for spell- and grammar checking on multiple languages, and various methods to work with personal user dictionaries.
 
 
 To explore the  full list of parameters and methods available, please visit this [page](http://dev.webspellchecker.net/api/webapi/WEBSPELLCHECKER.html#.initWebApi).
 
-# Supported Languages
+# Supported languages
 WebSpellChecker API provides multi-language support.
 The next languages are supported by default: American English, Canadian English, British English, Danish, Dutch, Canadian French, Finnish, French, German, Greek, Italian, Portuguese, Brazilian Portuguese, Norwegian Bokmal, Spanish, Swedish.
 
@@ -21,7 +21,7 @@ npm install webspellchecker-api --save
 var WEBSPELLCHECKER = require('webspellchecker-api');
 ```
 
-# Obtain Service ID
+# Obtain service ID
 
 In order to start using WebSpellChecker API, you have to obtain a service key. You can do it here by subscribing to [Cloud Web API](https://www.webspellchecker.net/signup/hosted-signup.html#wsc-trial).
 
@@ -76,7 +76,7 @@ proofreadApi.grammarCheck({
 });
 ```
 
-## Add word to User Dictionary
+## Add word to user dictionary
 
 ```javascript
 proofreadApi.addWordToUserDictionary({
@@ -109,4 +109,4 @@ The built version  will be placed in the `dest` folder.
 
 # License
 
-This project is licensed under the MIT License.
+This project is licensed under the [MIT License](https://opensource.org/licenses/MIT).
