@@ -191,7 +191,7 @@
 
 				ajax.request.onload = function() {
 					var responseData = ajax.request.responseText,
-						responseStatus = ajax.request.status || 0;
+						responseStatus = ajax.request.status;
 
 					ajax.success = true;
 
@@ -206,7 +206,7 @@
 
 					responseData = responseData || {};
 
-					if (responseStatus !== 200 || responseData.error) {
+					if ( (responseStatus && responseStatus !== 200) || responseData.error ) {
 						responseData.message && logger.warn(responseData.message);
 						ajax.params.onError && ajax.params.onError(responseData);
 
