@@ -15,7 +15,11 @@
         optionsTemplate = {
             lang: {
                 type: optionTypes.string,
-                defaultValue: 'en_US'
+                defaultValue: 'auto'
+            },
+            autoLangPriorities: {
+                type: optionTypes.object,
+                defaultValue: {}
             },
             serviceProtocol: {
                 type: optionTypes.urlProtocol,
@@ -406,6 +410,7 @@
                 return this._request({
                         command: this._commands.check,
                         language: parameters.lang || this.getOption('lang'),
+                        autoLangPriorities: parameters.autoLangPriorities,
                         shortAnswer: true,
                         userWordlist: parameters.userWordlist,
                         customDictionary: this.getOption('customDictionaryIds'),
