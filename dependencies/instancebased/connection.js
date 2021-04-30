@@ -21,6 +21,7 @@
                 userWordlist: 'user_wordlist',
                 wordList: 'wordlist',
                 language: 'lang',
+                autoLangPriorities: 'auto_lang_priorities',
                 outType: 'out_type',
                 text: 'text',
                 sentences: 'sentences',
