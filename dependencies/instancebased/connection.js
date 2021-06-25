@@ -48,6 +48,7 @@
                 spellCheck: 'check_spelling',
                 grammarCheck: 'grammar_check',
                 check: 'check',
+                autocorrect: 'autocorrect',
                 userDictionary: 'user_dictionary',
                 getLangList: 'get_lang_list',
                 getInfo: 'get_info',
