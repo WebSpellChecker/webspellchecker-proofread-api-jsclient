@@ -448,7 +448,7 @@
              */
             autocorrect: function(parameters) {
                 return this._request({
-                        command: this._commands.check,
+                        command: this._commands.autocorrect,
                         language: parameters.lang || this.getOption('lang'),
                         autoLangPriorities: parameters.autoLangPriorities || '',
                         shortAnswer: true,
