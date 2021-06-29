@@ -452,6 +452,9 @@
                         language: parameters.lang || this.getOption('lang'),
                         autoLangPriorities: parameters.autoLangPriorities || '',
                         shortAnswer: true,
+                        userWordlist: parameters.userWordlist,
+                        customDictionary: this.getOption('customDictionaryIds'),
+                        userDictionary: this.getOption('userDictionaryName'),
                         text: parameters.text
                     },
                         parameters
