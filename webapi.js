@@ -451,6 +451,7 @@
                         command: this._commands.autocorrect,
                         language: parameters.lang || this.getOption('lang'),
                         autoLangPriorities: parameters.autoLangPriorities || '',
+                        detectedLang: parameters.detectedLang,
                         shortAnswer: true,
                         userWordlist: parameters.userWordlist,
                         customDictionary: this.getOption('customDictionaryIds'),

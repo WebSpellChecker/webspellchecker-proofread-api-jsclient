@@ -22,6 +22,7 @@
                 wordList: 'wordlist',
                 language: 'lang',
                 autoLangPriorities: 'auto_lang_priorities',
+                detectedLang: 'detected_lang',
                 outType: 'out_type',
                 text: 'text',
                 sentences: 'sentences',
