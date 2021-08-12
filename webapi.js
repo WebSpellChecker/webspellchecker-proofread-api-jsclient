@@ -425,6 +425,43 @@
                 );
             },
             /**
+             * Autocorrect API method.
+             * @public
+             * @memberof WebApiInstance#
+             *
+             * @param {Object} parameters
+             * @param {String} parameters.text - Text to autocorrect.
+             * @param {String} parameters.lang - Check language. If not provided then take from constructor.
+             * @param {GrammarCheckCallback} parameters.success - Handler successful response from the server.
+             * @param {RequestCallback} parameters.error - Handler unsuccessful response from the server.
+             * @returns {Object} - Transport object.
+             * @example
+             * wscWebApiInstance.autocorrect({
+             *      text: 'teh',
+             *      success: function(data) {
+             *          console.log(data);
+             *      },
+             *      error: function(error) {
+             *          console.log(error);
+             *      }
+             * });
+             */
+            autocorrect: function(parameters) {
+                return this._request({
+                        command: this._commands.autocorrect,
+                        language: parameters.lang || this.getOption('lang'),
+                        autoLangPriorities: parameters.autoLangPriorities || '',
+                        detectedLang: parameters.detectedLang,
+                        shortAnswer: true,
+                        userWordlist: parameters.userWordlist,
+                        customDictionary: this.getOption('customDictionaryIds'),
+                        userDictionary: this.getOption('userDictionaryName'),
+                        text: parameters.text
+                    },
+                        parameters
+                );
+            },
+            /**
              * statistics API method.
              * @private
              * @memberof WebApiInstance#
