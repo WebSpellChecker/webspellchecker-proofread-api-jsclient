@@ -471,6 +471,7 @@
              * @param {String} parameters.text - Text related to the action.
              * @param {String | Undefined} parameters.newText - New text related to the replace action only.
              * @param {String} parameters.lang - Check language.
+             * @param {String} parameters.detectedLang - Auto detected language.
              * @param {String} parameters.type - Type of the problem.
              * @param {String | Undefined} parameters.context - Context of the problem.
              * @param {StatisticsCallback} parameters.success - Handler for successful response from the server.
@@ -501,6 +502,7 @@
                     text: parameters.text,
                     newText: parameters.newText,
                     language: parameters.lang || this.getOption('lang'),
+                    detectedLang: parameters.detectedLang,
                     type: parameters.type,
                     category: parameters.category,
                     rule: parameters.rule || '',
