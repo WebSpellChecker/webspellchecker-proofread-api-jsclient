@@ -462,6 +462,40 @@
                 );
             },
             /**
+             * Autocomplete API method.
+             * @public
+             * @memberof WebApiInstance#
+             *
+             * @param {Object} parameters
+             * @param {String} parameters.text - Text to autocomplete.
+             * @param {String} parameters.lang - Check language. If not provided then take from constructor.
+             * @param {GrammarCheckCallback} parameters.success - Handler successful response from the server.
+             * @param {RequestCallback} parameters.error - Handler unsuccessful response from the server.
+             * @returns {Object} - Transport object.
+             * @example
+             * wscWebApiInstance.autocomplete({
+             *      text: 'How are ',
+             *      success: function(data) {
+             *          console.log(data);
+             *      },
+             *      error: function(error) {
+             *          console.log(error);
+             *      }
+             * });
+             */
+            autocomplete: function(parameters) {
+                return this._request({
+                        command: this._commands.autocomplete,
+                        language: parameters.lang || this.getOption('lang'),
+                        autoLangPriorities: parameters.autoLangPriorities || '',
+                        detectedLang: parameters.detectedLang,
+                        shortAnswer: true,
+                        text: parameters.text
+                    },
+                        parameters
+                );
+            },
+            /**
              * statistics API method.
              * @private
              * @memberof WebApiInstance#

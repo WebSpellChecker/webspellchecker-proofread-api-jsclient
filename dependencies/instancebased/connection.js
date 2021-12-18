@@ -50,6 +50,7 @@
                 grammarCheck: 'grammar_check',
                 check: 'check',
                 autocorrect: 'autocorrect',
+                autocomplete: 'autocomplete',
                 userDictionary: 'user_dictionary',
                 getLangList: 'get_lang_list',
                 getInfo: 'get_info',
