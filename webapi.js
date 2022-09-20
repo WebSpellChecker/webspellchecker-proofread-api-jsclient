@@ -35,7 +35,7 @@
             },
             servicePath: {
                 type: optionTypes.urlPath,
-                defaultValue: 'spellcheck31/script/ssrv.cgi'
+                defaultValue: 'api'
             },
             serviceId: {
                 type: optionTypes.string,
