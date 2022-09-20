@@ -23,6 +23,7 @@
                 language: 'lang',
                 autoLangPriorities: 'auto_lang_priorities',
                 detectedLang: 'detected_lang',
+                enforceAI: 'enforce_ai',
                 outType: 'out_type',
                 text: 'text',
                 sentences: 'sentences',

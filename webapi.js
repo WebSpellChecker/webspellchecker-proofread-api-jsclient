@@ -21,6 +21,10 @@
                 type: optionTypes.object,
                 defaultValue: {}
             },
+            enforceAI: {
+                type: optionTypes.boolean,
+                defaultValue: false
+            },
             serviceProtocol: {
                 type: optionTypes.urlProtocol,
                 defaultValue: 'http'
@@ -411,6 +415,7 @@
                         command: this._commands.check,
                         language: parameters.lang || this.getOption('lang'),
                         autoLangPriorities: parameters.autoLangPriorities,
+                        enforceAI: parameters.enforceAI || this.getOption('enforceAI'),
                         shortAnswer: true,
                         userWordlist: parameters.userWordlist,
                         customDictionary: this.getOption('customDictionaryIds'),
@@ -506,6 +511,7 @@
              * @param {String | Undefined} parameters.newText - New text related to the replace action only.
              * @param {String} parameters.lang - Check language.
              * @param {String} parameters.detectedLang - Auto detected language.
+             * @param {String} parameters.enforceAI - Enforce the use of enhanced text checking for American, British, Canadian and Australian English.
              * @param {String} parameters.type - Type of the problem.
              * @param {String | Undefined} parameters.context - Context of the problem.
              * @param {StatisticsCallback} parameters.success - Handler for successful response from the server.
@@ -537,6 +543,7 @@
                     newText: parameters.newText,
                     language: parameters.lang || this.getOption('lang'),
                     detectedLang: parameters.detectedLang,
+                    enforceAI: parameters.enforceAI || this.getOption('enforceAI'),
                     type: parameters.type,
                     category: parameters.category,
                     rule: parameters.rule || '',
