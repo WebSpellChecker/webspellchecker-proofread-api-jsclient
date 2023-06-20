@@ -423,6 +423,7 @@
                         customPunctuation: this.getOption('customPunctuation'),
                         minWordLength: this.getOption('minWordLength'),
                         disableGrammar: !this.getOption('enableGrammar') ? true : false,
+                        disableStyleGuide: this.getOption('disableStyleGuide') ? true : false,
                         tokens: parameters.tokens,
                         text: parameters.text
                     },

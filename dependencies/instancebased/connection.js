@@ -34,6 +34,7 @@
                 shortAnswer: 'short_answer',
                 disableSpelling: 'disable_spelling',
                 disableGrammar: 'disable_grammar',
+                disableStyleGuide: 'disable_style_guide',
                 version: 'version',
                 locale: 'locale',
                 action: 'action',
