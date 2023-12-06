@@ -502,6 +502,32 @@
                 );
             },
             /**
+             * getPromptsCount API method.
+             * @public
+             * @memberof WebApiInstance#
+             *
+             * @param {Object} parameters
+             * @param {getInfoCallback} parameters.success - Handler successful response from the server.
+             * @param {RequestCallback} parameters.error - Handler unsuccessful response from the server.
+             * @returns {Object} - Transport object.
+             * @example
+             * wscWebApiInstance.getPromptsCount({
+             *      success: function(data) {
+             *          console.log(data); // {"count": 15}
+             *      },
+             *      error: function(error) {
+             *          console.log(error);
+             *      }
+             * })
+             */
+            getPromptsCount: function(parameters) {
+                return this._request({
+                        command: this._commands.getPromptsCount
+                    },
+                    parameters
+                );
+            },
+            /**
              * statistics API method.
              * @private
              * @memberof WebApiInstance#

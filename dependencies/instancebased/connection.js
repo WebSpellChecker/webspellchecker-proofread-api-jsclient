@@ -53,6 +53,7 @@
                 check: 'check',
                 autocorrect: 'autocorrect',
                 autocomplete: 'autocomplete',
+                getPromptsCount: 'get_prompts_count',
                 userDictionary: 'user_dictionary',
                 getLangList: 'get_lang_list',
                 getInfo: 'get_info',
