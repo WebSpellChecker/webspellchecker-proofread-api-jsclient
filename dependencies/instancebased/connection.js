@@ -54,6 +54,7 @@
                 autocorrect: 'autocorrect',
                 autocomplete: 'autocomplete',
                 getPromptsInfo: 'get_prompts_info',
+                assist: 'assist',
                 userDictionary: 'user_dictionary',
                 getLangList: 'get_lang_list',
                 getInfo: 'get_info',
