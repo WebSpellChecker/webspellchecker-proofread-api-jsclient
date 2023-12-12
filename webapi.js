@@ -552,6 +552,7 @@
             assist: function(parameters) {
                 return this._request({
                     command: this._commands.assist,
+                    type: parameters.type,
                     language: parameters.lang || this.getOption('lang'),
                     autoLangPriorities: parameters.autoLangPriorities || '',
                     detectedLang: parameters.detectedLang,
