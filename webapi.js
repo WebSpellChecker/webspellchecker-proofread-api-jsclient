@@ -552,7 +552,7 @@
             generate: function(parameters) {
                 return this._request({
                     command: this._commands.generate,
-                    type: parameters.type,
+                    prompt: parameters.prompt,
                     language: parameters.lang || this.getOption('lang'),
                     autoLangPriorities: parameters.autoLangPriorities || '',
                     detectedLang: parameters.detectedLang,
@@ -610,7 +610,8 @@
                     category: parameters.category,
                     rule: parameters.rule || '',
                     offset: parameters.offset,
-                    context: parameters.context
+                    context: parameters.context,
+                    prompt: parameters.prompt
                 },
                     parameters
                 );
