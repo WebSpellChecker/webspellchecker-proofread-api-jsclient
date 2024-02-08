@@ -53,7 +53,7 @@
                 check: 'check',
                 autocorrect: 'autocorrect',
                 autocomplete: 'autocomplete',
-                getPromptsInfo: 'get_prompts_info',
+                getPrompts: 'get_prompts',
                 generate: 'generate',
                 userDictionary: 'user_dictionary',
                 getLangList: 'get_lang_list',

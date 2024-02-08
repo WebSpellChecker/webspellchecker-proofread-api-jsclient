@@ -502,7 +502,7 @@
                 );
             },
             /**
-             * getPromptsInfo API method.
+             * getPrompts API method.
              * @public
              * @memberof WebApiInstance#
              *
@@ -511,18 +511,18 @@
              * @param {RequestCallback} parameters.error - Handler unsuccessful response from the server.
              * @returns {Object} - Transport object.
              * @example
-             * wscWebApiInstance.getPromptsInfo({
+             * wscWebApiInstance.getPrompts({
              *      success: function(data) {
-             *          console.log(data); // {"count": 9, "total": 10}
+             *          console.log(data);
              *      },
              *      error: function(error) {
              *          console.log(error);
              *      }
              * })
              */
-            getPromptsInfo: function(parameters) {
+            getPrompts: function(parameters) {
                 return this._request({
-                    command: this._commands.getPromptsInfo
+                    command: this._commands.getPrompts
                     },
                     parameters
                 );
