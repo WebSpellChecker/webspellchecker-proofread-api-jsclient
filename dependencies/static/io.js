@@ -207,6 +207,7 @@
 					responseData = responseData || {};
 
 					if ( (responseStatus && responseStatus !== 200) || responseData.error ) {
+						responseStatus && (responseData.status = responseStatus);
 						responseData.message && logger.warn(responseData.message);
 						ajax.params.onError && ajax.params.onError(responseData);
 
