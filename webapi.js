@@ -515,6 +515,7 @@
              * @param {String} parameters.enforceAI - Enforce the use of enhanced text checking for American, British, Canadian and Australian English.
              * @param {String} parameters.type - Type of the problem.
              * @param {String | Undefined} parameters.context - Context of the problem.
+             * @param {Array} parameters.suggestions - Suggestions of the problem.
              * @param {StatisticsCallback} parameters.success - Handler for successful response from the server.
              * @param {RequestCallback} parameters.error - Handler for unsuccessful response from the server.
              * @returns {Object} - Transport object.
@@ -549,7 +550,8 @@
                     category: parameters.category,
                     rule: parameters.rule || '',
                     offset: parameters.offset,
-                    context: parameters.context
+                    context: parameters.context,
+                    suggestions: parameters.suggestions
                 },
                     parameters
                 );

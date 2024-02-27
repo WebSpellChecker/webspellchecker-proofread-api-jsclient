@@ -45,7 +45,8 @@
                 context: 'context',
                 session: 'session',
                 offset: 'offset',
-                timestamp: 'timestamp'
+                timestamp: 'timestamp',
+                suggestions: 'suggestions'
             },
             _commandsMap = {
                 spellCheck: 'check_spelling',
