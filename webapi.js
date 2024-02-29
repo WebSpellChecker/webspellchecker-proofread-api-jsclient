@@ -68,6 +68,10 @@
             appType: {
                 type: optionTypes.string,
                 defaultValue: 'web_api'
+            },
+            withCredentials: {
+                type: optionTypes.boolean,
+                defaultValue: false
             }
         };
 

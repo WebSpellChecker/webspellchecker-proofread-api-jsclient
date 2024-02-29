@@ -89,6 +89,8 @@
 				path 		: appInstance.getOption('servicePath')
             });
 
+            this.withCredentials = appInstance.getOption('withCredentials');
+
             this.defaultParameters = this.setDefaults(['serviceId', 'communicationFormat', 'appType'], _parametersMap);
         }
 
@@ -186,6 +188,7 @@
                     this.getURL()
                         .addParameters( this.prepareParameters(parameters, _parametersMap) )
                         .addMetaParameters( this.defaultMetaParameters ),
+                    this.withCredentials,
                     onSuccess,
                     onError
                 );
