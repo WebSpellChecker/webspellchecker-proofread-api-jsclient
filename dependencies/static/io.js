@@ -140,6 +140,7 @@
 			 * Make reqest using AJAX way
 			 * @param {Object} params Define params that we need
 			 * @param {Object} params.url URL object for this request
+			 * @param {Object} params.withCredentials Flag to determine whether cookies are sent to the server
 			 * @param {String} params.onSuccess Handler successful response from the server
 			 * @param {String} params.onError Handler unsuccessful response from the server
 			 * @return {Object} AJAX request custom object
@@ -183,8 +184,7 @@
 					// for IE's versions 8, 9
 					ajax.request = new IO.XDomainRequest();
 				} else if ('withCredentials' in ajax.request) {
-					// Set the value to 'true' if you'd like to pass cookies to the server.
-					ajax.request.withCredentials = false;
+					ajax.request.withCredentials = params.withCredentials || false;
 				} else {
 					logger.warn('Cors is not supported by this browser!');
 				}
@@ -436,15 +436,17 @@
 
 			/**
 			 * Create request on server
-			 * @param  {Object} url         Object created with params
-			 * @param  {Function} onSuccess Handler successful response from the server
-			 * @param  {Function} onError   Handler unsuccessful response from the server
-			 * @return {String}             Callback function name
+			 * @param  {Object} url             Object created with params
+			 * @param  {Object} withCredentials Flag to determine whether cookies are sent to the server
+			 * @param  {Function} onSuccess     Handler successful response from the server
+			 * @param  {Function} onError       Handler unsuccessful response from the server
+			 * @return {String}                 Callback function name
 			 */
-			get: function( url , onSuccess, onError ) {
+			get: function( url, withCredentials, onSuccess, onError ) {
 				// Make Request using defined request types
 				return IO.request({
 					url: url,
+					withCredentials: withCredentials,
 					onSuccess: onSuccess,
 					onError: onError
 				});
