@@ -442,7 +442,7 @@
 			 * @param  {Function} onError       Handler unsuccessful response from the server
 			 * @return {String}                 Callback function name
 			 */
-			get: function ( url, withCredentials, onSuccess, onError ) {
+			get: function( url, withCredentials, onSuccess, onError ) {
 				// Make Request using defined request types
 				return IO.request({
 					url: url,
