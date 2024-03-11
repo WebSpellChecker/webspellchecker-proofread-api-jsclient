@@ -72,6 +72,10 @@
             withCredentials: {
                 type: optionTypes.boolean,
                 defaultValue: false
+            },
+            requestHeaders: {
+                type: optionTypes.function,
+                defaultValue: function() {}
             }
         };
 

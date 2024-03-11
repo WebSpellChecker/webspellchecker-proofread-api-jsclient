@@ -90,6 +90,7 @@
             });
 
             this.withCredentials = appInstance.getOption('withCredentials');
+            this.requestHeaders = appInstance.getOption('requestHeaders');
 
             this.defaultParameters = this.setDefaults(['serviceId', 'communicationFormat', 'appType'], _parametersMap);
         }
@@ -189,6 +190,7 @@
                         .addParameters( this.prepareParameters(parameters, _parametersMap) )
                         .addMetaParameters( this.defaultMetaParameters ),
                     this.withCredentials,
+                    this.requestHeaders,
                     onSuccess,
                     onError
                 );
