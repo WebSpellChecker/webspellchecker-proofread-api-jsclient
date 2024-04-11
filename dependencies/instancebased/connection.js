@@ -45,7 +45,8 @@
                 context: 'context',
                 session: 'session',
                 offset: 'offset',
-                timestamp: 'timestamp'
+                timestamp: 'timestamp',
+                prompt: 'prompt'
             },
             _commandsMap = {
                 spellCheck: 'check_spelling',
@@ -53,6 +54,8 @@
                 check: 'check',
                 autocorrect: 'autocorrect',
                 autocomplete: 'autocomplete',
+                getPrompts: 'get_prompts',
+                generate: 'generate',
                 userDictionary: 'user_dictionary',
                 getLangList: 'get_lang_list',
                 getInfo: 'get_info',
