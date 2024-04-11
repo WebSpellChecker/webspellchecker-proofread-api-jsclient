@@ -522,7 +522,7 @@
              */
             getPrompts: function(parameters) {
                 return this._request({
-                    command: this._commands.getPrompts
+                        command: this._commands.getPrompts
                     },
                     parameters
                 );
