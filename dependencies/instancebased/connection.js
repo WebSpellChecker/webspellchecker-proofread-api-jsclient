@@ -45,7 +45,8 @@
                 context: 'context',
                 session: 'session',
                 offset: 'offset',
-                timestamp: 'timestamp'
+                timestamp: 'timestamp',
+                prompt: 'prompt'
             },
             _commandsMap = {
                 spellCheck: 'check_spelling',
@@ -53,6 +54,8 @@
                 check: 'check',
                 autocorrect: 'autocorrect',
                 autocomplete: 'autocomplete',
+                getPrompts: 'get_prompts',
+                generate: 'generate',
                 userDictionary: 'user_dictionary',
                 getLangList: 'get_lang_list',
                 getInfo: 'get_info',
@@ -90,6 +93,7 @@
             });
 
             this.withCredentials = appInstance.getOption('withCredentials');
+            this.requestHeaders = appInstance.getOption('requestHeaders');
 
             this.defaultParameters = this.setDefaults(['serviceId', 'communicationFormat', 'appType'], _parametersMap);
         }
@@ -189,6 +193,7 @@
                         .addParameters( this.prepareParameters(parameters, _parametersMap) )
                         .addMetaParameters( this.defaultMetaParameters ),
                     this.withCredentials,
+                    this.requestHeaders,
                     onSuccess,
                     onError
                 );

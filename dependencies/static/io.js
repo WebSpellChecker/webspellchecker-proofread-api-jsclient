@@ -141,13 +141,16 @@
 			 * @param {Object} params Define params that we need
 			 * @param {Object} params.url URL object for this request
 			 * @param {Object} params.withCredentials Flag to determine whether cookies are sent to the server
+			 * @param {Object} params.requestHeaders Function that resolves with an object of request headers
 			 * @param {String} params.onSuccess Handler successful response from the server
 			 * @param {String} params.onError Handler unsuccessful response from the server
 			 * @return {Object} AJAX request custom object
 			 */
 			AJAX: function(params) {
 				var ajax = {},
-					parse = JSON.parse || function() { return arguments };
+					parse = JSON.parse || function() { return arguments },
+					headers = params.requestHeaders() || {},
+					allowedHeaders = { 'Authorization': true };
 
 				if (isMocked) {
 
@@ -207,6 +210,7 @@
 					responseData = responseData || {};
 
 					if ( (responseStatus && responseStatus !== 200) || responseData.error ) {
+						responseStatus && (responseData.status = responseStatus);
 						responseData.message && logger.warn(responseData.message);
 						ajax.params.onError && ajax.params.onError(responseData);
 
@@ -228,6 +232,15 @@
 				};
 
 				ajax.request.open('POST', ajax.params.url, true);
+
+				if (Object.keys(headers).length) {
+					for (var header in headers) {
+						if ( allowedHeaders.hasOwnProperty(header) ) {
+							ajax.request.setRequestHeader(header, headers[header]);
+						}
+					}
+				}
+
 				// Fixed IE9 bug with ajax requests.
 				if (Utils.Browser.ie && Utils.Browser.version === 9) {
 					setTimeout(function() {
@@ -438,15 +451,17 @@
 			 * Create request on server
 			 * @param  {Object} url             Object created with params
 			 * @param  {Object} withCredentials Flag to determine whether cookies are sent to the server
+			 * @param  {Object} requestHeaders  Function that resolves with an object of request headers
 			 * @param  {Function} onSuccess     Handler successful response from the server
 			 * @param  {Function} onError       Handler unsuccessful response from the server
 			 * @return {String}                 Callback function name
 			 */
-			get: function( url, withCredentials, onSuccess, onError ) {
+			get: function(url, withCredentials, requestHeaders, onSuccess, onError ) {
 				// Make Request using defined request types
 				return IO.request({
 					url: url,
 					withCredentials: withCredentials,
+					requestHeaders: requestHeaders,
 					onSuccess: onSuccess,
 					onError: onError
 				});
