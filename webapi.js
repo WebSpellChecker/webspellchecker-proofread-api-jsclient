@@ -500,6 +500,8 @@
             autocomplete: function(parameters) {
                 return this._request({
                         command: this._commands.autocomplete,
+                        session: this.getOption('session'),
+                        timestamp: new Date().getTime(),
                         language: parameters.lang || this.getOption('lang'),
                         autoLangPriorities: parameters.autoLangPriorities || '',
                         detectedLang: parameters.detectedLang,
@@ -560,6 +562,8 @@
             generate: function(parameters) {
                 return this._request({
                     command: this._commands.generate,
+                    session: this.getOption('session'),
+                    timestamp: new Date().getTime(),
                     prompt: parameters.prompt,
                     language: parameters.lang || this.getOption('lang'),
                     autoLangPriorities: parameters.autoLangPriorities || '',
