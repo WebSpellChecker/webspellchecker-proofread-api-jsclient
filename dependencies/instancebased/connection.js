@@ -46,7 +46,8 @@
                 session: 'session',
                 offset: 'offset',
                 timestamp: 'timestamp',
-                prompt: 'prompt'
+                prompt: 'prompt',
+                suggestions: 'suggestions'
             },
             _commandsMap = {
                 spellCheck: 'check_spelling',
