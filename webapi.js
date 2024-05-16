@@ -500,6 +500,8 @@
             autocomplete: function(parameters) {
                 return this._request({
                         command: this._commands.autocomplete,
+                        session: this.getOption('session'),
+                        timestamp: new Date().getTime(),
                         language: parameters.lang || this.getOption('lang'),
                         autoLangPriorities: parameters.autoLangPriorities || '',
                         detectedLang: parameters.detectedLang,
@@ -560,6 +562,8 @@
             generate: function(parameters) {
                 return this._request({
                     command: this._commands.generate,
+                    session: this.getOption('session'),
+                    timestamp: new Date().getTime(),
                     prompt: parameters.prompt,
                     language: parameters.lang || this.getOption('lang'),
                     autoLangPriorities: parameters.autoLangPriorities || '',
@@ -584,6 +588,7 @@
              * @param {String} parameters.enforceAI - Enforce the use of enhanced text checking for American, British, Canadian and Australian English.
              * @param {String} parameters.type - Type of the problem.
              * @param {String | Undefined} parameters.context - Context of the problem.
+             * @param {Array} parameters.suggestions - Suggestions of the problem.
              * @param {StatisticsCallback} parameters.success - Handler for successful response from the server.
              * @param {RequestCallback} parameters.error - Handler for unsuccessful response from the server.
              * @returns {Object} - Transport object.
@@ -619,7 +624,8 @@
                     rule: parameters.rule || '',
                     offset: parameters.offset,
                     context: parameters.context,
-                    prompt: parameters.prompt
+                    prompt: parameters.prompt,
+                    suggestions: parameters.suggestions
                 },
                     parameters
                 );
