@@ -432,6 +432,7 @@
                         minWordLength: this.getOption('minWordLength'),
                         disableGrammar: !this.getOption('enableGrammar') ? true : false,
                         disableStyleGuide: this.getOption('disableStyleGuide') ? true : false,
+                        checkKit: this.getOption('checkKit'),
                         tokens: parameters.tokens,
                         text: parameters.text
                     },
