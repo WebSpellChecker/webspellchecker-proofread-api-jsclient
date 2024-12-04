@@ -620,6 +620,7 @@
                     language: parameters.lang || this.getOption('lang'),
                     detectedLang: parameters.detectedLang,
                     enforceAI: parameters.enforceAI || this.getOption('enforceAI'),
+                    checkKit: this.getOption('checkKit'),
                     type: parameters.type,
                     category: parameters.category,
                     rule: parameters.rule || '',
