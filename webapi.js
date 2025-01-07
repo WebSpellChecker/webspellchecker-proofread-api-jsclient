@@ -627,7 +627,8 @@
                     offset: parameters.offset,
                     context: parameters.context,
                     prompt: parameters.prompt,
-                    suggestions: parameters.suggestions
+                    suggestions: parameters.suggestions,
+                    probability: parameters.probability
                 },
                     parameters
                 );

@@ -48,7 +48,8 @@
                 timestamp: 'timestamp',
                 prompt: 'prompt',
                 suggestions: 'suggestions',
-                checkKit: 'check_kit'
+                checkKit: 'check_kit',
+                probability: 'probability'
             },
             _commandsMap = {
                 spellCheck: 'check_spelling',
