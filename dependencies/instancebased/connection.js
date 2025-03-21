@@ -49,7 +49,8 @@
                 prompt: 'prompt',
                 suggestions: 'suggestions',
                 checkKit: 'check_kit',
-                probability: 'probability'
+                probability: 'probability',
+                responseTime: 'response_time'
             },
             _commandsMap = {
                 spellCheck: 'check_spelling',
