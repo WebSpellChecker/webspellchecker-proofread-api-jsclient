@@ -628,7 +628,8 @@
                     context: parameters.context,
                     prompt: parameters.prompt,
                     suggestions: parameters.suggestions,
-                    probability: parameters.probability
+                    probability: parameters.probability,
+                    responseTime: parameters.responseTime
                 },
                     parameters
                 );
