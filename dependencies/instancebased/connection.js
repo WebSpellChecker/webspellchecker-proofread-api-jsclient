@@ -50,7 +50,8 @@
                 suggestions: 'suggestions',
                 checkKit: 'check_kit',
                 probability: 'probability',
-                responseTime: 'response_time'
+                responseTime: 'response_time',
+                containerType: 'container_type'
             },
             _commandsMap = {
                 spellCheck: 'check_spelling',
