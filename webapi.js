@@ -233,7 +233,8 @@
                 return this._request({
                         command: this._commands.getInfo,
                         locale: parameters.locale || this.getOption('localization'),
-                        version: parameters.version || 2
+                        version: parameters.version || 2,
+                        containerType: this.getOption('containerType')
                     },
                     parameters
                 );
