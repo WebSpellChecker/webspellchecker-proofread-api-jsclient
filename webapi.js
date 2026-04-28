@@ -53,6 +53,10 @@
                 type: optionTypes.string,
                 defaultValue: ''
             },
+            enableStyleGuideCollections: {
+                type: optionTypes.array,
+                defaultValue: []
+            },
             minWordLength: {
                 type: optionTypes.number,
                 defaultValue: 3
@@ -429,6 +433,7 @@
                         userWordlist: parameters.userWordlist,
                         customDictionary: this.getOption('customDictionaryIds'),
                         userDictionary: this.getOption('userDictionaryName'),
+                        enableStyleGuideCollections: parameters.enableStyleGuideCollections || '',
                         customPunctuation: this.getOption('customPunctuation'),
                         minWordLength: this.getOption('minWordLength'),
                         disableGrammar: !this.getOption('enableGrammar') ? true : false,

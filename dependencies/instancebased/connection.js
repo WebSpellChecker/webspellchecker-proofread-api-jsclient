@@ -51,7 +51,8 @@
                 checkKit: 'check_kit',
                 probability: 'probability',
                 responseTime: 'response_time',
-                containerType: 'container_type'
+                containerType: 'container_type',
+                enableStyleGuideCollections: 'enable_style_guide_collections'
             },
             _commandsMap = {
                 spellCheck: 'check_spelling',
