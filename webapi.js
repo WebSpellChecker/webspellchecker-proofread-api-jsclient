@@ -80,6 +80,10 @@
             requestHeaders: {
                 type: optionTypes.function,
                 defaultValue: function() {}
+            },
+            checkKit: {
+                type: optionTypes.string,
+                defaultValue: ''
             }
         };
 
@@ -238,7 +242,8 @@
                         command: this._commands.getInfo,
                         locale: parameters.locale || this.getOption('localization'),
                         version: parameters.version || 2,
-                        containerType: this.getOption('containerType')
+                        containerType: this.getOption('containerType'),
+                        checkKit: this.getOption('checkKit')
                     },
                     parameters
                 );
