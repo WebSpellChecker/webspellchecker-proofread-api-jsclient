@@ -52,7 +52,8 @@
                 probability: 'probability',
                 responseTime: 'response_time',
                 containerType: 'container_type',
-                enableStyleGuideCollections: 'enable_style_guide_collections'
+                enableStyleGuideCollections: 'enable_style_guide_collections',
+                comment: 'comment'
             },
             _commandsMap = {
                 spellCheck: 'check_spelling',

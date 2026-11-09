@@ -640,7 +640,8 @@
                     prompt: parameters.prompt,
                     suggestions: parameters.suggestions,
                     probability: parameters.probability,
-                    responseTime: parameters.responseTime
+                    responseTime: parameters.responseTime,
+                    comment: parameters.comment
                 },
                     parameters
                 );
