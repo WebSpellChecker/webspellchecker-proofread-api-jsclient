@@ -482,7 +482,10 @@
                         userWordlist: parameters.userWordlist,
                         customDictionary: this.getOption('customDictionaryIds'),
                         userDictionary: this.getOption('userDictionaryName'),
-                        text: parameters.text
+                        text: parameters.text,
+                        autocorrect: parameters.autocorrect,
+                        autocapitalize: parameters.autocapitalize,
+                        context: parameters.context
                     },
                         parameters
                 );
