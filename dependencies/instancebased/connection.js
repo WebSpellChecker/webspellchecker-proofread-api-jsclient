@@ -54,7 +54,8 @@
                 containerType: 'container_type',
                 enableStyleGuideCollections: 'enable_style_guide_collections',
                 autocorrect: 'autocorrect',
-                autocapitalize: 'autocapitalize'
+                autocapitalize: 'autocapitalize',
+                comment: 'comment'
             },
             _commandsMap = {
                 spellCheck: 'check_spelling',
