@@ -53,6 +53,8 @@
                 responseTime: 'response_time',
                 containerType: 'container_type',
                 enableStyleGuideCollections: 'enable_style_guide_collections',
+                autocorrect: 'autocorrect',
+                autocapitalize: 'autocapitalize',
                 comment: 'comment'
             },
             _commandsMap = {
